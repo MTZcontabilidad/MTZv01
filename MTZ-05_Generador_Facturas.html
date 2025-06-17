@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MTZ-05 | Generador de Facturas y Boletas</title>
+    <title>MTZ-05 | Generador de Facturas</title>
     <style>
         * {
             margin: 0;
@@ -22,6 +22,55 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        /* Navegación de regreso */
+        .back-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 25px rgba(0, 212, 255, 0.6);
+            border-color: #00ffff;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        .breadcrumb {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        .breadcrumb span {
+            color: #00d4ff;
         }
 
         .header {
@@ -345,6 +394,16 @@
 </head>
 <body>
     <div class="container">
+        <div class="back-navigation">
+            <a href="index.html" class="back-btn">
+                <span>🏠</span>
+                Inicio
+            </a>
+            <div class="breadcrumb">
+                <a href="index.html">Inicio</a> > <span>MTZ-05</span>
+            </div>
+        </div>
+
         <div class="header">
             <h1>MTZ-05 Generador de Documentos</h1>
             <p>Cree facturas y boletas de forma rápida y profesional</p>
