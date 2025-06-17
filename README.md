@@ -57,7 +57,7 @@
 
 ### Opción 1: Sitio Web (Recomendado)
 ```
-https://tu-usuario.github.io/mtz-tributarias/
+https://mtzcontabilidad.github.io/MTZv01/
 ```
 
 ### Opción 2: Descarga Local
@@ -74,24 +74,24 @@ https://tu-usuario.github.io/mtz-tributarias/
 ## 🔧 Instalación
 
 ### Para Usuarios Finales
-1. Visita el sitio web: [MTZ Tributarias](https://tu-usuario.github.io/mtz-tributarias/)
+1. Visita el sitio web: [MTZ Tributarias](https://mtzcontabilidad.github.io/MTZv01/)
 2. Selecciona la herramienta que necesitas
 3. ¡Comienza a usar inmediatamente!
 
 ### Para Desarrolladores
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/mtz-tributarias.git
+git clone https://github.com/MTZcontabilidad/MTZv01.git
 
 # Abrir en navegador
-cd mtz-tributarias
+cd MTZv01
 open index.html
 ```
 
 ## 📊 Estructura del Proyecto
 
 ```
-mtz-tributarias/
+MTZv01/
 ├── index.html                     # Página principal
 ├── MTZ-01_Enlaces_Rapidos.html     # Módulo de enlaces
 ├── MTZ-02_Documentos_RRHH.html     # Generador de documentos
@@ -138,8 +138,8 @@ mtz-tributarias/
 ## 📞 Contacto y Soporte
 
 ### 📧 **Contacto**
-- Email: [tu-email@ejemplo.com]
-- Proyecto: [GitHub Repository]
+- Email: [contacto@mtzcontabilidad.com]
+- Proyecto: [GitHub Repository](https://github.com/MTZcontabilidad/MTZv01)
 
 ### 💬 **Comunidad**
 - Reporta bugs o sugerencias
@@ -203,6 +203,6 @@ Gracias a todos los usuarios que utilizan estas herramientas y hacen que este pr
 
 **🎯 MTZ Tributarias - Desarrollado con ❤️ para la comunidad**
 
-[🌐 Sitio Web](https://tu-usuario.github.io/mtz-tributarias/) | [📧 Contacto](mailto:tu-email@ejemplo.com) | [🐛 Reportar Bug](https://github.com/tu-usuario/mtz-tributarias/issues)
+[🌐 Sitio Web](https://mtzcontabilidad.github.io/MTZv01/) | [📧 Contacto](mailto:contacto@mtzcontabilidad.com) | [🐛 Reportar Bug](https://github.com/MTZcontabilidad/MTZv01/issues)
 
-</div> 
+</div>
