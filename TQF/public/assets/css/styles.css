@@ -1,0 +1,296 @@
+/* Fundación Te Quiero Feliz - Custom Styles */
+
+:root {
+    --color-accent: #0EA5E9; /* sky-500 */
+    --color-accent-rgb: 14, 165, 233;
+    --color-secondary-bg: #F0F9FF; /* sky-50 */
+    --color-text-primary: #374151; /* gray-700 */
+    --color-text-secondary: #4B5563; /* gray-600 */
+    --font-primary: 'Inter', sans-serif;
+}
+
+html {
+    scroll-padding-top: 80px; /* Adjust for sticky header height */
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: #FFFFFF;
+    color: var(--color-text-primary);
+    opacity: 0;
+    animation: pageLoadFadeIn 0.7s 0.2s ease-out forwards;
+}
+
+@keyframes pageLoadFadeIn {
+    to { opacity: 1; }
+}
+
+/* Color Utilities */
+.text-accent { color: var(--color-accent); }
+.bg-accent { background-color: var(--color-accent); }
+.bg-secondary { background-color: var(--color-secondary-bg); }
+.border-accent { border-color: var(--color-accent); }
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+    max-height: 400px;
+}
+
+@media (min-width: 768px) {
+    .chart-container { 
+        height: 400px; 
+    }
+}
+
+/* Navigation Styles */
+.nav-link {
+    transition: color 0.3s ease, font-weight 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    padding-bottom: 8px; /* Space for underline */
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: var(--color-accent);
+    transition: width 0.3s ease-in-out;
+    border-radius: 2px;
+}
+
+.nav-link.active, .nav-link[aria-selected="true"] {
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+.nav-link.active::after, .nav-link[aria-selected="true"]::after, 
+.nav-link:hover::after {
+     width: 100%;
+}
+
+.nav-link:hover:not(.active):not([aria-selected="true"]) {
+    color: var(--color-accent);
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    animation: fadeInContent 0.6s ease-in-out forwards;
+}
+
+@keyframes fadeInContent {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content.active { 
+    display: block; 
+}
+
+/* Accordion Styles */
+.accordion-button { 
+    transition: background-color 0.3s ease; 
+}
+
+.accordion-button svg { 
+    transition: transform 0.3s ease; 
+}
+
+.accordion-button[aria-expanded="true"] svg { 
+    transform: rotate(180deg); 
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Focus styles for better accessibility */
+.nav-link:focus-visible, 
+.accordion-button:focus-visible, 
+#mobile-menu-button:focus-visible, 
+.social-link:focus-visible,
+#hero a:focus-visible, 
+.ftqf-logo:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Hero Animations */
+.hero-highlight-1, .hero-highlight-2 {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeInUpText 0.7s ease-out forwards;
+}
+
+.hero-highlight-1 { 
+    animation-delay: 0.4s; 
+}
+
+.hero-highlight-2 { 
+    animation-delay: 0.7s; 
+}
+
+@keyframes fadeInUpText {
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+#hero .hero-button-animate {
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeInUpText 0.7s ease-out 1.0s forwards;
+}
+
+/* Generic animate on scroll */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered children animation */
+.animate-child-item {
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeInUpItem 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpItem {
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Card hover enhancement */
+.mission-card {
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mission-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.08);
+}
+
+/* Social Link Icon Hover */
+.social-link svg {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease;
+}
+
+.social-link:hover svg {
+    transform: scale(1.25);
+}
+
+/* "Apoyo Directo" Card Pulse Effect */
+.card-apoyo-directo {
+    position: relative;
+}
+
+.card-apoyo-directo::before {
+    content: '';
+    position: absolute;
+    top: -3px; 
+    left: -3px; 
+    right: -3px; 
+    bottom: -3px;
+    border-radius: 0.625rem;
+    border: 2px solid transparent;
+    animation: pulseBorder 2.5s infinite ease-in-out;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes pulseBorder {
+    0%, 100% { 
+        border-color: rgba(var(--color-accent-rgb), 0.5); 
+        opacity: 0.7; 
+        transform: scale(1.01); 
+    }
+    50% { 
+        border-color: rgba(var(--color-accent-rgb), 0.1); 
+        opacity: 0.3; 
+        transform: scale(1.03); 
+    }
+}
+
+/* Sticky header backdrop improvement */
+.backdrop-blur-md {
+     -webkit-backdrop-filter: blur(12px);
+     backdrop-filter: blur(12px);
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .bg-accent {
+        background: #0EA5E9 !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --color-accent: #0066CC;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .chart-container {
+        height: 250px;
+    }
+    
+    .hero-highlight-1,
+    .hero-highlight-2 {
+        display: inline;
+    }
+} 

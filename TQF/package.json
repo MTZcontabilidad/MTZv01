@@ -1,0 +1,83 @@
+{
+  "name": "fundacion-te-quiero-feliz-website",
+  "version": "1.0.0",
+  "description": "Sitio web oficial de la Fundación Te Quiero Feliz - Movilidad y dignidad para personas con discapacidad y adultos mayores en Iquique y Alto Hospicio",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "live-server public --port=3000 --host=localhost --open=/",
+    "build": "npm run optimize:images && npm run minify:css && npm run minify:js",
+    "start": "live-server public --port=8080 --host=0.0.0.0",
+    "deploy": "npm run build && npm run upload",
+    "upload": "echo 'Upload to cPanel via FTP or File Manager'",
+    "test": "echo 'No tests specified yet'",
+    "lint:css": "stylelint 'public/assets/css/**/*.css'",
+    "lint:js": "eslint 'public/assets/js/**/*.js'",
+    "optimize:images": "echo 'Image optimization (install imagemin if needed)'",
+    "minify:css": "echo 'CSS minification (install cssnano if needed)'",
+    "minify:js": "echo 'JS minification (install terser if needed)'",
+    "validate:html": "echo 'HTML validation (install html-validate if needed)'",
+    "lighthouse": "echo 'Run Lighthouse audit'",
+    "backup": "tar -czf backup-$(date +%Y%m%d).tar.gz public/ docs/ config/",
+    "serve:prod": "http-server public -p 8080 -c-1"
+  },
+  "keywords": [
+    "fundacion",
+    "nonprofit",
+    "iquique",
+    "chile",
+    "discapacidad",
+    "adultos-mayores",
+    "transporte",
+    "movilidad",
+    "website",
+    "charity"
+  ],
+  "author": {
+    "name": "Fundación Te Quiero Feliz",
+    "email": "contacto@fundaciontequierofeliz.cl",
+    "url": "https://fundaciontequierofeliz.cl"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fundacion-te-quiero-feliz/website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fundacion-te-quiero-feliz/website/issues",
+    "email": "soporte@fundaciontequierofeliz.cl"
+  },
+  "homepage": "https://fundaciontequierofeliz.cl",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "http-server": "^14.1.1",
+    "eslint": "^8.57.0",
+    "stylelint": "^15.11.0",
+    "stylelint-config-standard": "^34.0.0",
+    "html-validate": "^8.7.3",
+    "imagemin": "^8.0.1",
+    "imagemin-webp": "^7.0.0",
+    "cssnano": "^6.0.1",
+    "terser": "^5.24.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "config": {
+    "domain": "fundaciontequierofeliz.cl",
+    "deployPath": "public_html/",
+    "backupPath": "backups/"
+  },
+  "funding": {
+    "type": "donation",
+    "url": "https://fundaciontequierofeliz.cl/#sumate"
+  }
+} 

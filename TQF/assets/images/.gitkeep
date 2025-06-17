@@ -1,0 +1,12 @@
+# Esta carpeta contiene las imágenes del sitio web
+# 
+# Imágenes requeridas:
+# - favicon.ico (16x16, 32x32, 48x48)
+# - favicon-16x16.png
+# - favicon-32x32.png
+# - apple-touch-icon.png (180x180)
+# - logo.png (logo de la fundación)
+# - og-image.jpg (1200x630 para redes sociales)
+# - equipo-comprometido.webp (imagen del equipo)
+#
+# Puedes reemplazar el placeholder en el HTML con imágenes reales 
