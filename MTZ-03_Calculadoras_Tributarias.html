@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTZ-03 | Calculadoras Tributarias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .calculators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .calc-title {
+            font-size: 1.5em;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calc-icon {
+            font-size: 1.2em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00d4ff;
+            font-size: 0.9em;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .calc-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .calc-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.5);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-title {
+            color: #00d4ff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .result-value {
+            color: #ff00ff;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            font-size: 0.9em;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .calculators-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MTZ-03 Calculadoras Tributarias</h1>
+            <p>Herramientas de cálculo fiscal para profesionales</p>
+        </div>
+
+        <div class="calculators-grid">
+            <!-- Calculadora IVA -->
+            <div class="calculator-card">
+                <h2 class="calc-title">
+                    <span class="calc-icon">📊</span>
+                    Calculadora de IVA
+                </h2>
+                
+                <div class="input-group">
+                    <label>Tipo de cálculo</label>
+                    <select id="iva-tipo" onchange="cambiarTipoIVA()">
+                        <option value="agregar">Agregar IVA al neto</option>
+                        <option value="extraer">Extraer IVA del bruto</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label id="iva-label">Monto Neto</label>
+                    <input type="number" id="iva-monto" placeholder="0">
+                </div>
+                
+                <button class="calc-button" onclick="calcularIVA()">Calcular IVA</button>
+                
+                <div id="iva-result" class="result-box">
+                    <p class="result-title">Resultado:</p>
+                    <div class="result-item">
+                        <span>Neto:</span>
+                        <span class="result-value" id="iva-neto">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>IVA (19%):</span>
+                        <span class="result-value" id="iva-impuesto">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Total:</span>
+                        <span class="result-value" id="iva-total">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculadora Honorarios -->
+            <div class="calculator-card">
+                <h2 class="calc-title">
+                    <span class="calc-icon">💼</span>
+                    Calculadora de Honorarios
+                </h2>
+                
+                <div class="input-group">
+                    <label>Monto Bruto (lo que recibe el cliente)</label>
+                    <input type="number" id="hon-bruto" placeholder="0">
+                </div>
+                
+                <div class="input-group">
+                    <label>Año</label>
+                    <select id="hon-año">
+                        <option value="2024">2024 (12.25%)</option>
+                        <option value="2025" selected>2025 (12.25%)</option>
+                    </select>
+                </div>
+                
+                <button class="calc-button" onclick="calcularHonorarios()">Calcular Líquido</button>
+                
+                <div id="hon-result" class="result-box">
+                    <p class="result-title">Desglose:</p>
+                    <div class="result-item">
+                        <span>Monto Bruto:</span>
+                        <span class="result-value" id="hon-monto-bruto">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Retención (12.25%):</span>
+                        <span class="result-value" id="hon-retencion">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Líquido a Pagar:</span>
+                        <span class="result-value" id="hon-liquido">$0</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <p>💡 Para calcular desde el líquido deseado, use: Bruto = Líquido / 0.8775</p>
+                </div>
+            </div>
+
+            <!-- Calculadora PPM -->
+            <div class="calculator-card">
+                <h2 class="calc-title">
+                    <span class="calc-icon">🏢</span>
+                    Calculadora PPM
+                </h2>
+                
+                <div class="input-group">
+                    <label>Ventas Mensuales Netas</label>
+                    <input type="number" id="ppm-ventas" placeholder="0">
+                </div>
+                
+                <div class="input-group">
+                    <label>Tipo de Contribuyente</label>
+                    <select id="ppm-tipo">
+                        <option value="0.25">Servicios Profesionales (0.25%)</option>
+                        <option value="0.5">Comercio/Industria (0.5%)</option>
+                        <option value="0.75">Actividades del Art. 20 N°3 y 4 (0.75%)</option>
+                    </select>
+                </div>
+                
+                <button class="calc-button" onclick="calcularPPM()">Calcular PPM</button>
+                
+                <div id="ppm-result" class="result-box">
+                    <p class="result-title">Cálculo PPM:</p>
+                    <div class="result-item">
+                        <span>Ventas Netas:</span>
+                        <span class="result-value" id="ppm-ventas-result">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Tasa PPM:</span>
+                        <span class="result-value" id="ppm-tasa">0%</span>
+                    </div>
+                    <div class="result-item">
+                        <span>PPM a Pagar:</span>
+                        <span class="result-value" id="ppm-total">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculadora Sueldo Líquido -->
+            <div class="calculator-card">
+                <h2 class="calc-title">
+                    <span class="calc-icon">💰</span>
+                    Calculadora Sueldo Líquido
+                </h2>
+                
+                <div class="input-group">
+                    <label>Sueldo Bruto</label>
+                    <input type="number" id="sueldo-bruto" placeholder="0">
+                </div>
+                
+                <div class="input-group">
+                    <label>AFP</label>
+                    <select id="sueldo-afp">
+                        <option value="0.1144">Capital (11.44%)</option>
+                        <option value="0.1127">Cuprum (11.27%)</option>
+                        <option value="0.1148">Habitat (11.48%)</option>
+                        <option value="0.1116">PlanVital (11.16%)</option>
+                        <option value="0.1154">ProVida (11.54%)</option>
+                        <option value="0.1145">Modelo (11.45%)</option>
+                        <option value="0.1277">Uno (12.77%)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Salud</label>
+                    <select id="sueldo-salud">
+                        <option value="0.07">Fonasa (7%)</option>
+                        <option value="0.07">Isapre (7% + adicional)</option>
+                    </select>
+                </div>
+                
+                <button class="calc-button" onclick="calcularSueldo()">Calcular Líquido</button>
+                
+                <div id="sueldo-result" class="result-box">
+                    <p class="result-title">Desglose Sueldo:</p>
+                    <div class="result-item">
+                        <span>Sueldo Bruto:</span>
+                        <span class="result-value" id="sueldo-bruto-result">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>AFP:</span>
+                        <span class="result-value" id="sueldo-afp-monto">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Salud:</span>
+                        <span class="result-value" id="sueldo-salud-monto">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Seguro Cesantía:</span>
+                        <span class="result-value" id="sueldo-cesantia">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Base Imponible:</span>
+                        <span class="result-value" id="sueldo-base-imp">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Impuesto Único:</span>
+                        <span class="result-value" id="sueldo-impuesto">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Sueldo Líquido:</span>
+                        <span class="result-value" id="sueldo-liquido">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculadora Retenciones -->
+            <div class="calculator-card">
+                <h2 class="calc-title">
+                    <span class="calc-icon">📋</span>
+                    Calculadora de Retenciones
+                </h2>
+                
+                <div class="input-group">
+                    <label>Tipo de Retención</label>
+                    <select id="ret-tipo">
+                        <option value="10">Retención 10% (Servicios)</option>
+                        <option value="12.25">Retención 12.25% (Honorarios)</option>
+                        <option value="15">Retención 15% (Asesorías al exterior)</option>
+                        <option value="20">Retención 20% (Otros)</option>
+                        <option value="35">Retención 35% (Sin domicilio)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Monto Base</label>
+                    <input type="number" id="ret-monto" placeholder="0">
+                </div>
+                
+                <button class="calc-button" onclick="calcularRetencion()">Calcular Retención</button>
+                
+                <div id="ret-result" class="result-box">
+                    <p class="result-title">Cálculo de Retención:</p>
+                    <div class="result-item">
+                        <span>Monto Base:</span>
+                        <span class="result-value" id="ret-base">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Retención:</span>
+                        <span class="result-value" id="ret-retencion">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Monto a Pagar:</span>
+                        <span class="result-value" id="ret-pagar">$0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculadora Multas e Intereses -->
+            <div class="calculator-card">
+                <h2 class="calc-title">
+                    <span class="calc-icon">⚠️</span>
+                    Calculadora Multas SII
+                </h2>
+                
+                <div class="input-group">
+                    <label>Monto Adeudado</label>
+                    <input type="number" id="multa-monto" placeholder="0">
+                </div>
+                
+                <div class="input-group">
+                    <label>Meses de Atraso</label>
+                    <input type="number" id="multa-meses" placeholder="0" min="0" max="36">
+                </div>
+                
+                <button class="calc-button" onclick="calcularMulta()">Calcular Multa e Intereses</button>
+                
+                <div id="multa-result" class="result-box">
+                    <p class="result-title">Cálculo de Multas:</p>
+                    <div class="result-item">
+                        <span>Monto Original:</span>
+                        <span class="result-value" id="multa-original">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Intereses (1.5% mensual):</span>
+                        <span class="result-value" id="multa-intereses">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Multa (10%):</span>
+                        <span class="result-value" id="multa-multa">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Total a Pagar:</span>
+                        <span class="result-value" id="multa-total">$0</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <p>⚠️ Este cálculo es referencial. La multa real puede variar según el tipo de infracción.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para formatear números como moneda
+        function formatCurrency(amount) {
+            return '$' + Math.round(amount).toLocaleString('es-CL');
+        }
+
+        // Calculadora IVA
+        function cambiarTipoIVA() {
+            const tipo = document.getElementById('iva-tipo').value;
+            const label = document.getElementById('iva-label');
+            if (tipo === 'agregar') {
+                label.textContent = 'Monto Neto';
+            } else {
+                label.textContent = 'Monto Bruto (con IVA)';
+            }
+        }
+
+        function calcularIVA() {
+            const tipo = document.getElementById('iva-tipo').value;
+            const monto = parseFloat(document.getElementById('iva-monto').value) || 0;
+            let neto, iva, total;
+
+            if (tipo === 'agregar') {
+                neto = monto;
+                iva = neto * 0.19;
+                total = neto + iva;
+            } else {
+                total = monto;
+                neto = total / 1.19;
+                iva = total - neto;
+            }
+
+            document.getElementById('iva-neto').textContent = formatCurrency(neto);
+            document.getElementById('iva-impuesto').textContent = formatCurrency(iva);
+            document.getElementById('iva-total').textContent = formatCurrency(total);
+            document.getElementById('iva-result').classList.add('show');
+        }
+
+        // Calculadora Honorarios
+        function calcularHonorarios() {
+            const bruto = parseFloat(document.getElementById('hon-bruto').value) || 0;
+            const tasa = 0.1225; // 12.25% para 2024-2025
+            const retencion = bruto * tasa;
+            const liquido = bruto - retencion;
+
+            document.getElementById('hon-monto-bruto').textContent = formatCurrency(bruto);
+            document.getElementById('hon-retencion').textContent = formatCurrency(retencion);
+            document.getElementById('hon-liquido').textContent = formatCurrency(liquido);
+            document.getElementById('hon-result').classList.add('show');
+        }
+
+        // Calculadora PPM
+        function calcularPPM() {
+            const ventas = parseFloat(document.getElementById('ppm-ventas').value) || 0;
+            const tasa = parseFloat(document.getElementById('ppm-tipo').value);
+            const ppm = ventas * tasa / 100;
+
+            document.getElementById('ppm-ventas-result').textContent = formatCurrency(ventas);
+            document.getElementById('ppm-tasa').textContent = tasa + '%';
+            document.getElementById('ppm-total').textContent = formatCurrency(ppm);
+            document.getElementById('ppm-result').classList.add('show');
+        }
+
+        // Calculadora Sueldo
+        function calcularSueldo() {
+            const bruto = parseFloat(document.getElementById('sueldo-bruto').value) || 0;
+            const tasaAFP = parseFloat(document.getElementById('sueldo-afp').value);
+            const tasaSalud = parseFloat(document.getElementById('sueldo-salud').value);
+            
+            // Tope imponible 2025: 84.5 UF (aproximadamente $3,200,000)
+            const topeImponible = 3200000;
+            const baseImponible = Math.min(bruto, topeImponible);
+            
+            const afp = baseImponible * tasaAFP;
+            const salud = baseImponible * tasaSalud;
+            const cesantia = baseImponible * 0.006; // 0.6% trabajador
+            
+            const totalDescuentosLegales = afp + salud + cesantia;
+            const baseImpuesto = bruto - totalDescuentosLegales;
+            
+            // Cálculo impuesto único 2025
+            let impuesto = 0;
+            if (baseImpuesto > 899000 && baseImpuesto <= 1998000) {
+                impuesto = (baseImpuesto - 899000) * 0.04;
+            } else if (baseImpuesto > 1998000 && baseImpuesto <= 3330000) {
+                impuesto = 43960 + (baseImpuesto - 1998000) * 0.08;
+            } else if (baseImpuesto > 3330000 && baseImpuesto <= 4662000) {
+                impuesto = 150520 + (baseImpuesto - 3330000) * 0.135;
+            } else if (baseImpuesto > 4662000 && baseImpuesto <= 5994000) {
+                impuesto = 330340 + (baseImpuesto - 4662000) * 0.23;
+            } else if (baseImpuesto > 5994000 && baseImpuesto <= 15984000) {
+                impuesto = 636700 + (baseImpuesto - 5994000) * 0.304;
+            } else if (baseImpuesto > 15984000) {
+                impuesto = 3673660 + (baseImpuesto - 15984000) * 0.35;
+            }
+            
+            const liquido = bruto - totalDescuentosLegales - impuesto;
+
+            document.getElementById('sueldo-bruto-result').textContent = formatCurrency(bruto);
+            document.getElementById('sueldo-afp-monto').textContent = formatCurrency(afp);
+            document.getElementById('sueldo-salud-monto').textContent = formatCurrency(salud);
+            document.getElementById('sueldo-cesantia').textContent = formatCurrency(cesantia);
+            document.getElementById('sueldo-base-imp').textContent = formatCurrency(baseImpuesto);
+            document.getElementById('sueldo-impuesto').textContent = formatCurrency(impuesto);
+            document.getElementById('sueldo-liquido').textContent = formatCurrency(liquido);
+            document.getElementById('sueldo-result').classList.add('show');
+        }
+
+        // Calculadora Retenciones
+        function calcularRetencion() {
+            const monto = parseFloat(document.getElementById('ret-monto').value) || 0;
+            const tasa = parseFloat(document.getElementById('ret-tipo').value);
+            const retencion = monto * tasa / 100;
+            const pagar = monto - retencion;
+
+            document.getElementById('ret-base').textContent = formatCurrency(monto);
+            document.getElementById('ret-retencion').textContent = formatCurrency(retencion);
+            document.getElementById('ret-pagar').textContent = formatCurrency(pagar);
+            document.getElementById('ret-result').classList.add('show');
+        }
+
+        // Calculadora Multas
+        function calcularMulta() {
+            const monto = parseFloat(document.getElementById('multa-monto').value) || 0;
+            const meses = parseInt(document.getElementById('multa-meses').value) || 0;
+            
+            // Interés simple 1.5% mensual
+            const intereses = monto * 0.015 * meses;
+            // Multa 10% sobre el monto original
+            const multa = monto * 0.1;
+            const total = monto + intereses + multa;
+
+            document.getElementById('multa-original').textContent = formatCurrency(monto);
+            document.getElementById('multa-intereses').textContent = formatCurrency(intereses);
+            document.getElementById('multa-multa').textContent = formatCurrency(multa);
+            document.getElementById('multa-total').textContent = formatCurrency(total);
+            document.getElementById('multa-result').classList.add('show');
+        }
+    </script>
+</body>
+</html>

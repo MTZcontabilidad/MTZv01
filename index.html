@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTZ - Herramientas Tributarias Comunitarias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 50px 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.1));
+            z-index: -1;
+        }
+
+        .hero-title {
+            font-size: 3.5em;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4em;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .hero-description {
+            font-size: 1.1em;
+            color: #ccc;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .community-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 25px;
+            font-weight: bold;
+            color: white;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .module-card:hover::before {
+            left: 100%;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            border-color: #00d4ff;
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .module-icon {
+            font-size: 2.5em;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            border-radius: 15px;
+        }
+
+        .module-info h3 {
+            font-size: 1.6em;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .module-code {
+            color: #ff00ff;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .module-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-size: 1.05em;
+        }
+
+        .module-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .module-features li {
+            color: #00d4ff;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .module-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .module-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .module-button:hover::before {
+            left: 100%;
+        }
+
+        .module-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.6);
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 5px solid #ff00ff;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(5px);
+        }
+
+        .info-section h2 {
+            color: #ff00ff;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .info-section p {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-top: 60px;
+        }
+
+        .footer h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .footer p {
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-link {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #00d4ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5em;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1 class="hero-title">MTZ Tributarias</h1>
+            <h2 class="hero-subtitle">Herramientas Fiscales Comunitarias</h2>
+            <p class="hero-description">
+                Suite completa de herramientas tributarias desarrollada como aporte comunitario para facilitar 
+                los trámites fiscales y administrativos. Acceso gratuito a calculadoras, formularios, 
+                generadores de documentos y enlaces directos a organismos oficiales.
+            </p>
+            <div class="community-badge">
+                🎯 100% GRATUITO - APORTE COMUNITARIO
+            </div>
+        </div>
+
+        <!-- Modules Grid -->
+        <div class="modules-grid">
+            <!-- MTZ-01 Enlaces Rápidos -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">🔗</div>
+                    <div class="module-info">
+                        <h3>Enlaces Rápidos</h3>
+                        <div class="module-code">MTZ-01</div>
+                    </div>
+                </div>
+                <p class="module-description">
+                    Acceso directo a todos los organismos fiscales importantes. Enlaces organizados al SII, 
+                    servicios online, declaraciones, consultas y más.
+                </p>
+                <ul class="module-features">
+                    <li>Portal SII completo</li>
+                    <li>Servicios online organizados</li>
+                    <li>Enlaces a formularios oficiales</li>
+                    <li>Consultas de estado tributario</li>
+                </ul>
+                <a href="MTZ-01_Enlaces_Rapidos.html" class="module-button">
+                    Acceder a Enlaces →
+                </a>
+            </div>
+
+            <!-- MTZ-02 Documentos RRHH -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">📋</div>
+                    <div class="module-info">
+                        <h3>Documentos RRHH</h3>
+                        <div class="module-code">MTZ-02</div>
+                    </div>
+                </div>
+                <p class="module-description">
+                    Generador automático de documentos de recursos humanos. Contratos, cartas, 
+                    certificados y más con formato profesional.
+                </p>
+                <ul class="module-features">
+                    <li>Contratos de trabajo</li>
+                    <li>Cartas de despido</li>
+                    <li>Certificados laborales</li>
+                    <li>Documentos personalizados</li>
+                </ul>
+                <a href="MTZ-02_Documentos_RRHH.html" class="module-button">
+                    Generar Documentos →
+                </a>
+            </div>
+
+            <!-- MTZ-03 Calculadoras -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">🧮</div>
+                    <div class="module-info">
+                        <h3>Calculadoras Tributarias</h3>
+                        <div class="module-code">MTZ-03</div>
+                    </div>
+                </div>
+                <p class="module-description">
+                    Suite completa de calculadoras fiscales. IVA, retenciones, impuestos, 
+                    honorarios y más cálculos automatizados.
+                </p>
+                <ul class="module-features">
+                    <li>Calculadora de IVA</li>
+                    <li>Retenciones automáticas</li>
+                    <li>Cálculo de honorarios</li>
+                    <li>Impuestos y contribuciones</li>
+                </ul>
+                <a href="MTZ-03_Calculadoras_Tributarias.html" class="module-button">
+                    Usar Calculadoras →
+                </a>
+            </div>
+
+            <!-- MTZ-04 Formularios -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">📝</div>
+                    <div class="module-info">
+                        <h3>Formularios de Contacto</h3>
+                        <div class="module-code">MTZ-04</div>
+                    </div>
+                </div>
+                <p class="module-description">
+                    Formularios profesionales para cotizaciones y contacto. Genera automáticamente 
+                    solicitudes de servicios contables y tributarios.
+                </p>
+                <ul class="module-features">
+                    <li>Solicitud de cotizaciones</li>
+                    <li>Formularios de contacto</li>
+                    <li>Consultas especializadas</li>
+                    <li>Generación automática</li>
+                </ul>
+                <a href="MTZ-04_Formularios_Contacto.html" class="module-button">
+                    Crear Formularios →
+                </a>
+            </div>
+
+            <!-- MTZ-05 Generador Facturas -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">🧾</div>
+                    <div class="module-info">
+                        <h3>Generador de Facturas</h3>
+                        <div class="module-code">MTZ-05</div>
+                    </div>
+                </div>
+                <p class="module-description">
+                    Crea facturas y boletas profesionales al instante. Cálculos automáticos, 
+                    formato legal y descarga inmediata.
+                </p>
+                <ul class="module-features">
+                    <li>Facturas profesionales</li>
+                    <li>Boletas de honorarios</li>
+                    <li>Cálculos automáticos</li>
+                    <li>Descarga instantánea</li>
+                </ul>
+                <a href="MTZ-05_Generador_Facturas.html" class="module-button">
+                    Generar Facturas →
+                </a>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h2>🎯 Sobre Este Proyecto</h2>
+            <p>
+                <strong>MTZ Tributarias</strong> es un proyecto de código abierto desarrollado como aporte comunitario 
+                para facilitar los trámites fiscales y administrativos en Chile. Todas las herramientas son 
+                <strong>100% gratuitas</strong> y están diseñadas para ser utilizadas por profesionales, 
+                empresarios y cualquier persona que necesite realizar gestiones tributarias.
+            </p>
+            <br>
+            <p>
+                Este proyecto busca democratizar el acceso a herramientas fiscales profesionales y ayudar a 
+                la comunidad con sus obligaciones tributarias de manera simple y eficiente.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>💙 Proyecto Comunitario MTZ</h3>
+            <p>
+                Desarrollado con ❤️ como aporte a la comunidad<br>
+                Herramientas tributarias gratuitas para todos
+            </p>
+            <div class="social-links">
+                <a href="#" class="social-link">📧 Contacto</a>
+                <a href="#" class="social-link">🔄 Actualizaciones</a>
+                <a href="#" class="social-link">💡 Sugerencias</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animación suave para los enlaces
+        document.querySelectorAll('a[href^="MTZ-"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Agregar efecto de clic
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Mostrar mensaje de bienvenida
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                console.log('🎯 MTZ Tributarias - Proyecto Comunitario Cargado Exitosamente');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

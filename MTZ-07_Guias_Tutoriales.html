@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTZ-07 | Guías y Tutoriales Fiscales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .search-section {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 30px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .category-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .category-title {
+            font-size: 1.3em;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .category-desc {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        .guides-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .guides-section.active {
+            display: block;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff00ff, #ff0066);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.5);
+        }
+
+        .guide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .guide-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .guide-item:hover {
+            transform: translateX(10px);
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .guide-title {
+            font-size: 1.2em;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .guide-summary {
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .guide-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .guide-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .guide-content.active {
+            display: block;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .content-header h2 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .content-body {
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .content-body h3 {
+            color: #ff00ff;
+            margin: 25px 0 15px;
+        }
+
+        .content-body p {
+            margin-bottom: 15px;
+        }
+
+        .content-body ul,
+        .content-body ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-body li {
+            margin-bottom: 8px;
+        }
+
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 4px solid #ffa500;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .tip-box {
+            background: rgba(0, 255, 0, 0.1);
+            border-left: 4px solid #00ff00;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .interactive-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quiz-option {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 0, 0, 0.2);
+            border-color: #ff0000;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #ff00ff);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .guide-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MTZ-07 Guías Tributarias</h1>
+            <p>Aprenda paso a paso sobre temas fiscales y contables</p>
+        </div>
+
+        <div class="search-section">
+            <input type="text" class="search-box" placeholder="🔍 Buscar guías, tutoriales o temas..." id="searchBox" onkeyup="searchGuides()">
+        </div>
+
+        <!-- Categorías principales -->
+        <div id="categoriesView">
+            <div class="categories-grid">
+                <div class="category-card" onclick="showCategory('basicos')">
+                    <div class="category-icon">📚</div>
+                    <h3 class="category-title">Conceptos Básicos</h3>
+                    <p class="category-desc">Fundamentos tributarios para principiantes</p>
+                </div>
+
+                <div class="category-card" onclick="showCategory('declaraciones')">
+                    <div class="category-icon">📄</div>
+                    <h3 class="category-title">Declaraciones</h3>
+                    <p class="category-desc">Cómo completar F29, F22 y otros formularios</p>
+                </div>
+
+                <div class="category-card" onclick="showCategory('empresa')">
+                    <div class="category-icon">🏢</div>
+                    <h3 class="category-title">Inicio de Actividades</h3>
+                    <p class="category-desc">Pasos para constituir y formalizar empresas</p>
+                </div>
+
+                <div class="category-card" onclick="showCategory('iva')">
+                    <div class="category-icon">💰</div>
+                    <h3 class="category-title">IVA y Facturación</h3>
+                    <p class="category-desc">Todo sobre IVA, facturas y documentos tributarios</p>
+                </div>
+
+                <div class="category-card" onclick="showCategory('renta')">
+                    <div class="category-icon">📊</div>
+                    <h3 class="category-title">Impuesto a la Renta</h3>
+                    <p class="category-desc">Guías para personas y empresas</p>
+                </div>
+
+                <div class="category-card" onclick="showCategory('laboral')">
+                    <div class="category-icon">👥</div>
+                    <h3 class="category-title">Temas Laborales</h3>
+                    <p class="category-desc">Contratos, finiquitos y obligaciones</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista de guías por categoría -->
+        <div id="guidesView" class="guides-section">
+            <button class="back-button" onclick="showCategories()">← Volver a Categorías</button>
+            <h2 id="categoryTitle" style="color: #00d4ff; margin-bottom: 25px;"></h2>
+            <div id="guidesList" class="guide-list"></div>
+        </div>
+
+        <!-- Vista de contenido de guía -->
+        <div id="contentView" class="guide-content">
+            <button class="back-button" onclick="backToGuides()">← Volver a Guías</button>
+            <div id="guideContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de guías
+        const guidesDatabase = {
+            basicos: {
+                title: "Conceptos Básicos",
+                guides: [
+                    {
+                        id: "rut-empresa",
+                        title: "¿Qué es el RUT y cómo obtenerlo?",
+                        summary: "Guía completa sobre el Rol Único Tributario para personas y empresas",
+                        duration: "10 min",
+                        level: "Básico",
+                        content: `
+                            <div class="content-header">
+                                <h2>¿Qué es el RUT y cómo obtenerlo?</h2>
+                                <p>El RUT (Rol Único Tributario) es el número de identificación tributaria en Chile.</p>
+                            </div>
+                            <div class="content-body">
+                                <h3>1. ¿Qué es el RUT?</h3>
+                                <p>El RUT es un número único e irrepetible que identifica a cada contribuyente ante el SII. Es obligatorio para:</p>
+                                <ul>
+                                    <li>Realizar cualquier actividad económica</li>
+                                    <li>Emitir facturas o boletas</li>
+                                    <li>Hacer declaraciones de impuestos</li>
+                                    <li>Contratar trabajadores</li>
+                                </ul>
+
+                                <div class="info-box">
+                                    <strong>💡 Importante:</strong> El RUT es diferente al RUN (Rol Único Nacional), aunque para personas naturales chilenas coinciden.
+                                </div>
+
+                                <h3>2. Tipos de RUT</h3>
+                                <ul>
+                                    <li><strong>Persona Natural:</strong> Coincide con el RUN/Cédula de Identidad</li>
+                                    <li><strong>Persona Jurídica:</strong> Se asigna al constituir la empresa</li>
+                                    <li><strong>Extranjeros:</strong> Se puede obtener RUT sin tener RUN</li>
+                                </ul>
+
+                                <h3>3. ¿Cómo obtener RUT como empresa?</h3>
+                                <ol>
+                                    <li>Constituir la sociedad (escritura pública)</li>
+                                    <li>Publicar extracto en Diario Oficial</li>
+                                    <li>Inscribir en Registro de Comercio</li>
+                                    <li>Solicitar RUT en SII con documentos legales</li>
+                                </ol>
+
+                                <div class="tip-box">
+                                    <strong>✅ Consejo:</strong> Puede hacer el trámite en línea a través del portal "Empresa en un Día".
+                                </div>
+
+                                <h3>4. Documentos necesarios</h3>
+                                <ul>
+                                    <li>Escritura de constitución</li>
+                                    <li>Publicación en Diario Oficial</li>
+                                    <li>Inscripción en Registro de Comercio</li>
+                                    <li>Cédula de identidad del representante</li>
+                                </ul>
+                            </div>
+                        `
+                    },
+                    {
+                        id: "tipos-contribuyentes",
+                        title: "Tipos de Contribuyentes en Chile",
+                        summary: "Diferencias entre persona natural y jurídica, regímenes tributarios",
+                        duration: "15 min",
+                        level: "Básico"
+                    },
+                    {
+                        id: "obligaciones-basicas",
+                        title: "Obligaciones Tributarias Básicas",
+                        summary: "Qué impuestos debe pagar según su actividad",
+                        duration: "12 min",
+                        level: "Básico"
+                    }
+                ]
+            },
+            declaraciones: {
+                title: "Declaraciones",
+                guides: [
+                    {
+                        id: "f29-paso-paso",
+                        title: "Cómo Declarar F29 Paso a Paso",
+                        summary: "Tutorial completo para declarar IVA mensualmente",
+                        duration: "20 min",
+                        level: "Intermedio",
+                        content: `
+                            <div class="content-header">
+                                <h2>Cómo Declarar F29 Paso a Paso</h2>
+                                <p>Guía detallada para completar y enviar su declaración mensual de IVA.</p>
+                            </div>
+                            <div class="content-body">
+                                <h3>1. Antes de comenzar</h3>
+                                <p>Prepare la siguiente información:</p>
+                                <ul>
+                                    <li>Libro de Compras del mes</li>
+                                    <li>Libro de Ventas del mes</li>
+                                    <li>Facturas de activo fijo (si corresponde)</li>
+                                    <li>Clave tributaria del SII</li>
+                                </ul>
+
+                                <div class="warning-box">
+                                    <strong>⚠️ Atención:</strong> El plazo vence el día 20 de cada mes (o siguiente hábil).
+                                </div>
+
+                                <h3>2. Ingreso al sistema</h3>
+                                <ol>
+                                    <li>Ingrese a www.sii.cl</li>
+                                    <li>Click en "Servicios Online"</li>
+                                    <li>Seleccione "Declaración Mensual (F29/F50)"</li>
+                                    <li>Ingrese RUT y clave tributaria</li>
+                                </ol>
+
+                                <h3>3. Completar el formulario</h3>
+                                <p><strong>Sección Ventas:</strong></p>
+                                <ul>
+                                    <li>Línea 20: Ventas netas del período</li>
+                                    <li>Línea 502: Ventas exentas</li>
+                                    <li>Línea 142: Exportaciones</li>
+                                </ul>
+
+                                <p><strong>Sección Compras:</strong></p>
+                                <ul>
+                                    <li>Línea 519: Compras con derecho a crédito</li>
+                                    <li>Línea 520: Compras activo fijo</li>
+                                    <li>Línea 524: IVA no recuperable</li>
+                                </ul>
+
+                                <div class="interactive-section">
+                                    <h4>🎯 Quiz Rápido</h4>
+                                    <div class="quiz-question">
+                                        <p><strong>¿Cuándo vence el plazo para declarar F29?</strong></p>
+                                        <div class="quiz-options">
+                                            <div class="quiz-option" onclick="checkAnswer(this, false)">El día 15 de cada mes</div>
+                                            <div class="quiz-option" onclick="checkAnswer(this, true)">El día 20 de cada mes</div>
+                                            <div class="quiz-option" onclick="checkAnswer(this, false)">El último día del mes</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3>4. Revisión y envío</h3>
+                                <ol>
+                                    <li>Verifique que el IVA débito y crédito estén correctos</li>
+                                    <li>Revise el resultado (a pagar o crédito)</li>
+                                    <li>Click en "Enviar Declaración"</li>
+                                    <li>Guarde el comprobante PDF</li>
+                                </ol>
+
+                                <div class="tip-box">
+                                    <strong>💡 Tip:</strong> Si tiene crédito a favor, puede arrastrarlo al mes siguiente o solicitar devolución.
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        id: "f22-renta",
+                        title: "Declaración de Renta F22",
+                        summary: "Cómo declarar impuesto a la renta anual",
+                        duration: "25 min",
+                        level: "Intermedio"
+                    },
+                    {
+                        id: "rectificatorias",
+                        title: "Declaraciones Rectificatorias",
+                        summary: "Cuándo y cómo corregir declaraciones ya enviadas",
+                        duration: "15 min",
+                        level: "Avanzado"
+                    }
+                ]
+            },
+            empresa: {
+                title: "Inicio de Actividades",
+                guides: [
+                    {
+                        id: "constituir-empresa",
+                        title: "Cómo Constituir una Empresa",
+                        summary: "Pasos legales y tributarios para crear una empresa",
+                        duration: "30 min",
+                        level: "Intermedio"
+                    },
+                    {
+                        id: "inicio-actividades",
+                        title: "Inicio de Actividades en SII",
+                        summary: "Proceso completo en el Servicio de Impuestos Internos",
+                        duration: "20 min",
+                        level: "Básico"
+                    }
+                ]
+            },
+            iva: {
+                title: "IVA y Facturación",
+                guides: [
+                    {
+                        id: "facturacion-electronica",
+                        title: "Facturación Electrónica",
+                        summary: "Cómo emitir facturas electrónicas paso a paso",
+                        duration: "18 min",
+                        level: "Intermedio"
+                    },
+                    {
+                        id: "credito-fiscal",
+                        title: "Crédito Fiscal IVA",
+                        summary: "Qué es y cómo usar el crédito fiscal",
+                        duration: "15 min",
+                        level: "Intermedio"
+                    }
+                ]
+            },
+            renta: {
+                title: "Impuesto a la Renta",
+                guides: [
+                    {
+                        id: "global-complementario",
+                        title: "Impuesto Global Complementario",
+                        summary: "Guía para personas naturales",
+                        duration: "20 min",
+                        level: "Intermedio"
+                    },
+                    {
+                        id: "primera-categoria",
+                        title: "Impuesto Primera Categoría",
+                        summary: "Para empresas y sociedades",
+                        duration: "25 min",
+                        level: "Avanzado"
+                    }
+                ]
+            },
+            laboral: {
+                title: "Temas Laborales",
+                guides: [
+                    {
+                        id: "contratos-trabajo",
+                        title: "Contratos de Trabajo",
+                        summary: "Tipos, cláusulas obligatorias y recomendaciones",
+                        duration: "20 min",
+                        level: "Básico"
+                    },
+                    {
+                        id: "liquidaciones-sueldo",
+                        title: "Liquidaciones de Sueldo",
+                        summary: "Cómo calcular y emitir liquidaciones correctamente",
+                        duration: "15 min",
+                        level: "Intermedio"
+                    }
+                ]
+            }
+        };
+
+        let currentCategory = null;
+        let currentGuide = null;
+
+        function showCategory(categoryId) {
+            currentCategory = categoryId;
+            const category = guidesDatabase[categoryId];
+            
+            document.getElementById('categoriesView').style.display = 'none';
+            document.getElementById('guidesView').classList.add('active');
+            document.getElementById('categoryTitle').textContent = category.title;
+            
+            const guidesList = document.getElementById('guidesList');
+            guidesList.innerHTML = '';
+            
+            category.guides.forEach(guide => {
+                const guideElement = createGuideElement(guide);
+                guidesList.appendChild(guideElement);
+            });
+        }
+
+        function createGuideElement(guide) {
+            const div = document.createElement('div');
+            div.className = 'guide-item';
+            div.onclick = () => showGuide(guide);
+            
+            div.innerHTML = `
+                <h3 class="guide-title">
+                    <span>📖</span>
+                    ${guide.title}
+                </h3>
+                <p class="guide-summary">${guide.summary}</p>
+                <div class="guide-meta">
+                    <span>⏱️ ${guide.duration}</span>
+                    <span>📊 Nivel: ${guide.level}</span>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        function showGuide(guide) {
+            if (!guide.content) {
+                alert('Esta guía está en desarrollo. Por favor, vuelva pronto.');
+                return;
+            }
+            
+            currentGuide = guide;
+            document.getElementById('guidesView').classList.remove('active');
+            document.getElementById('contentView').classList.add('active');
+            document.getElementById('guideContent').innerHTML = guide.content;
+            
+            // Iniciar progreso de lectura
+            initReadingProgress();
+        }
+
+        function showCategories() {
+            document.getElementById('categoriesView').style.display = 'block';
+            document.getElementById('guidesView').classList.remove('active');
+            document.getElementById('contentView').classList.remove('active');
+        }
+
+        function backToGuides() {
+            document.getElementById('contentView').classList.remove('active');
+            document.getElementById('guidesView').classList.add('active');
+        }
+
+        function searchGuides() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            
+            if (searchTerm.length < 2) {
+                showCategories();
+                return;
+            }
+            
+            // Aquí se implementaría la búsqueda real
+            console.log('Buscando:', searchTerm);
+        }
+
+        function checkAnswer(element, isCorrect) {
+            const options = element.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Mostrar la respuesta correcta
+                options.forEach(opt => {
+                    if (opt.textContent.includes('20')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function initReadingProgress() {
+            // Simulación de progreso de lectura
+            let progress = 0;
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+            progressBar.innerHTML = '<div class="progress-fill" id="progressFill"></div>';
+            
+            const contentHeader = document.querySelector('.content-header');
+            if (contentHeader) {
+                contentHeader.appendChild(progressBar);
+            }
+            
+            // Actualizar progreso al hacer scroll
+            document.getElementById('contentView').addEventListener('scroll', function() {
+                const scrollHeight = this.scrollHeight - this.clientHeight;
+                const scrollPosition = this.scrollTop;
+                progress = (scrollPosition / scrollHeight) * 100;
+                
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) {
+                    progressFill.style.width = progress + '%';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
