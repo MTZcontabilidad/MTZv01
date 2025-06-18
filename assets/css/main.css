@@ -705,10 +705,41 @@ a, button {
         bottom: 20px;
         top: auto;
         transform: none;
+        font-size: 1rem;
+        padding: 25px;
     }
 
     .info-panel.active {
         right: 20px;
+    }
+    
+    /* Mejoras específicas para WhatsApp en móviles */
+    .info-panel .action-button {
+        padding: 18px 30px;
+        font-size: 1.1rem;
+        min-height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        border-radius: 25px;
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+    }
+    
+    .info-panel .action-button::before {
+        content: "📱";
+        font-size: 1.3em;
+        position: static;
+        width: auto;
+        height: auto;
+        background: none;
+    }
+    
+    .info-panel .action-button:hover {
+        background: linear-gradient(135deg, #128C7E, #25D366);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 12px 35px rgba(37, 211, 102, 0.4);
     }
 }
 

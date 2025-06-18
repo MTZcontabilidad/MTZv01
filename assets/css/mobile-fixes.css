@@ -1,0 +1,237 @@
+/* ===================================
+   MEJORAS MÓVILES PARA CUBO 3D
+   =================================== */
+
+/* Prevenir zoom no deseado en dispositivos móviles */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Optimización específica para WhatsApp y enlaces externos */
+a[href*="wa.me"] {
+    -webkit-tap-highlight-color: rgba(37, 211, 102, 0.3);
+    tap-highlight-color: rgba(37, 211, 102, 0.3);
+}
+
+/* Mejorar la experiencia táctil */
+#canvas-container {
+    touch-action: pan-x pan-y pinch-zoom;
+}
+
+/* Optimizar el rendimiento del canvas en móviles */
+#canvas-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    touch-action: pan-x pan-y pinch-zoom;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Ajustes específicos para dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+    /* Hacer los elementos interactivos más grandes para dedos */
+    .action-button {
+        padding: 18px 35px !important;
+        font-size: 1.1em !important;
+    }
+    
+    /* Mejorar la visibilidad del panel de información en móviles */
+    .info-panel {
+        width: calc(100% - 30px);
+        max-width: 400px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%) translateY(-50%);
+        bottom: auto;
+        top: 50%;
+        font-size: 1.1em;
+        padding: 25px;
+    }
+    
+    .info-panel.active {
+        right: auto;
+        left: 50%;
+    }
+    
+    /* Mejorar botones para WhatsApp */
+    .info-panel .action-button {
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        border: none;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+    
+    .info-panel .action-button:hover {
+        background: linear-gradient(135deg, #128C7E, #25D366);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+    }
+    
+    /* Ajustar el tamaño del texto para mejor legibilidad */
+    .controls-info p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+}
+
+/* Mejoras para iPhone específicamente */
+@supports (-webkit-touch-callout: none) {
+    /* Prevenir el rebote elástico en iOS */
+    body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    /* Mejorar el rendimiento en Safari */
+    #canvas-container {
+        -webkit-transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+    }
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 375px) {
+    .navbar {
+        height: 60px;
+    }
+    
+    .navbar-logo .logo {
+        height: 35px;
+    }
+    
+    .company-name {
+        font-size: 1.2rem;
+    }
+    
+    .tech-info {
+        font-size: 0.8rem;
+    }
+    
+    #canvas-container {
+        top: 60px;
+        height: calc(100% - 60px);
+    }
+    
+    .controls-info {
+        bottom: 20px;
+        padding: 12px 20px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Optimización de rendimiento para móviles */
+@media (max-width: 768px) {
+    /* Reducir efectos visuales pesados en móviles */
+    .cosmic-particles {
+        animation-duration: 30s;
+    }
+    
+    body::before {
+        animation-duration: 20s;
+    }
+    
+    /* Simplificar sombras para mejor rendimiento */
+    * {
+        box-shadow: none !important;
+    }
+    
+    .navbar {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .info-panel {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Fix para el panel de información en landscape móvil */
+@media (max-height: 500px) and (orientation: landscape) {
+    .info-panel {
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 20px;
+        font-size: 0.9rem;
+    }
+    
+    .info-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2em;
+        margin-bottom: 15px;
+    }
+    
+    .info-panel h3 {
+        font-size: 1.4em;
+        margin-bottom: 10px;
+    }
+    
+    .info-panel .action-button {
+        padding: 15px 25px;
+        font-size: 1rem;
+        min-height: 45px;
+    }
+}
+
+/* Mejoras adicionales para dispositivos muy pequeños */
+@media (max-width: 320px) {
+    .navbar {
+        height: 60px;
+        padding: 0 15px;
+    }
+    
+    .navbar-logo .logo {
+        height: 30px;
+    }
+    
+    .company-name {
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .tech-info {
+        font-size: 0.7rem;
+    }
+    
+    #canvas-container {
+        top: 60px;
+        height: calc(100% - 60px);
+    }
+    
+    .controls-info {
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+        padding: 12px 15px;
+        font-size: 0.8rem;
+    }
+    
+    .info-panel {
+        width: calc(100% - 30px);
+        padding: 20px;
+        font-size: 0.9rem;
+    }
+    
+    .info-panel .action-button {
+        padding: 16px 25px;
+        font-size: 1rem;
+        min-height: 50px;
+    }
+}
