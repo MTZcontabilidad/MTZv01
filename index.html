@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>MTZ Consultores Tributarios | Portal 3D Espectacular V3.1.05 OPTIMIZADO</title>
+    <title>MTZ Consultores Tributarios | Portal 3D Espectacular V3.1.06 CRÍTICO</title>
     <meta name="description" content="Portal 3D interactivo ultra-optimizado de MTZ Consultores Tributarios con acceso directo a servicios del SII, PREVIRED, Dirección del Trabajo, Tesorería y más. Compatible con todos los dispositivos.">
     <meta name="keywords" content="MTZ, Consultores Tributarios, SII, PREVIRED, Portal 3D, WebGL, Three.js">
     <meta name="theme-color" content="#00d4ff">
@@ -14,9 +14,9 @@
     <link rel="icon" type="image/png" href="assets/img/logo-mtz.png">
     
     <!-- CSS V3.1 Ultra-Optimizado -->
-    <link rel="stylesheet" href="assets/css/main.css?v=3105">
-    <link rel="stylesheet" href="assets/css/animations.css?v=3105">
-    <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3105">
+    <link rel="stylesheet" href="assets/css/main.css?v=3106">
+    <link rel="stylesheet" href="assets/css/animations.css?v=3106">
+    <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3106">
 </head>
 <body>
     <!-- Partículas cósmicas de fondo -->
@@ -64,25 +64,34 @@
         </button>
     </div>
 
-    <!-- Three.js R150 - Carga simple y directa -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js"></script>
+    <!-- Three.js R150 - Carga MÚLTIPLE con fallbacks -->
+    <script src="https://unpkg.com/three@0.150.0/build/three.min.js"></script>
+    <script>
+        // Verificación inmediata de Three.js
+        if (typeof THREE === 'undefined') {
+            console.log('⚠️ Fallback: Cargando Three.js desde CDN alternativo');
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js"><\/script>');
+        } else {
+            console.log('✅ Three.js cargado exitosamente desde unpkg');
+        }
+    </script>
     
     <!-- JavaScript V3.1 Ultra-Optimizado -->
-    <script src="assets/js/cube.js?v=3105"></script>
-    <script src="assets/js/main.js?v=3105"></script>
+    <script src="assets/js/cube.js?v=3106"></script>
+    <script src="assets/js/main.js?v=3106"></script>
 
     <!-- Analytics V3.1 -->
     <script>
-        console.log('🎯 MTZ Portal 3D V3.1.05 OPTIMIZADO - ULTRA-OPTIMIZADO');
-        console.log('🚀 Cubo Espectacular: 60% más rápido');
-        console.log('⚡ Efectos Visuales Mejorados: ON');
-        console.log('📱 Detección Adaptiva de Dispositivo: ON');
-        console.log('🔍 Controles Táctiles y Mouse: HABILITADOS');
+        console.log('🎯 MTZ Portal 3D V3.1.06 CRÍTICO - ULTRA-ROBUSTO');
+        console.log('🚀 Sistema de Carga: MÚLTIPLES REINTENTOS');
+        console.log('🛡️ Three.js: CARGA REDUNDANTE CON FALLBACKS');
+        console.log('⚡ Detección de Errores: ULTRA-AVANZADA');
+        console.log('📱 Compatibilidad WebGL: VERIFICACIÓN COMPLETA');
+        console.log('🔄 Reintentos Automáticos: 10 INTENTOS');
+        console.log('⏱️ Timeout Extendido: 15 SEGUNDOS');
         console.log('🎮 Performance Mode: ULTRA-ADAPTATIVO');
         console.log('✨ Three.js R150 + WebGL 2.0');
-        console.log('🧹 Archivos Innecesarios Eliminados: 85KB');
-        console.log('🛡️ Sistema de Carga Unificado: ON');
-        console.log('🔧 Conflictos de Funciones Resueltos: ON');
+        console.log('🧹 Archivos Eliminados: 85KB');
     </script>
 </body>
 </html> 

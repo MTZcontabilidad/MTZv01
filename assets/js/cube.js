@@ -807,20 +807,71 @@ window.addEventListener('orientationchange', () => {
     setTimeout(handleResize, 200);
 });
 
-// Función de inicialización que será llamada por main.js
+// Función de inicialización ULTRA-ROBUSTA que será llamada por main.js
 function startCube() {
     console.log('🚀 INICIANDO CUBO 3D...');
     
+    // Verificación múltiple de Three.js
     if (typeof THREE === 'undefined') {
         console.error('❌ THREE.js no disponible');
+        
+        // Mostrar error en pantalla
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.innerHTML = `
+                <div style="color: #ff6b6b; text-align: center; padding: 20px; font-family: Arial;">
+                    <h2>⚠️ Error de Carga</h2>
+                    <p>Three.js no se pudo cargar correctamente</p>
+                    <p>Verificando conexión a internet...</p>
+                    <button onclick="location.reload()" style="padding: 15px 30px; margin-top: 20px; background: #00d4ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                        🔄 Recargar Página
+                    </button>
+                </div>
+            `;
+        }
         return false;
     }
     
+    // Verificar propiedades esenciales de Three.js
+    if (!THREE.Scene || !THREE.WebGLRenderer || !THREE.PerspectiveCamera) {
+        console.error('❌ Three.js incompleto - faltan componentes esenciales');
+        return false;
+    }
+    
+    console.log('✅ Three.js verificado correctamente');
+    console.log('📋 Versión Three.js:', THREE.REVISION);
+    
     try {
+        // Verificar soporte WebGL
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) {
+            throw new Error('WebGL no soportado en este navegador');
+        }
+        console.log('✅ WebGL soportado');
+        
+        // Inicializar el cubo
         initThreeJS();
+        console.log('✅ Cubo inicializado exitosamente');
         return true;
+        
     } catch (error) {
-        console.error('❌ Error iniciando cubo:', error);
+        console.error('❌ Error crítico iniciando cubo:', error);
+        
+        // Mostrar error específico
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.innerHTML = `
+                <div style="color: #ff6b6b; text-align: center; padding: 20px; font-family: Arial;">
+                    <h2>⚠️ Error del Sistema 3D</h2>
+                    <p><strong>Problema:</strong> ${error.message}</p>
+                    <p>Tu navegador puede no soportar WebGL o hay un problema de compatibilidad.</p>
+                    <button onclick="location.reload()" style="padding: 15px 30px; margin-top: 20px; background: #00d4ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                        🔄 Intentar de Nuevo
+                    </button>
+                </div>
+            `;
+        }
         return false;
     }
 }

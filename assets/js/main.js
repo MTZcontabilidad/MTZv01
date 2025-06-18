@@ -15,23 +15,42 @@ document.addEventListener('DOMContentLoaded', function() {
     // Iniciar loading
     startLoadingSequence();
     
-    // Esperar un poco y luego iniciar el cubo
-    setTimeout(() => {
+    // Función para intentar iniciar el cubo con reintentos
+    function tryStartCube(attempt = 1, maxAttempts = 10) {
+        console.log(`🔄 Intento ${attempt}/${maxAttempts} de iniciar cubo...`);
+        
         if (typeof startCube === 'function') {
             const success = startCube();
             if (success) {
-                console.log('✅ Cubo iniciado correctamente');
+                console.log('✅ Cubo iniciado correctamente en intento', attempt);
+                return;
             } else {
-                console.error('❌ Error iniciando cubo');
-                // Mostrar error y ocultar loading
-                setTimeout(() => {
-                    hideLoadingScreen();
-                }, 1000);
+                console.log('❌ Cubo falló en intento', attempt);
             }
         } else {
-            console.error('❌ Función startCube no disponible');
+            console.log('⚠️ Función startCube no disponible en intento', attempt);
         }
-    }, 200);
+        
+        // Si no es el último intento, esperar y reintentar
+        if (attempt < maxAttempts) {
+            const delay = attempt * 500; // Incrementar delay progresivamente
+            console.log(`⏳ Esperando ${delay}ms antes del siguiente intento...`);
+            setTimeout(() => {
+                tryStartCube(attempt + 1, maxAttempts);
+            }, delay);
+        } else {
+            console.error('❌ FALLO CRÍTICO: No se pudo iniciar el cubo después de', maxAttempts, 'intentos');
+            // Forzar hide del loading después de fallar
+            setTimeout(() => {
+                hideLoadingScreen();
+            }, 1000);
+        }
+    }
+    
+    // Iniciar el primer intento después de un pequeño delay
+    setTimeout(() => {
+        tryStartCube();
+    }, 300);
 });
 
 // Escuchar cuando el cubo esté listo
@@ -43,13 +62,17 @@ document.addEventListener('cubeReady', function() {
     }, 1000); // Reducido a 1 segundo
 });
 
-// Backup timer - si el cubo no se carga en 5 segundos, forzar hide
+// Backup timer - si el cubo no se carga en 15 segundos, forzar hide
 setTimeout(() => {
     if (!loadingComplete) {
-        console.log('⚠️ TIMEOUT - FORZANDO HIDE LOADING (5s)');
+        console.log('⚠️ TIMEOUT EXTENDIDO - FORZANDO HIDE LOADING (15s)');
+        console.log('🔍 Estado actual del sistema:');
+        console.log('  - THREE disponible:', typeof THREE !== 'undefined');
+        console.log('  - startCube disponible:', typeof startCube === 'function');
+        console.log('  - Canvas container:', document.getElementById('canvas-container') ? 'Existe' : 'No existe');
         hideLoadingScreen();
     }
-}, 5000);
+}, 15000); // Aumentado a 15 segundos
 
 // Secuencia de loading
 function startLoadingSequence() {
@@ -156,7 +179,7 @@ window.addEventListener('resize', throttle(() => {
 // Manejar visibilidad de la página
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-        console.log('👁️ PÁGINA OCULTA');
+        console.log('��️ PÁGINA OCULTA');
     } else {
         console.log('👁️ PÁGINA VISIBLE');
     }
