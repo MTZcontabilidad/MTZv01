@@ -576,11 +576,22 @@ function onTouchEnd(event) {
             Math.pow(touch.clientY - lastTouchPosition.y, 2)
         );
         
-        // Detectar tap rápido
-        if (touchDuration < 300 && touchDistance < 15) {
+        // Detectar tap más sensible - aumentamos tolerancia y tiempo
+        if (touchDuration < 500 && touchDistance < 25) {
             mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+            
+            // Feedback táctil en dispositivos compatibles
+            if (navigator.vibrate) {
+                navigator.vibrate(50); // Vibración sutil de 50ms
+            }
+            
+            console.log('📱 Tap detectado en móvil');
             handleClick();
+        } else if (touchDuration >= 500) {
+            console.log('📱 Tap muy largo - considerado como arrastre');
+        } else if (touchDistance >= 25) {
+            console.log('📱 Movimiento detectado - considerado como arrastre');
         }
         
         initialDistance = 0;
@@ -593,7 +604,7 @@ function updateMousePosition(event) {
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
-// Manejar clicks/taps con efecto mejorado
+// Manejar clicks/taps con confirmación mejorada
 function handleClick() {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(cube);
@@ -605,15 +616,8 @@ function handleClick() {
         // Crear efecto visual
         createEnhancedClickEffect(intersects[0].point, faceData.color);
         
-        // Mostrar panel de información
-        updateInfoPanel(faceData);
-        
-        // Abrir enlace después del efecto
-        setTimeout(() => {
-            if (faceData.link.startsWith('http')) {
-                window.open(faceData.link, '_blank');
-            }
-        }, 300);
+        // Mostrar panel de información con confirmación
+        updateInfoPanelWithConfirmation(faceData);
         
         console.log(`🎯 Cara clickeada: ${faceData.title}`);
     }
@@ -716,15 +720,138 @@ function updateInfoPanel(faceData) {
     }
 }
 
-// Actualizar información de controles
+// Actualizar panel de información con confirmación interactiva
+function updateInfoPanelWithConfirmation(faceData) {
+    const panel = document.getElementById('infoPanel');
+    const title = document.getElementById('infoTitle');
+    const content = document.getElementById('infoContent');
+    const icon = document.getElementById('infoIcon');
+    
+    if (title) title.textContent = faceData.title;
+    if (content) content.textContent = faceData.content;
+    if (icon) icon.textContent = faceData.emoji;
+    
+    // Actualizar botón de acción con confirmación
+    const actionButton = panel.querySelector('.action-button');
+    if (actionButton) {
+        // Detectar si es móvil para ajustar la experiencia
+        const device = getDeviceCapabilities();
+        
+        if (faceData.link.startsWith('http')) {
+            actionButton.innerHTML = device.isMobile ? 
+                `<span>📱</span> Ir a ${faceData.title}` : 
+                `<span>🌐</span> Visitar ${faceData.title}`;
+            
+            actionButton.onclick = () => showConfirmationModal(faceData);
+        } else {
+            actionButton.innerHTML = device.isMobile ? 
+                `<span>📱</span> Contactar por WhatsApp` : 
+                `<span>💬</span> Contactar por WhatsApp`;
+            
+            actionButton.onclick = () => showConfirmationModal(faceData);
+        }
+    }
+    
+    if (panel) {
+        panel.classList.add('active');
+        
+        // Auto-ocultar después de 8 segundos (más tiempo para leer)
+        setTimeout(() => {
+            panel.classList.remove('active');
+        }, 8000);
+    }
+}
+
+// Modal de confirmación adaptativo
+function showConfirmationModal(faceData) {
+    const device = getDeviceCapabilities();
+    
+    // Crear modal dinámicamente
+    const modal = document.createElement('div');
+    modal.className = 'confirmation-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-icon">${faceData.emoji}</span>
+                <h3>${faceData.title}</h3>
+            </div>
+            <div class="modal-body">
+                <p>${faceData.content}</p>
+                ${faceData.link.startsWith('http') ? 
+                    `<p class="modal-url">🌐 ${faceData.link}</p>` : 
+                    `<p class="modal-url">📱 Abrir WhatsApp</p>`
+                }
+                <p class="modal-question">${device.isMobile ? 
+                    '¿Deseas abrir esta aplicación?' : 
+                    '¿Deseas visitar este sitio web?'}</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" onclick="closeConfirmationModal()">
+                    ❌ Cancelar
+                </button>
+                <button class="modal-btn modal-confirm" onclick="confirmNavigation('${faceData.link}')">
+                    ✅ ${device.isMobile ? 'Abrir' : 'Ir al Sitio'}
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Animación de entrada
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+    
+    // Auto-cerrar después de 10 segundos
+    setTimeout(() => {
+        if (document.body.contains(modal)) {
+            closeConfirmationModal();
+        }
+    }, 10000);
+}
+
+// Cerrar modal de confirmación
+function closeConfirmationModal() {
+    const modal = document.querySelector('.confirmation-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            if (document.body.contains(modal)) {
+                document.body.removeChild(modal);
+            }
+        }, 300);
+    }
+}
+
+// Confirmar navegación
+function confirmNavigation(link) {
+    closeConfirmationModal();
+    
+    // Efecto de confirmación
+    console.log('✅ Usuario confirmó navegación a:', link);
+    
+    // Abrir enlace con pequeño delay para mejor UX
+    setTimeout(() => {
+        if (link.startsWith('http')) {
+            window.open(link, '_blank', 'noopener,noreferrer');
+        }
+    }, 200);
+}
+
+// Hacer funciones globales para onclick
+window.closeConfirmationModal = closeConfirmationModal;
+window.confirmNavigation = confirmNavigation;
+
+// Actualizar información de controles con detalles mejorados
 function updateControlsInfo() {
     const controlsInfo = document.getElementById('controlsInfo');
     if (controlsInfo) {
         const device = getDeviceCapabilities();
         if (device.isMobile) {
-            controlsInfo.innerHTML = '<p>👆 Arrastra para rotar • 🤏 Pellizca para zoom • 👆 Toca las caras</p>';
+            controlsInfo.innerHTML = '<p>👆 <strong>Arrastra</strong> para rotar • 🤏 <strong>Pellizca</strong> para zoom • 👆 <strong>Toca las caras</strong> para ver servicios</p>';
         } else {
-            controlsInfo.innerHTML = '<p>🖱️ Arrastra para rotar • 🔍 Rueda para zoom • 👆 Click en las caras</p>';
+            controlsInfo.innerHTML = '<p>🖱️ <strong>Arrastra</strong> para rotar • 🔍 <strong>Rueda del mouse</strong> para zoom • 👆 <strong>Click en las caras</strong> para ver servicios</p>';
         }
     }
 }
