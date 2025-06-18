@@ -12,6 +12,9 @@ let loadingComplete = false;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 MTZ Portal 3D V3.1.12 - Inicializando...');
     
+    // Iniciar secuencia de loading
+    startLoadingSequence();
+    
     // Verificar soporte WebGL
     if (!window.WebGLRenderingContext) {
         console.error('❌ WebGL no soportado');
@@ -21,11 +24,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar el cubo 3D
     try {
-        if (typeof initCube === 'function') {
-            initCube();
-            console.log('✅ Cubo 3D inicializado correctamente');
+        if (typeof startCube === 'function') {
+            const success = startCube();
+            if (success) {
+                console.log('✅ Cubo 3D inicializado correctamente');
+            } else {
+                console.error('❌ Cubo falló al inicializar');
+            }
         } else {
-            console.error('❌ Función initCube no encontrada');
+            console.error('❌ Función startCube no encontrada');
+            console.log('🔍 Funciones disponibles:', Object.keys(window).filter(key => key.includes('cube') || key.includes('Cube')));
         }
     } catch (error) {
         console.error('❌ Error al inicializar cubo:', error);

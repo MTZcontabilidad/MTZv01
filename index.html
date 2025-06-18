@@ -64,6 +64,24 @@
         </button>
     </div>
 
+    <!-- Modal de Confirmación -->
+    <div class="confirmation-modal" id="confirmModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon">🚀</div>
+                <h3>Confirmar Navegación</h3>
+            </div>
+            <div class="modal-body">
+                <p class="modal-question">¿Deseas acceder a <strong id="serviceName">este servicio</strong>?</p>
+                <p class="modal-url">Se abrirá en una nueva pestaña</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-confirm" id="confirmNavigation">✅ Confirmar</button>
+                <button class="modal-btn modal-cancel" id="cancelNavigation">❌ Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Three.js R150 - Carga MÚLTIPLE con fallbacks -->
     <script src="https://unpkg.com/three@0.150.0/build/three.min.js"></script>
     <script>
