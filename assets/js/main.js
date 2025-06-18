@@ -16,11 +16,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Escuchar cuando el cubo esté listo
 document.addEventListener('cubeReady', function() {
-    console.log('🎯 CUBO LISTO - OCULTANDO LOADING');
+    console.log('🎯 EVENTO cubeReady RECIBIDO - OCULTANDO LOADING');
+    loadingComplete = true;
     setTimeout(() => {
         hideLoadingScreen();
-    }, 2000); // Dar 2 segundos más para mostrar el "Portal cuántico listo!"
+    }, 1000); // Reducido a 1 segundo
 });
+
+// Backup timer - si el cubo no se carga en 10 segundos, forzar hide
+setTimeout(() => {
+    if (!loadingComplete) {
+        console.log('⚠️ TIMEOUT - FORZANDO HIDE LOADING');
+        hideLoadingScreen();
+    }
+}, 10000);
 
 // Secuencia de loading
 function startLoadingSequence() {

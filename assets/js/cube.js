@@ -180,14 +180,19 @@ function initThreeJS() {
     
     console.log('✨ CUBO V3.0 INICIALIZADO - Modo:', config.powerPreference);
     
-    // Notificar que está listo
+    // Notificar que está listo INMEDIATAMENTE
+    console.log('📡 DISPARANDO EVENTO cubeReady');
+    document.dispatchEvent(new CustomEvent('cubeReady'));
+    
+    // Backup dispatch después de 500ms
     setTimeout(() => {
+        console.log('📡 BACKUP - DISPARANDO EVENTO cubeReady');
         document.dispatchEvent(new CustomEvent('cubeReady'));
     }, 500);
     
     } catch (error) {
         console.error('Error initializing cube:', error);
-        document.getElementById('loading-screen').innerHTML = `
+        document.getElementById('loadingScreen').innerHTML = `
             <div style="color: #ff6b6b; text-align: center;">
                 <h3>Error al cargar el cubo 3D</h3>
                 <p>Por favor, recarga la página</p>
