@@ -10,48 +10,127 @@ let loadingComplete = false;
 
 // Inicializar cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📱 DOM CARGADO - INICIANDO SISTEMA COMPLETO');
+    console.log('🚀 MTZ Portal 3D V3.1.12 - Inicializando...');
     
-    // Iniciar loading
-    startLoadingSequence();
-    
-    // Función para intentar iniciar el cubo con reintentos
-    function tryStartCube(attempt = 1, maxAttempts = 10) {
-        console.log(`🔄 Intento ${attempt}/${maxAttempts} de iniciar cubo...`);
-        
-        if (typeof startCube === 'function') {
-            const success = startCube();
-            if (success) {
-                console.log('✅ Cubo iniciado correctamente en intento', attempt);
-                return;
-            } else {
-                console.log('❌ Cubo falló en intento', attempt);
-            }
-        } else {
-            console.log('⚠️ Función startCube no disponible en intento', attempt);
-        }
-        
-        // Si no es el último intento, esperar y reintentar
-        if (attempt < maxAttempts) {
-            const delay = attempt * 500; // Incrementar delay progresivamente
-            console.log(`⏳ Esperando ${delay}ms antes del siguiente intento...`);
-            setTimeout(() => {
-                tryStartCube(attempt + 1, maxAttempts);
-            }, delay);
-        } else {
-            console.error('❌ FALLO CRÍTICO: No se pudo iniciar el cubo después de', maxAttempts, 'intentos');
-            // Forzar hide del loading después de fallar
-            setTimeout(() => {
-                hideLoadingScreen();
-            }, 1000);
-        }
+    // Verificar soporte WebGL
+    if (!window.WebGLRenderingContext) {
+        console.error('❌ WebGL no soportado');
+        document.getElementById('webgl-error').style.display = 'block';
+        return;
     }
     
-    // Iniciar el primer intento después de un pequeño delay
-    setTimeout(() => {
-        tryStartCube();
-    }, 300);
+    // Inicializar el cubo 3D
+    try {
+        if (typeof initCube === 'function') {
+            initCube();
+            console.log('✅ Cubo 3D inicializado correctamente');
+        } else {
+            console.error('❌ Función initCube no encontrada');
+        }
+    } catch (error) {
+        console.error('❌ Error al inicializar cubo:', error);
+    }
+    
+    // Sistema de detección de dispositivos
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth > 768 && window.innerWidth <= 1024;
+    
+    console.log(`📱 Dispositivo detectado: ${isMobile ? 'Móvil' : isTablet ? 'Tablet' : 'Desktop'}`);
+    
+    // Aplicar estilos específicos del dispositivo
+    document.body.classList.add(isMobile ? 'mobile-device' : isTablet ? 'tablet-device' : 'desktop-device');
+    
+    // Optimizaciones de rendimiento
+    if (isMobile) {
+        // Reducir calidad en móviles
+        document.documentElement.style.setProperty('--particle-count', '50');
+        document.documentElement.style.setProperty('--animation-speed', '0.8');
+    } else {
+        document.documentElement.style.setProperty('--particle-count', '100');
+        document.documentElement.style.setProperty('--animation-speed', '1.0');
+    }
+    
+    // Control de modal de confirmación
+    setupModalControls();
+    
+    // Manejo de errores globales
+    window.addEventListener('error', function(e) {
+        console.error('❌ Error global capturado:', e.error);
+    });
+    
+    // Prevenir zoom accidental en iOS
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    }
+    
+    console.log('🎉 MTZ Portal 3D completamente cargado');
 });
+
+function setupModalControls() {
+    // Modal de confirmación para navegación
+    const modal = document.getElementById('confirmModal');
+    const confirmBtn = document.getElementById('confirmNavigation');
+    const cancelBtn = document.getElementById('cancelNavigation');
+    
+    let pendingUrl = '';
+    
+    // Interceptar clics en enlaces de servicios
+    document.querySelectorAll('a[data-service]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            pendingUrl = this.href;
+            
+            const serviceName = this.getAttribute('data-service') || 'este servicio';
+            document.getElementById('serviceName').textContent = serviceName;
+            
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
+        });
+    });
+    
+    // Confirmar navegación
+    confirmBtn.addEventListener('click', function() {
+        if (pendingUrl) {
+            window.open(pendingUrl, '_blank');
+        }
+        closeModal();
+    });
+    
+    // Cancelar navegación
+    cancelBtn.addEventListener('click', closeModal);
+    
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+    
+    function closeModal() {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            pendingUrl = '';
+        }, 300);
+    }
+}
+
+// Función de utilidad para debugging
+window.MTZDebug = {
+    version: '3.1.12',
+    checkStatus: function() {
+        console.log('🔍 Estado del Portal MTZ:');
+        console.log('- Versión:', this.version);
+        console.log('- WebGL:', window.WebGLRenderingContext ? '✅' : '❌');
+        console.log('- Three.js:', typeof THREE !== 'undefined' ? '✅' : '❌');
+        console.log('- Cubo inicializado:', typeof scene !== 'undefined' ? '✅' : '❌');
+        console.log('- Dispositivo:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Móvil' : 'Desktop');
+    }
+};
 
 // Escuchar cuando el cubo esté listo
 document.addEventListener('cubeReady', function() {
