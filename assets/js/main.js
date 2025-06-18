@@ -11,7 +11,10 @@ let loadingComplete = false;
 // Inicializar cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📱 DOM CARGADO - INICIANDO LOADING');
-    startLoadingSequence();
+    // Pequeño delay para asegurar que todo esté listo
+    setTimeout(() => {
+        startLoadingSequence();
+    }, 100);
 });
 
 // Escuchar cuando el cubo esté listo

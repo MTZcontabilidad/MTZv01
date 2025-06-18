@@ -804,21 +804,57 @@ window.addEventListener('orientationchange', () => {
     setTimeout(handleResize, 200);
 });
 
-// Inicializar cuando el DOM esté listo Y Three.js esté cargado
-document.addEventListener('DOMContentLoaded', function() {
-    // Verificar que Three.js esté cargado
-    if (typeof THREE !== 'undefined') {
-        initThreeJS();
-    } else {
-        console.error('❌ THREE.js no está cargado');
-        // Retry después de un momento
-        setTimeout(() => {
+// Sistema de inicialización robusto
+function waitForThreeJS() {
+    return new Promise((resolve, reject) => {
+        if (typeof THREE !== 'undefined') {
+            console.log('✅ THREE.js ya está disponible');
+            resolve();
+            return;
+        }
+        
+        let attempts = 0;
+        const maxAttempts = 50; // 5 segundos máximo
+        
+        const checkThree = () => {
+            attempts++;
             if (typeof THREE !== 'undefined') {
-                initThreeJS();
+                console.log('✅ THREE.js cargado después de', attempts * 100, 'ms');
+                resolve();
+            } else if (attempts >= maxAttempts) {
+                console.error('❌ THREE.js no se pudo cargar después de 5 segundos');
+                reject(new Error('THREE.js timeout'));
             } else {
-                console.error('❌ THREE.js falló al cargar - recarga la página');
+                setTimeout(checkThree, 100);
             }
-        }, 1000);
+        };
+        
+        checkThree();
+    });
+}
+
+// Inicializar cuando el DOM esté listo Y Three.js esté cargado
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('📱 DOM cargado, esperando THREE.js...');
+    
+    try {
+        await waitForThreeJS();
+        console.log('🚀 Iniciando cubo 3D...');
+        initThreeJS();
+    } catch (error) {
+        console.error('❌ Error en la inicialización:', error);
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.innerHTML = `
+                <div style="color: #ff6b6b; text-align: center; padding: 20px;">
+                    <h3>⚠️ Error al cargar Three.js</h3>
+                    <p>No se pudo cargar la librería 3D</p>
+                    <button onclick="location.reload()" style="padding: 10px 20px; margin-top: 10px; background: #00d4ff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🔄 Recargar Página
+                    </button>
+                </div>
+            `;
+        }
     }
 });
 
