@@ -10,8 +10,28 @@ let loadingComplete = false;
 
 // Inicializar cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📱 DOM CARGADO - INICIANDO LOADING');
+    console.log('📱 DOM CARGADO - INICIANDO SISTEMA COMPLETO');
+    
+    // Iniciar loading
     startLoadingSequence();
+    
+    // Esperar un poco y luego iniciar el cubo
+    setTimeout(() => {
+        if (typeof startCube === 'function') {
+            const success = startCube();
+            if (success) {
+                console.log('✅ Cubo iniciado correctamente');
+            } else {
+                console.error('❌ Error iniciando cubo');
+                // Mostrar error y ocultar loading
+                setTimeout(() => {
+                    hideLoadingScreen();
+                }, 1000);
+            }
+        } else {
+            console.error('❌ Función startCube no disponible');
+        }
+    }, 200);
 });
 
 // Escuchar cuando el cubo esté listo

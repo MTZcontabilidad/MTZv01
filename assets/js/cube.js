@@ -804,34 +804,23 @@ window.addEventListener('orientationchange', () => {
     setTimeout(handleResize, 200);
 });
 
-// Inicialización simple y directa
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('📱 DOM cargado, iniciando cubo...');
+// Función de inicialización que será llamada por main.js
+function startCube() {
+    console.log('🚀 INICIANDO CUBO 3D...');
     
-    // Verificación simple de Three.js
     if (typeof THREE === 'undefined') {
-        console.log('⏳ Esperando Three.js...');
-        setTimeout(() => {
-            if (typeof THREE !== 'undefined') {
-                console.log('✅ Three.js listo, iniciando cubo');
-                initThreeJS();
-            } else {
-                console.error('❌ Three.js no disponible');
-                document.getElementById('loadingScreen').innerHTML = `
-                    <div style="color: #ff6b6b; text-align: center; padding: 20px;">
-                        <h3>Error cargando Three.js</h3>
-                        <button onclick="location.reload()" style="padding: 10px 20px; background: #00d4ff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            Recargar
-                        </button>
-                    </div>
-                `;
-            }
-        }, 500);
-    } else {
-        console.log('✅ Three.js ya disponible, iniciando cubo');
-        initThreeJS();
+        console.error('❌ THREE.js no disponible');
+        return false;
     }
-});
+    
+    try {
+        initThreeJS();
+        return true;
+    } catch (error) {
+        console.error('❌ Error iniciando cubo:', error);
+        return false;
+    }
+}
 
 // API externa para controlar el cubo
 window.cubeAPI = {
