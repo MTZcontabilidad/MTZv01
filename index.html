@@ -10,12 +10,25 @@
     <link rel="icon" type="image/png" href="assets/img/logo-mtz.png">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/main.css?v=2027">
-    <link rel="stylesheet" href="assets/css/animations.css?v=2025">
+    <link rel="stylesheet" href="assets/css/main.css?v=2028">
+    <link rel="stylesheet" href="assets/css/animations.css?v=2026">
 </head>
 <body>
     <!-- Partículas cósmicas de fondo -->
     <div class="cosmic-particles"></div>
+    
+    <!-- Navbar Superior -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <img src="assets/img/logo-mtz.png" alt="MTZ Logo" class="logo">
+            </div>
+            <div class="navbar-info">
+                <h1 class="company-name">MTZ CONSULTORES TRIBUTARIOS</h1>
+                <p class="tech-info">Portal 3D • Three.js • WebGL • Tecnología Cuántica</p>
+            </div>
+        </div>
+    </nav>
     
     <!-- Loading Screen -->
     <div class="loading" id="loadingScreen">
@@ -28,16 +41,9 @@
         </div>
     </div>
 
-    <!-- Instrucciones superiores -->
-    <div class="instructions" id="instructions">
-        <div class="instructions-logo">
-            <img src="assets/img/logo-mtz.png" alt="MTZ Logo">
-        </div>
-        <div class="instructions-text">
-            <h3>MTZ CONSULTORES TRIBUTARIOS</h3>
-            <p>Portal 3D Interactivo • Servicios Tributarios • Fundación TQF</p>
-            <p class="controls-info">🖱️ Arrastra para rotar • 🔍 Rueda para zoom • 👆 Click en las caras</p>
-        </div>
+    <!-- Instrucciones de control -->
+    <div class="controls-info" id="controlsInfo">
+        <p>🖱️ Arrastra para rotar • 🔍 Rueda para zoom • 👆 Click en las caras</p>
     </div>
 
     <!-- Contenedor del Canvas 3D -->
@@ -57,8 +63,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <!-- JavaScript Modular -->
-    <script src="assets/js/cube.js?v=2029"></script>
-    <script src="assets/js/main.js?v=2027"></script>
+    <script src="assets/js/cube.js?v=2030"></script>
+    <script src="assets/js/main.js?v=2028"></script>
 
     <!-- Analytics -->
     <script>
