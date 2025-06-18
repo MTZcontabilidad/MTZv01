@@ -1,8 +1,8 @@
 /* ===================================
-   MAIN.JS SIMPLIFICADO - SOLO LOADING
+   MAIN.JS V3.0 - CONTROLADOR OPTIMIZADO
    =================================== */
 
-console.log('🚀 MAIN.JS CARGADO - CONTROLADOR DE LOADING');
+console.log('🚀 MAIN.JS V3.0 CARGADO - CONTROLADOR INTELIGENTE');
 
 // Variables para loading
 let loadingProgress = 0;
