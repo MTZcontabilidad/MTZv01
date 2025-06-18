@@ -14,9 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
     startLoadingSequence();
 });
 
+// Escuchar cuando el cubo esté listo
+document.addEventListener('cubeReady', function() {
+    console.log('🎯 CUBO LISTO - OCULTANDO LOADING');
+    setTimeout(() => {
+        hideLoadingScreen();
+    }, 1000); // Dar un segundo más para mostrar el "Portal cuántico listo!"
+});
+
 // Secuencia de loading
 function startLoadingSequence() {
-    const loadingElement = document.getElementById('loading');
+    const loadingElement = document.getElementById('loadingScreen');
     const progressBar = document.querySelector('.progress-bar');
     const loadingText = document.querySelector('.loading-text');
     
@@ -35,10 +43,8 @@ function startLoadingSequence() {
             loadingProgress = 100;
             clearInterval(progressInterval);
             
-            // Esperar un momento antes de ocultar
-            setTimeout(() => {
-                hideLoadingScreen();
-            }, 500);
+            // NO ocultar automáticamente - esperar señal del cubo
+            console.log('📊 PROGRESO COMPLETADO - ESPERANDO CUBO');
         }
         
         // Actualizar barra de progreso
@@ -64,7 +70,7 @@ function startLoadingSequence() {
 
 // Ocultar loading screen
 function hideLoadingScreen() {
-    const loadingElement = document.getElementById('loading');
+    const loadingElement = document.getElementById('loadingScreen');
     
     if (loadingElement) {
         console.log('✅ OCULTANDO LOADING SCREEN');
