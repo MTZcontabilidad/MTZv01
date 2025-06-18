@@ -19,7 +19,7 @@ document.addEventListener('cubeReady', function() {
     console.log('🎯 CUBO LISTO - OCULTANDO LOADING');
     setTimeout(() => {
         hideLoadingScreen();
-    }, 1000); // Dar un segundo más para mostrar el "Portal cuántico listo!"
+    }, 2000); // Dar 2 segundos más para mostrar el "Portal cuántico listo!"
 });
 
 // Secuencia de loading
@@ -35,9 +35,9 @@ function startLoadingSequence() {
     
     console.log('⏳ INICIANDO SECUENCIA DE LOADING');
     
-    // Simular progreso de carga
+    // Simular progreso de carga más lento y realista
     const progressInterval = setInterval(() => {
-        loadingProgress += Math.random() * 15 + 5;
+        loadingProgress += Math.random() * 8 + 3;
         
         if (loadingProgress >= 100) {
             loadingProgress = 100;
@@ -52,37 +52,43 @@ function startLoadingSequence() {
             progressBar.style.width = loadingProgress + '%';
         }
         
-        // Actualizar texto
+        // Actualizar texto con más pasos
         if (loadingText) {
-            if (loadingProgress < 30) {
-                loadingText.textContent = 'Cargando servicios tributarios...';
+            if (loadingProgress < 20) {
+                loadingText.textContent = 'Iniciando sistema tributario...';
+            } else if (loadingProgress < 40) {
+                loadingText.textContent = 'Cargando servicios del SII...';
             } else if (loadingProgress < 60) {
-                loadingText.textContent = 'Conectando con servidores...';
-            } else if (loadingProgress < 90) {
+                loadingText.textContent = 'Conectando con PREVIRED...';
+            } else if (loadingProgress < 80) {
                 loadingText.textContent = 'Inicializando cubo cuántico...';
+            } else if (loadingProgress < 95) {
+                loadingText.textContent = 'Activando efectos visuales...';
             } else {
                 loadingText.textContent = 'Portal cuántico listo!';
             }
         }
         
-    }, 100);
+    }, 150); // Intervalo más lento para mejor apreciación
 }
 
-// Ocultar loading screen
+// Ocultar loading screen con transición más suave
 function hideLoadingScreen() {
     const loadingElement = document.getElementById('loadingScreen');
     
     if (loadingElement) {
         console.log('✅ OCULTANDO LOADING SCREEN');
         
+        // Transición más suave y lenta
+        loadingElement.style.transition = 'all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         loadingElement.style.opacity = '0';
-        loadingElement.style.transform = 'scale(0.8)';
+        loadingElement.style.transform = 'scale(0.9)';
         
         setTimeout(() => {
             loadingElement.style.display = 'none';
             loadingComplete = true;
             console.log('🎯 LOADING COMPLETADO - CUBO DISPONIBLE');
-        }, 500);
+        }, 1000); // Tiempo aumentado para la transición
     }
 }
 

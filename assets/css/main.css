@@ -260,7 +260,7 @@ a, button {
         drop-shadow(0 0 60px rgba(0, 212, 255, 1))
         drop-shadow(0 0 120px rgba(255, 0, 128, 0.8))
         drop-shadow(0 0 180px rgba(128, 0, 255, 0.6));
-    animation: logoEntrance 3s ease-out forwards, logoGlow 2.5s ease-in-out infinite alternate 1s;
+    animation: logoEntrance 4s ease-out forwards, logoGlow 3s ease-in-out infinite alternate 1.5s;
     transform: scale(0) rotateY(180deg);
     opacity: 0;
 }
@@ -275,7 +275,7 @@ a, button {
     letter-spacing: 3px;
     margin-bottom: 30px;
     text-align: center;
-    animation: textPulse 2s ease-in-out infinite alternate, textSlideUp 1.5s ease-out 0.5s both;
+    animation: textPulse 2.5s ease-in-out infinite alternate, textSlideUp 2s ease-out 1s both;
     text-shadow: 
         0 0 20px rgba(0, 212, 255, 0.8),
         0 0 40px rgba(0, 212, 255, 0.5);
@@ -293,7 +293,7 @@ a, button {
     overflow: hidden;
     position: relative;
     border: 1px solid rgba(0, 212, 255, 0.3);
-    animation: textSlideUp 1.5s ease-out 0.7s both;
+    animation: textSlideUp 2s ease-out 1.2s both;
     opacity: 0;
     transform: translateY(30px);
 }
