@@ -726,30 +726,38 @@ function updateInfoPanelWithConfirmation(faceData) {
     const title = document.getElementById('infoTitle');
     const content = document.getElementById('infoContent');
     const icon = document.getElementById('infoIcon');
+    const actionButton = document.getElementById('actionButton');
     
     if (title) title.textContent = faceData.title;
     if (content) content.textContent = faceData.content;
     if (icon) icon.textContent = faceData.emoji;
     
-    // Actualizar botón de acción con confirmación
-    const actionButton = panel.querySelector('.action-button');
+    // Configurar botón de acción con confirmación OBLIGATORIA
     if (actionButton) {
         // Detectar si es móvil para ajustar la experiencia
         const device = getDeviceCapabilities();
+        
+        // ELIMINAR cualquier onclick previo
+        actionButton.onclick = null;
+        actionButton.removeAttribute('onclick');
         
         if (faceData.link.startsWith('http')) {
             actionButton.innerHTML = device.isMobile ? 
                 `<span>📱</span> Ir a ${faceData.title}` : 
                 `<span>🌐</span> Visitar ${faceData.title}`;
-            
-            actionButton.onclick = () => showConfirmationModal(faceData);
         } else {
             actionButton.innerHTML = device.isMobile ? 
                 `<span>📱</span> Contactar por WhatsApp` : 
                 `<span>💬</span> Contactar por WhatsApp`;
-            
-            actionButton.onclick = () => showConfirmationModal(faceData);
         }
+        
+        // Asignar SOLO la función de confirmación
+        actionButton.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🔒 Botón clickeado - Mostrando confirmación para:', faceData.title);
+            showConfirmationModal(faceData);
+        };
     }
     
     if (panel) {
@@ -764,6 +772,9 @@ function updateInfoPanelWithConfirmation(faceData) {
 
 // Modal de confirmación adaptativo
 function showConfirmationModal(faceData) {
+    console.log('🔒 MOSTRANDO MODAL DE CONFIRMACIÓN para:', faceData.title);
+    console.log('🔗 Link:', faceData.link);
+    
     const device = getDeviceCapabilities();
     
     // Crear modal dinámicamente
@@ -797,15 +808,18 @@ function showConfirmationModal(faceData) {
     `;
     
     document.body.appendChild(modal);
+    console.log('✅ Modal agregado al DOM');
     
     // Animación de entrada
     setTimeout(() => {
         modal.classList.add('show');
+        console.log('✅ Modal mostrado con animación');
     }, 10);
     
     // Auto-cerrar después de 10 segundos
     setTimeout(() => {
         if (document.body.contains(modal)) {
+            console.log('⏰ Auto-cerrando modal después de 10 segundos');
             closeConfirmationModal();
         }
     }, 10000);
