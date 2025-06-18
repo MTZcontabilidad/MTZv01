@@ -17,6 +17,11 @@ let initialDistance = 0, touchStartTime = 0;
 let lastTouchPosition = { x: 0, y: 0 };
 let performanceMode = 'auto';
 
+// Variables para efectos espectaculares V3.1.10
+let alienCats = [];
+let floatingOffset = { x: 0, y: 0, z: 0 };
+let cubeFloatAmplitude = 0.15;
+
 console.log('🎯 CUBO ESPECTACULAR V3.1 - CARGA INICIADA (ULTRA-OPTIMIZADO)');
 
 // Información de cada cara del cubo con datos actualizados
@@ -171,6 +176,7 @@ function initThreeJS() {
         setupLights(config);
         createAdvancedCube(config);
         createParticleSystem(config);
+        createAlienCats(config);
         setupControls();
         
         // Iniciar bucle de animación
@@ -455,6 +461,126 @@ function createParticleSystem(config) {
     scene.add(particleSystem);
 }
 
+// 🛸 CREAR GATOS ALIEN EN PLATILLOS VOLADORES ESPECTACULARES
+function createAlienCats(config) {
+    const catCount = config.isLowEnd ? 2 : config.isMobile ? 3 : 5;
+    
+    for (let i = 0; i < catCount; i++) {
+        // Crear grupo para cada gato alien + platillo
+        const alienGroup = new THREE.Group();
+        
+        // PLATILLO VOLADOR
+        const saucerGeometry = new THREE.CylinderGeometry(0.8, 1.2, 0.3, 16);
+        const saucerMaterial = new THREE.MeshPhongMaterial({
+            color: 0x00ff88,
+            emissive: 0x004422,
+            shininess: 100,
+            transparent: true,
+            opacity: 0.9
+        });
+        const saucer = new THREE.Mesh(saucerGeometry, saucerMaterial);
+        
+        // Cúpula del platillo
+        const domeGeometry = new THREE.SphereGeometry(0.6, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+        const domeMaterial = new THREE.MeshPhongMaterial({
+            color: 0x00d4ff,
+            emissive: 0x002244,
+            transparent: true,
+            opacity: 0.7
+        });
+        const dome = new THREE.Mesh(domeGeometry, domeMaterial);
+        dome.position.y = 0.2;
+        
+        // GATO ALIEN (cuerpo simple pero adorable)
+        const catBody = new THREE.Group();
+        
+        // Cuerpo del gato
+        const bodyGeometry = new THREE.SphereGeometry(0.25, 8, 6);
+        const bodyMaterial = new THREE.MeshPhongMaterial({
+            color: 0xff6600,
+            emissive: 0x331100
+        });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        body.scale.set(1, 0.8, 1.2);
+        
+        // Cabeza del gato
+        const headGeometry = new THREE.SphereGeometry(0.2, 8, 6);
+        const head = new THREE.Mesh(headGeometry, bodyMaterial);
+        head.position.set(0, 0.3, 0.1);
+        
+        // Orejas alien (más grandes y puntiagudas)
+        const earGeometry = new THREE.ConeGeometry(0.08, 0.2, 4);
+        const earMaterial = new THREE.MeshPhongMaterial({
+            color: 0xff8800,
+            emissive: 0x221100
+        });
+        
+        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
+        leftEar.position.set(-0.12, 0.45, 0.05);
+        leftEar.rotation.z = -0.3;
+        
+        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
+        rightEar.position.set(0.12, 0.45, 0.05);
+        rightEar.rotation.z = 0.3;
+        
+        // Ojos brillantes alien
+        const eyeGeometry = new THREE.SphereGeometry(0.04, 6, 4);
+        const eyeMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ff00,
+            emissive: 0x00ff00
+        });
+        
+        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+        leftEye.position.set(-0.08, 0.32, 0.18);
+        
+        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+        rightEye.position.set(0.08, 0.32, 0.18);
+        
+        // Cola del gato
+        const tailGeometry = new THREE.CylinderGeometry(0.03, 0.06, 0.4, 6);
+        const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
+        tail.position.set(0, 0.1, -0.35);
+        tail.rotation.x = 0.5;
+        
+        // Ensamblar el gato
+        catBody.add(body, head, leftEar, rightEar, leftEye, rightEye, tail);
+        catBody.position.y = 0.4;
+        catBody.scale.setScalar(0.8);
+        
+        // Luz del platillo
+        const saucerLight = new THREE.PointLight(0x00ff88, 0.5, 10);
+        saucerLight.position.set(0, -0.2, 0);
+        
+        // Ensamblar platillo completo
+        alienGroup.add(saucer, dome, catBody, saucerLight);
+        
+        // Posición orbital aleatoria
+        const radius = 15 + Math.random() * 10;
+        const angle = (i / catCount) * Math.PI * 2 + Math.random() * 0.5;
+        const height = (Math.random() - 0.5) * 8;
+        
+        alienGroup.position.set(
+            Math.cos(angle) * radius,
+            height,
+            Math.sin(angle) * radius
+        );
+        
+        // Datos para animación
+        alienGroup.userData = {
+            originalRadius: radius,
+            baseAngle: angle,
+            speed: 0.3 + Math.random() * 0.4,
+            bobAmplitude: 0.5 + Math.random() * 0.3,
+            bobSpeed: 1 + Math.random() * 0.5
+        };
+        
+        alienCats.push(alienGroup);
+        scene.add(alienGroup);
+    }
+    
+    console.log(`🛸 ${catCount} Gatos Alien creados y listos para volar!`);
+}
+
 // Configurar controles unificados
 function setupControls() {
     raycaster = new THREE.Raycaster();
@@ -592,15 +718,17 @@ function onTouchMove(event) {
         const dy = touch1.clientY - touch2.clientY;
         const currentDistance = Math.sqrt(dx * dx + dy * dy);
         
-        // Calcular zoom con suavizado
+        // Calcular zoom ULTRA PRECISO y suave
         const zoomRatio = currentDistance / initialDistance;
-        const zoomSpeed = 0.02; // Más suave
-        const minDistance = 5;
-        const maxDistance = 28;
+        const zoomDelta = zoomRatio - 1;
+        const zoomSpeed = 0.8; // Más responsivo pero suave
+        const minDistance = 4;
+        const maxDistance = 30;
         
-        // Aplicar zoom suave
-        const newDistance = camera.position.z / (1 + (zoomRatio - 1) * zoomSpeed);
-        camera.position.z = Math.max(minDistance, Math.min(maxDistance, newDistance));
+        // Aplicar zoom con curva suave
+        const currentZ = camera.position.z;
+        const targetZ = currentZ - (zoomDelta * zoomSpeed);
+        camera.position.z = Math.max(minDistance, Math.min(maxDistance, targetZ));
         
         // Actualizar distancia inicial para suavidad
         initialDistance = currentDistance;
@@ -991,6 +1119,13 @@ function animate() {
     cubeGroup.rotation.x = currentRotation.x;
     cubeGroup.rotation.y = currentRotation.y;
     
+    // ✨ EFECTO FLOTANTE SUTIL DEL CUBO
+    floatingOffset.y = Math.sin(elapsedTime * 0.8) * cubeFloatAmplitude;
+    floatingOffset.x = Math.cos(elapsedTime * 0.5) * (cubeFloatAmplitude * 0.3);
+    floatingOffset.z = Math.sin(elapsedTime * 0.6) * (cubeFloatAmplitude * 0.2);
+    
+    cubeGroup.position.set(floatingOffset.x, floatingOffset.y, floatingOffset.z);
+    
     // Respiración sutil del cubo (menos cálculos)
     const breathScale = 1 + Math.sin(elapsedTime * 0.6) * 0.03;
     cubeGroup.scale.setScalar(breathScale);
@@ -1018,6 +1153,37 @@ function animate() {
         particleSystem.rotation.y = elapsedTime * 0.05;
         particleSystem.rotation.x = Math.sin(elapsedTime * 0.3) * 0.1;
     }
+    
+    // 🛸 ANIMAR GATOS ALIEN EN PLATILLOS VOLADORES
+    alienCats.forEach((alienGroup, index) => {
+        const userData = alienGroup.userData;
+        const time = elapsedTime * userData.speed;
+        
+        // Movimiento orbital alrededor del cubo
+        const angle = userData.baseAngle + time;
+        const x = Math.cos(angle) * userData.originalRadius;
+        const z = Math.sin(angle) * userData.originalRadius;
+        
+        // Movimiento vertical de bobbing
+        const bobbing = Math.sin(elapsedTime * userData.bobSpeed) * userData.bobAmplitude;
+        const y = bobbing + (Math.random() - 0.5) * 0.1; // Pequeño ruido
+        
+        alienGroup.position.set(x, y, z);
+        
+        // Rotación del platillo
+        alienGroup.rotation.y = elapsedTime * 2;
+        
+        // Inclinación sutil del platillo
+        alienGroup.rotation.x = Math.sin(elapsedTime * 1.5 + index) * 0.1;
+        alienGroup.rotation.z = Math.cos(elapsedTime * 1.2 + index) * 0.05;
+        
+        // Animación del gato (balanceo de cola)
+        const catBody = alienGroup.children[2]; // El gato es el tercer hijo
+        if (catBody && catBody.children[6]) { // La cola es el séptimo hijo del gato
+            const tail = catBody.children[6];
+            tail.rotation.z = Math.sin(elapsedTime * 3 + index) * 0.3;
+        }
+    });
     
     // Renderizar
     renderer.render(scene, camera);
@@ -1143,4 +1309,4 @@ window.cubeAPI = {
     }
 };
 
-console.log('✅ CUBO V3.1.09 TOUCH OPTIMIZADO - CÓDIGO CARGADO - ESPERANDO DOM');
+console.log('✅ CUBO V3.1.10 ESPECTACULAR - GATOS ALIEN + FLOTANTE - CÓDIGO CARGADO');
