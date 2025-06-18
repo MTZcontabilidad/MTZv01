@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTZ-02 PRO | Documentos RRHH Inteligentes</title>
+    
+    <!-- Estilos compartidos -->
+    <link rel="stylesheet" href="shared/assets/css/components.css">
+    
+    <!-- Google Analytics y funciones compartidas -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTZQF2024"></script>
+    <script src="shared/assets/js/mtz-common.js"></script>
+    
+    <style>
+        /* Estilos específicos de MTZ-02 */
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #0066cc, #00d4ff);
+            border-color: #00d4ff;
+        }
+
+        .tab:hover {
+            border-color: #00d4ff;
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .preview-section {
+            margin-top: 30px;
+            padding: 30px;
+            background: white;
+            color: black;
+            border-radius: 10px;
+            display: none;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .preview-section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0066cc;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            font-weight: bold;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 15px rgba(40, 167, 69, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Estilos para impresión */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .container > *:not(.preview-section) {
+                display: none !important;
+            }
+            
+            .preview-section {
+                display: block !important;
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .download-btn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="mtz-body">
+    <div class="mtz-container">
+        <nav class="mtz-back-navigation">
+            <a href="index.html" class="mtz-back-btn">
+                <span>🏠</span>
+                Inicio
+            </a>
+            <div class="mtz-breadcrumb">
+                <a href="index.html">Inicio</a> > <span>MTZ-02</span>
+            </div>
+        </nav>
+
+        <header class="mtz-header">
+            <h1>📋 MTZ-02 PRO</h1>
+            <p>Documentos RRHH Inteligentes</p>
+            <div class="mtz-features">
+                <span class="mtz-feature-tag">⚡ Generación Automática</span>
+                <span class="mtz-feature-tag">📄 +15 Plantillas</span>
+                <span class="mtz-feature-tag">🔧 Personalizable</span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showSection('contrato')">Contrato de Trabajo</div>
+            <div class="tab" onclick="showSection('anexo')">Anexo de Contrato</div>
+            <div class="tab" onclick="showSection('finiquito')">Finiquito Laboral</div>
+            <div class="tab" onclick="showSection('carta')">Carta de Amonestación</div>
+        </div>
+
+        <!-- Sección Contrato de Trabajo -->
+        <div id="contrato" class="content-section active">
+            <h2 style="color: #00d4ff; margin-bottom: 20px;">Generar Contrato de Trabajo</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>RUT Empleador</label>
+                    <input type="text" id="cont_rut_empleador" placeholder="12.345.678-9">
+                </div>
+                <div class="form-group">
+                    <label>Nombre/Razón Social Empleador</label>
+                    <input type="text" id="cont_nombre_empleador" placeholder="Empresa S.A.">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Representante Legal</label>
+                    <input type="text" id="cont_rep_legal" placeholder="Juan Pérez González">
+                </div>
+                <div class="form-group">
+                    <label>RUT Representante</label>
+                    <input type="text" id="cont_rut_rep" placeholder="12.345.678-9">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Domicilio Empresa</label>
+                <input type="text" id="cont_domicilio_empresa" placeholder="Av. Principal 123, Santiago">
+            </div>
+
+            <hr style="margin: 30px 0; border-color: rgba(255,255,255,0.1);">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre Completo Trabajador</label>
+                    <input type="text" id="cont_nombre_trabajador" placeholder="María González López">
+                </div>
+                <div class="form-group">
+                    <label>RUT Trabajador</label>
+                    <input type="text" id="cont_rut_trabajador" placeholder="12.345.678-9">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" id="cont_fecha_nac">
+                </div>
+                <div class="form-group">
+                    <label>Nacionalidad</label>
+                    <input type="text" id="cont_nacionalidad" placeholder="Chilena">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Domicilio Trabajador</label>
+                <input type="text" id="cont_domicilio_trabajador" placeholder="Calle Los Aromos 456, Providencia">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Cargo</label>
+                    <input type="text" id="cont_cargo" placeholder="Analista Contable">
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Inicio</label>
+                    <input type="date" id="cont_fecha_inicio">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tipo de Contrato</label>
+                    <select id="cont_tipo">
+                        <option value="indefinido">Indefinido</option>
+                        <option value="plazo_fijo">Plazo Fijo</option>
+                        <option value="obra">Por Obra o Faena</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Jornada</label>
+                    <select id="cont_jornada">
+                        <option value="completa">Completa (45 horas)</option>
+                        <option value="parcial">Parcial</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Sueldo Base</label>
+                    <input type="number" id="cont_sueldo" placeholder="500000">
+                </div>
+                <div class="form-group">
+                    <label>Forma de Pago</label>
+                    <select id="cont_forma_pago">
+                        <option value="mensual">Mensual</option>
+                        <option value="quincenal">Quincenal</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Funciones del Cargo</label>
+                <textarea id="cont_funciones" rows="4" placeholder="Describa las principales funciones del cargo..."></textarea>
+            </div>
+
+            <button class="generate-btn" onclick="generarContrato()">Generar Contrato</button>
+        </div>
+
+        <!-- Sección Anexo de Contrato -->
+        <div id="anexo" class="content-section">
+            <h2 style="color: #00d4ff; margin-bottom: 20px;">Generar Anexo de Contrato</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre Trabajador</label>
+                    <input type="text" id="anx_nombre_trabajador" placeholder="María González López">
+                </div>
+                <div class="form-group">
+                    <label>RUT Trabajador</label>
+                    <input type="text" id="anx_rut_trabajador" placeholder="12.345.678-9">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Empresa</label>
+                    <input type="text" id="anx_empresa" placeholder="Empresa S.A.">
+                </div>
+                <div class="form-group">
+                    <label>Fecha del Anexo</label>
+                    <input type="date" id="anx_fecha">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Modificación</label>
+                <select id="anx_tipo" onchange="mostrarCamposAnexo()">
+                    <option value="">Seleccione...</option>
+                    <option value="sueldo">Cambio de Sueldo</option>
+                    <option value="cargo">Cambio de Cargo</option>
+                    <option value="jornada">Cambio de Jornada</option>
+                    <option value="lugar">Cambio de Lugar de Trabajo</option>
+                    <option value="multiple">Múltiples Cambios</option>
+                </select>
+            </div>
+
+            <div id="campos_anexo" style="display: none;">
+                <div class="form-group">
+                    <label>Detalle de la Modificación</label>
+                    <textarea id="anx_detalle" rows="4" placeholder="Describa los cambios a realizar..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nuevo Sueldo (si aplica)</label>
+                        <input type="number" id="anx_nuevo_sueldo" placeholder="600000">
+                    </div>
+                    <div class="form-group">
+                        <label>Nuevo Cargo (si aplica)</label>
+                        <input type="text" id="anx_nuevo_cargo" placeholder="Jefe de Área">
+                    </div>
+                </div>
+            </div>
+
+            <button class="generate-btn" onclick="generarAnexo()">Generar Anexo</button>
+        </div>
+
+        <!-- Sección Finiquito -->
+        <div id="finiquito" class="content-section">
+            <h2 style="color: #00d4ff; margin-bottom: 20px;">Generar Finiquito Laboral</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre Trabajador</label>
+                    <input type="text" id="fin_nombre_trabajador" placeholder="María González López">
+                </div>
+                <div class="form-group">
+                    <label>RUT Trabajador</label>
+                    <input type="text" id="fin_rut_trabajador" placeholder="12.345.678-9">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Empresa</label>
+                    <input type="text" id="fin_empresa" placeholder="Empresa S.A.">
+                </div>
+                <div class="form-group">
+                    <label>RUT Empresa</label>
+                    <input type="text" id="fin_rut_empresa" placeholder="76.123.456-7">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fecha de Ingreso</label>
+                    <input type="date" id="fin_fecha_ingreso">
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Término</label>
+                    <input type="date" id="fin_fecha_termino">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Causal de Término</label>
+                <select id="fin_causal">
+                    <option value="159_1">Art. 159 N°1 - Mutuo acuerdo</option>
+                    <option value="159_2">Art. 159 N°2 - Renuncia voluntaria</option>
+                    <option value="159_4">Art. 159 N°4 - Vencimiento plazo</option>
+                    <option value="159_5">Art. 159 N°5 - Conclusión del trabajo</option>
+                    <option value="160_1">Art. 160 N°1 - Conductas indebidas</option>
+                    <option value="161">Art. 161 - Necesidades de la empresa</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Último Sueldo Base</label>
+                    <input type="number" id="fin_sueldo" placeholder="500000">
+                </div>
+                <div class="form-group">
+                    <label>Días de Vacaciones Pendientes</label>
+                    <input type="number" id="fin_vacaciones" placeholder="10">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Indemnizaciones y Compensaciones</label>
+                <textarea id="fin_indemnizaciones" rows="3" placeholder="Detalle indemnizaciones si corresponde..."></textarea>
+            </div>
+
+            <button class="generate-btn" onclick="generarFiniquito()">Generar Finiquito</button>
+        </div>
+
+        <!-- Sección Carta de Amonestación -->
+        <div id="carta" class="content-section">
+            <h2 style="color: #00d4ff; margin-bottom: 20px;">Generar Carta de Amonestación</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre Trabajador</label>
+                    <input type="text" id="carta_nombre_trabajador" placeholder="María González López">
+                </div>
+                <div class="form-group">
+                    <label>Cargo</label>
+                    <input type="text" id="carta_cargo" placeholder="Analista Contable">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Fecha de los Hechos</label>
+                <input type="date" id="carta_fecha_hechos">
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Falta</label>
+                <select id="carta_tipo_falta">
+                    <option value="atraso">Atrasos reiterados</option>
+                    <option value="inasistencia">Inasistencia injustificada</option>
+                    <option value="incumplimiento">Incumplimiento de funciones</option>
+                    <option value="conducta">Conducta inadecuada</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Descripción de los Hechos</label>
+                <textarea id="carta_descripcion" rows="5" placeholder="Describa detalladamente los hechos que motivan esta amonestación..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Medidas a Tomar</label>
+                <textarea id="carta_medidas" rows="3" placeholder="Indique las medidas correctivas esperadas..."></textarea>
+            </div>
+
+            <button class="generate-btn" onclick="generarCarta()">Generar Carta</button>
+        </div>
+
+        <!-- Sección de Vista Previa -->
+        <div id="preview" class="preview-section">
+            <div id="preview-content"></div>
+            <button class="download-btn" onclick="descargarDocumento()">Descargar Documento</button>
+        </div>
+    </div>
+
+    <script>
+        function showSection(section) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            
+            // Desactivar todas las pestañas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(section).classList.add('active');
+            
+            // Activar la pestaña correspondiente
+            event.target.classList.add('active');
+            
+            // Ocultar vista previa
+            document.getElementById('preview').style.display = 'none';
+        }
+
+        function mostrarCamposAnexo() {
+            const tipo = document.getElementById('anx_tipo').value;
+            document.getElementById('campos_anexo').style.display = tipo ? 'block' : 'none';
+        }
+
+        // Funciones de formato ahora disponibles en MTZ.Format
+        function formatearFecha(fecha) {
+            return MTZ.Format.formatDate(fecha);
+        }
+
+        function formatearRUT(rut) {
+            return MTZ.Format.formatRUT(rut);
+        }
+
+        function generarContrato() {
+            const datos = {
+                rutEmpleador: document.getElementById('cont_rut_empleador').value,
+                nombreEmpleador: document.getElementById('cont_nombre_empleador').value,
+                repLegal: document.getElementById('cont_rep_legal').value,
+                rutRep: document.getElementById('cont_rut_rep').value,
+                domicilioEmpresa: document.getElementById('cont_domicilio_empresa').value,
+                nombreTrabajador: document.getElementById('cont_nombre_trabajador').value,
+                rutTrabajador: document.getElementById('cont_rut_trabajador').value,
+                fechaNac: document.getElementById('cont_fecha_nac').value,
+                nacionalidad: document.getElementById('cont_nacionalidad').value,
+                domicilioTrabajador: document.getElementById('cont_domicilio_trabajador').value,
+                cargo: document.getElementById('cont_cargo').value,
+                fechaInicio: document.getElementById('cont_fecha_inicio').value,
+                tipo: document.getElementById('cont_tipo').value,
+                jornada: document.getElementById('cont_jornada').value,
+                sueldo: document.getElementById('cont_sueldo').value,
+                formaPago: document.getElementById('cont_forma_pago').value,
+                funciones: document.getElementById('cont_funciones').value
+            };
+
+            const fechaHoy = new Date();
+            const contenido = `
+                <h2 style="text-align: center;">CONTRATO DE TRABAJO</h2>
+                <br>
+                <p>En Santiago, a ${formatearFecha(fechaHoy)}, entre <strong>${datos.nombreEmpleador}</strong>, 
+                RUT ${formatearRUT(datos.rutEmpleador)}, representada por don(ña) <strong>${datos.repLegal}</strong>, 
+                RUT ${formatearRUT(datos.rutRep)}, ambos domiciliados en ${datos.domicilioEmpresa}, 
+                en adelante "el empleador", y don(ña) <strong>${datos.nombreTrabajador}</strong>, 
+                RUT ${formatearRUT(datos.rutTrabajador)}, nacido(a) el ${formatearFecha(datos.fechaNac)}, 
+                de nacionalidad ${datos.nacionalidad}, domiciliado(a) en ${datos.domicilioTrabajador}, 
+                en adelante "el trabajador", se ha convenido el siguiente contrato de trabajo:</p>
+                
+                <h3>PRIMERO: FUNCIONES</h3>
+                <p>El trabajador se compromete a desempeñar el cargo de <strong>${datos.cargo}</strong>, 
+                realizando las siguientes funciones:</p>
+                <p>${datos.funciones}</p>
+                
+                <h3>SEGUNDO: JORNADA DE TRABAJO</h3>
+                <p>La jornada de trabajo será ${datos.jornada === 'completa' ? 'de 45 horas semanales' : 'parcial'}, 
+                distribuida de lunes a viernes.</p>
+                
+                <h3>TERCERO: REMUNERACIÓN</h3>
+                <p>El empleador se compromete a pagar al trabajador una remuneración ${datos.formaPago} de 
+                <strong>$${parseInt(datos.sueldo).toLocaleString('es-CL')}</strong> (${numeroALetras(datos.sueldo)} pesos), 
+                que se pagará el último día hábil de cada ${datos.formaPago === 'mensual' ? 'mes' : 'quincena'}.</p>
+                
+                <h3>CUARTO: PLAZO</h3>
+                <p>El presente contrato tendrá una duración ${datos.tipo === 'indefinido' ? 'indefinida' : 
+                datos.tipo === 'plazo_fijo' ? 'de plazo fijo' : 'por obra o faena determinada'}, 
+                iniciando sus funciones el día ${formatearFecha(datos.fechaInicio)}.</p>
+                
+                <h3>QUINTO: OBLIGACIONES</h3>
+                <p>El trabajador se obliga a cumplir fiel y oportunamente con las instrucciones del empleador 
+                y a respetar el reglamento interno de la empresa.</p>
+                
+                <br><br>
+                <div style="display: flex; justify-content: space-between; margin-top: 50px;">
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <p><strong>${datos.nombreEmpleador}</strong></p>
+                        <p>RUT: ${formatearRUT(datos.rutEmpleador)}</p>
+                        <p>EMPLEADOR</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <p><strong>${datos.nombreTrabajador}</strong></p>
+                        <p>RUT: ${formatearRUT(datos.rutTrabajador)}</p>
+                        <p>TRABAJADOR</p>
+                    </div>
+                </div>
+            `;
+
+            mostrarPreview(contenido);
+        }
+
+        function generarAnexo() {
+            const datos = {
+                nombreTrabajador: document.getElementById('anx_nombre_trabajador').value,
+                rutTrabajador: document.getElementById('anx_rut_trabajador').value,
+                empresa: document.getElementById('anx_empresa').value,
+                fecha: document.getElementById('anx_fecha').value,
+                tipo: document.getElementById('anx_tipo').value,
+                detalle: document.getElementById('anx_detalle').value,
+                nuevoSueldo: document.getElementById('anx_nuevo_sueldo').value,
+                nuevoCargo: document.getElementById('anx_nuevo_cargo').value
+            };
+
+            const contenido = `
+                <h2 style="text-align: center;">ANEXO DE CONTRATO DE TRABAJO</h2>
+                <br>
+                <p>En Santiago, a ${formatearFecha(datos.fecha)}, se deja constancia que entre 
+                <strong>${datos.empresa}</strong> y don(ña) <strong>${datos.nombreTrabajador}</strong>, 
+                RUT ${formatearRUT(datos.rutTrabajador)}, se ha acordado la siguiente modificación 
+                al contrato de trabajo vigente:</p>
+                
+                <h3>MODIFICACIONES ACORDADAS:</h3>
+                <p>${datos.detalle}</p>
+                
+                ${datos.nuevoSueldo ? `<p><strong>Nuevo sueldo base:</strong> $${parseInt(datos.nuevoSueldo).toLocaleString('es-CL')}</p>` : ''}
+                ${datos.nuevoCargo ? `<p><strong>Nuevo cargo:</strong> ${datos.nuevoCargo}</p>` : ''}
+                
+                <p>Las demás estipulaciones del contrato original permanecen vigentes sin modificación alguna.</p>
+                
+                <p>Para constancia firman:</p>
+                
+                <br><br>
+                <div style="display: flex; justify-content: space-between; margin-top: 50px;">
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <p><strong>${datos.empresa}</strong></p>
+                        <p>EMPLEADOR</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <p><strong>${datos.nombreTrabajador}</strong></p>
+                        <p>RUT: ${formatearRUT(datos.rutTrabajador)}</p>
+                        <p>TRABAJADOR</p>
+                    </div>
+                </div>
+            `;
+
+            mostrarPreview(contenido);
+        }
+
+        function generarFiniquito() {
+            const datos = {
+                nombreTrabajador: document.getElementById('fin_nombre_trabajador').value,
+                rutTrabajador: document.getElementById('fin_rut_trabajador').value,
+                empresa: document.getElementById('fin_empresa').value,
+                rutEmpresa: document.getElementById('fin_rut_empresa').value,
+                fechaIngreso: document.getElementById('fin_fecha_ingreso').value,
+                fechaTermino: document.getElementById('fin_fecha_termino').value,
+                causal: document.getElementById('fin_causal').value,
+                sueldo: document.getElementById('fin_sueldo').value,
+                vacaciones: document.getElementById('fin_vacaciones').value,
+                indemnizaciones: document.getElementById('fin_indemnizaciones').value
+            };
+
+            const causalTexto = document.getElementById('fin_causal').selectedOptions[0].text;
+            const vacacionesValor = Math.round((parseInt(datos.sueldo) / 30) * parseInt(datos.vacaciones));
+
+            const contenido = `
+                <h2 style="text-align: center;">FINIQUITO DE TRABAJO</h2>
+                <br>
+                <p>En Santiago, a ${formatearFecha(new Date())}, entre <strong>${datos.empresa}</strong>, 
+                RUT ${formatearRUT(datos.rutEmpresa)}, en adelante "el empleador", y don(ña) 
+                <strong>${datos.nombreTrabajador}</strong>, RUT ${formatearRUT(datos.rutTrabajador)}, 
+                en adelante "el trabajador", se deja constancia de lo siguiente:</p>
+                
+                <h3>PRIMERO:</h3>
+                <p>El trabajador prestó servicios para el empleador desde el ${formatearFecha(datos.fechaIngreso)} 
+                hasta el ${formatearFecha(datos.fechaTermino)}, desempeñándose en el cargo que se indica 
+                en el contrato de trabajo.</p>
+                
+                <h3>SEGUNDO:</h3>
+                <p>La relación laboral termina de acuerdo a la causal: <strong>${causalTexto}</strong></p>
+                
+                <h3>TERCERO:</h3>
+                <p>El empleador paga en este acto al trabajador las siguientes prestaciones:</p>
+                <ul>
+                    <li>Vacaciones proporcionales (${datos.vacaciones} días): $${vacacionesValor.toLocaleString('es-CL')}</li>
+                    ${datos.indemnizaciones ? `<li>${datos.indemnizaciones}</li>` : ''}
+                </ul>
+                
+                <h3>CUARTO:</h3>
+                <p>El trabajador declara recibir a su entera satisfacción el total de las prestaciones 
+                adeudadas, no teniendo cargo ni cobro alguno que formular en contra del empleador.</p>
+                
+                <h3>QUINTO:</h3>
+                <p>El trabajador otorga el más amplio y completo finiquito al empleador, declarando 
+                que nada se le adeuda por concepto de remuneraciones, imposiciones, gratificaciones, 
+                feriados, horas extraordinarias, ni por ningún otro concepto.</p>
+                
+                <br><br>
+                <div style="display: flex; justify-content: space-between; margin-top: 50px;">
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <p><strong>${datos.empresa}</strong></p>
+                        <p>RUT: ${formatearRUT(datos.rutEmpresa)}</p>
+                        <p>EMPLEADOR</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <p><strong>${datos.nombreTrabajador}</strong></p>
+                        <p>RUT: ${formatearRUT(datos.rutTrabajador)}</p>
+                        <p>TRABAJADOR</p>
+                    </div>
+                </div>
+            `;
+
+            mostrarPreview(contenido);
+        }
+
+        function generarCarta() {
+            const datos = {
+                nombreTrabajador: document.getElementById('carta_nombre_trabajador').value,
+                cargo: document.getElementById('carta_cargo').value,
+                fechaHechos: document.getElementById('carta_fecha_hechos').value,
+                tipoFalta: document.getElementById('carta_tipo_falta').selectedOptions[0].text,
+                descripcion: document.getElementById('carta_descripcion').value,
+                medidas: document.getElementById('carta_medidas').value
+            };
+
+            const contenido = `
+                <h2 style="text-align: center;">CARTA DE AMONESTACIÓN</h2>
+                <br>
+                <p style="text-align: right;">Santiago, ${formatearFecha(new Date())}</p>
+                <br>
+                <p><strong>Sr(a). ${datos.nombreTrabajador}</strong><br>
+                <strong>${datos.cargo}</strong><br>
+                PRESENTE</p>
+                <br>
+                <p>De nuestra consideración:</p>
+                
+                <p>Por medio de la presente, nos dirigimos a usted para manifestar nuestra preocupación 
+                por la siguiente situación:</p>
+                
+                <p><strong>Tipo de falta:</strong> ${datos.tipoFalta}</p>
+                <p><strong>Fecha de los hechos:</strong> ${formatearFecha(datos.fechaHechos)}</p>
+                
+                <h3>DESCRIPCIÓN DE LOS HECHOS:</h3>
+                <p>${datos.descripcion}</p>
+                
+                <p>Esta conducta constituye un incumplimiento a sus obligaciones laborales y al 
+                reglamento interno de la empresa.</p>
+                
+                <h3>MEDIDAS Y EXPECTATIVAS:</h3>
+                <p>${datos.medidas}</p>
+                
+                <p>Le recordamos que la reiteración de estas conductas podría constituir causal 
+                de término de contrato de trabajo, de acuerdo a lo establecido en el Código del Trabajo.</p>
+                
+                <p>Esperamos que esta situación no vuelva a repetirse y que pueda retomar el 
+                cumplimiento normal de sus funciones.</p>
+                
+                <p>Se solicita firmar la recepción de esta carta.</p>
+                
+                <br><br>
+                <p>Atentamente,</p>
+                <br><br>
+                <div style="display: flex; justify-content: space-between; margin-top: 50px;">
+                    <div>
+                        <p>_______________________</p>
+                        <p>RECURSOS HUMANOS</p>
+                    </div>
+                    <div>
+                        <p>_______________________</p>
+                        <p>Recibí conforme</p>
+                        <p>${datos.nombreTrabajador}</p>
+                        <p>Fecha: _______________</p>
+                    </div>
+                </div>
+            `;
+
+            mostrarPreview(contenido);
+        }
+
+        function mostrarPreview(contenido) {
+            document.getElementById('preview-content').innerHTML = contenido;
+            document.getElementById('preview').style.display = 'block';
+            document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function descargarDocumento() {
+            window.print();
+        }
+
+        function numeroALetras(num) {
+            // Función simplificada para convertir números a letras
+            const numero = parseInt(num);
+            if (numero < 1000000) {
+                return Math.floor(numero / 1000) + ' mil';
+            } else {
+                return Math.floor(numero / 1000000) + ' millones';
+            }
+        }
+
+        // Inicialización y tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            MTZ.Analytics.trackPageView('MTZ-02 Documentos RRHH');
+            MTZ.Analytics.trackModuleUsage('MTZ-02');
+            console.log('MTZ-02 Documentos RRHH cargado exitosamente');
+        });
+
+        // Tracking específico para cada generador
+        function generarContrato() {
+            MTZ.Analytics.trackEvent('contrato_generado');
+            // ... resto del código de generarContrato ...
+        }
+    </script>
+</body>
+</html>

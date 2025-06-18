@@ -1,0 +1,364 @@
+/* ===================================
+   Animations.css - Animaciones adicionales
+   =================================== */
+
+/* Animación para el loading screen */
+.loading-cube {
+    width: 80px;
+    height: 80px;
+    margin: 30px auto;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotateCube 2s infinite ease-in-out;
+}
+
+.loading-cube div {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 128, 0.1));
+    border: 2px solid rgba(0, 212, 255, 0.5);
+}
+
+.loading-cube .front { transform: translateZ(40px); }
+.loading-cube .back { transform: rotateY(180deg) translateZ(40px); }
+.loading-cube .right { transform: rotateY(90deg) translateZ(40px); }
+.loading-cube .left { transform: rotateY(-90deg) translateZ(40px); }
+.loading-cube .top { transform: rotateX(90deg) translateZ(40px); }
+.loading-cube .bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+@keyframes rotateCube {
+    0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
+    25% { transform: rotateX(45deg) rotateY(45deg); }
+    50% { transform: rotateX(90deg) rotateY(90deg); }
+    75% { transform: rotateX(45deg) rotateY(135deg); }
+}
+
+/* Progress bar animation mejorada */
+.loading-progress {
+    width: 300px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 30px auto 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 212, 255, 0.2);
+    animation: progressGlow 2s ease-in-out infinite alternate;
+}
+
+.loading-progress::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 100%);
+    animation: progressShine 2s linear infinite;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, 
+        #00d4ff 0%, 
+        #00e6ff 25%, 
+        #00ff88 50%, 
+        #0099ff 75%, 
+        #ff6600 100%);
+    border-radius: 10px;
+    position: relative;
+    animation: progressLoad 3s ease-out forwards;
+    box-shadow: 
+        0 0 20px rgba(0, 212, 255, 0.6),
+        0 0 40px rgba(255, 0, 128, 0.4);
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        transparent 50%);
+    border-radius: 10px;
+    animation: progressHighlight 1.5s ease-in-out infinite;
+}
+
+@keyframes progressLoad {
+    0% { 
+        width: 0%; 
+        opacity: 0;
+        transform: scaleY(0.5);
+    }
+    20% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+    100% { 
+        width: 100%; 
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+@keyframes progressGlow {
+    from {
+        box-shadow: 
+            inset 0 2px 4px rgba(0, 0, 0, 0.3),
+            0 0 20px rgba(0, 212, 255, 0.2);
+    }
+    to {
+        box-shadow: 
+            inset 0 2px 4px rgba(0, 0, 0, 0.3),
+            0 0 30px rgba(0, 212, 255, 0.4),
+            0 0 50px rgba(255, 0, 128, 0.2);
+    }
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(300px); }
+}
+
+@keyframes progressHighlight {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+/* Pulse dot animation */
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #00d4ff;
+    border-radius: 50%;
+    margin: 10px auto 0;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+}
+
+/* Scanlines effect simplificado */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.01;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 4px,
+        rgba(255, 255, 255, 0.02) 4px,
+        rgba(255, 255, 255, 0.02) 5px
+    );
+}
+
+/* Glitch effect for text */
+@keyframes glitch {
+    0%, 100% {
+        text-shadow: 
+            2px 0 #00d4ff,
+            -2px 0 #00e6ff,
+            0 0 10px rgba(0, 212, 255, 0.5);
+    }
+    25% {
+        text-shadow: 
+            -2px 0 #00e6ff,
+            2px 0 #00ff88,
+            0 0 20px rgba(0, 230, 255, 0.5);
+    }
+    50% {
+        text-shadow: 
+            2px 2px #00ff88,
+            -2px -2px #0099ff,
+            0 0 30px rgba(0, 255, 136, 0.5);
+    }
+    75% {
+        text-shadow: 
+            -2px 2px #0099ff,
+            2px -2px #ff6600,
+            0 0 20px rgba(0, 153, 255, 0.5);
+    }
+}
+
+/* Hover animations for service cards */
+.service-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg) translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.service-card:hover::before {
+    transform: rotate(45deg) translateX(100%);
+}
+
+/* Floating animation for icons */
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-5px) rotate(2deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(-3px) rotate(-2deg); }
+}
+
+.service-icon {
+    animation: iconFloat 6s ease-in-out infinite;
+}
+
+/* CTA button shine effect */
+.cta-primary::after,
+.cta-secondary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 70%
+    );
+    transform: rotate(45deg) translateX(-200%);
+    transition: transform 0.8s;
+}
+
+.cta-primary:hover::after,
+.cta-secondary:hover::after {
+    transform: rotate(45deg) translateX(200%);
+}
+
+/* AI Badge breathing animation */
+@keyframes breathe {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+    }
+}
+
+.ai-badge {
+    animation: float 4s ease-in-out infinite, breathe 3s ease-in-out infinite;
+}
+
+/* Particle animation for cosmic background */
+@keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* Info panel slide animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.info-panel.active {
+    animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* AI Description panel animation */
+@keyframes slideUp {
+    from {
+        transform: translateY(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.ai-description.show {
+    animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Mobile menu animation */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.nav-links.active {
+    animation: slideInLeft 0.4s ease-out forwards;
+}
+
+/* Hero title glow pulse */
+@keyframes titlePulse {
+    0%, 100% {
+        filter: brightness(1) drop-shadow(0 0 20px currentColor);
+    }
+    50% {
+        filter: brightness(1.2) drop-shadow(0 0 40px currentColor);
+    }
+}
+
+/* Ensure animations are smooth */
+* {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Performance optimization */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

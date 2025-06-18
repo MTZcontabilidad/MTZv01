@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTZ-03 PRO | Calculadoras Tributarias Inteligentes</title>
+    <meta name="description" content="Suite avanzada de calculadoras tributarias con IA, visualizaciones dinámicas y recomendaciones automáticas. Gratis y profesional.">
+    
+    <!-- Google Analytics y funciones compartidas -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTZQF2024"></script>
+    <script src="shared/assets/js/mtz-common.js"></script>
+    
+    <!-- Chart.js para visualizaciones -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Navegación mejorada */
+        .back-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 25px rgba(0, 212, 255, 0.6);
+            border-color: #00ffff;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        .breadcrumb {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        /* Header épico */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 30px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.1));
+            z-index: -1;
+        }
+
+        .header h1 {
+            font-size: 3.2em;
+            background: linear-gradient(45deg, #00d4ff, #00ff88, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            font-weight: bold;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.8)); }
+        }
+
+        .header p {
+            font-size: 1.3em;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .features-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #00d4ff;
+            margin: 5px;
+        }
+
+        /* Tabs de calculadoras */
+        .calc-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 25px;
+            color: #00d4ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border-color: #00d4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Grid de calculadoras */
+        .calculators-container {
+            position: relative;
+        }
+
+        .calculator-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .calculator-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .calculator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .calculator-card:hover::before {
+            left: 100%;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+        }
+
+        .calc-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .calc-icon {
+            font-size: 2.5em;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            border-radius: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .calc-title {
+            font-size: 2em;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .calc-subtitle {
+            color: #ccc;
+            font-size: 1em;
+        }
+
+        /* Inputs mejorados */
+        .inputs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .input-currency {
+            position: relative;
+        }
+
+        .input-currency::before {
+            content: '$';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00d4ff;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .input-currency input {
+            padding-left: 35px;
+        }
+
+        /* Botones épicos */
+        .calc-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .calc-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calc-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .calc-button:hover::before {
+            left: 100%;
+        }
+
+        .calc-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.6);
+        }
+
+        .calc-button.secondary {
+            background: linear-gradient(135deg, #00ff88, #6600cc);
+        }
+
+        .calc-button.secondary:hover {
+            box-shadow: 0 8px 25px rgba(255, 0, 255, 0.6);
+        }
+
+        /* Resultados épicos */
+        .results-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .result-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .result-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-title {
+            color: #00d4ff;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .result-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .result-label {
+            color: #ccc;
+        }
+
+        .result-value {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .result-total {
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .result-total .result-value {
+            color: #00d4ff;
+            font-size: 1.3em;
+        }
+
+        /* Gráficos */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            height: 300px;
+        }
+
+        /* Recomendaciones IA */
+        .ai-recommendations {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(128, 0, 255, 0.1));
+            border: 2px solid rgba(255, 0, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .ai-title {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recommendation-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #00ff88;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .calc-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .results-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .inputs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calc-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navegación -->
+        <div class="back-navigation">
+            <a href="index.html" class="back-btn">
+                <span>🏠</span>
+                Inicio
+            </a>
+            <div class="breadcrumb">
+                <a href="index.html">Inicio</a> > <span>MTZ-03 PRO</span>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>🧮 MTZ-03 PRO</h1>
+            <p>Calculadoras Tributarias Inteligentes con IA</p>
+            <div>
+                <span class="features-badge">🤖 IA Integrada</span>
+                <span class="features-badge">📊 Visualizaciones</span>
+                <span class="features-badge">⚡ Tiempo Real</span>
+                <span class="features-badge">📱 Mobile First</span>
+                <span class="features-badge">💾 Memoria Inteligente</span>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="calc-tabs">
+            <div class="tab-btn active" onclick="showCalculator('iva')">
+                <span>📊</span> IVA Inteligente
+            </div>
+            <div class="tab-btn" onclick="showCalculator('honorarios')">
+                <span>💼</span> Honorarios Pro
+            </div>
+            <div class="tab-btn" onclick="showCalculator('ppm')">
+                <span>🏢</span> PPM Avanzado
+            </div>
+            <div class="tab-btn" onclick="showCalculator('sueldo')">
+                <span>💰</span> Sueldo Líquido
+            </div>
+            <div class="tab-btn" onclick="showCalculator('comparador')">
+                <span>⚖️</span> Comparador
+            </div>
+        </div>
+
+        <!-- Calculadora IVA -->
+        <div id="calc-iva" class="calculator-section active">
+            <div class="calculator-card">
+                <div class="calc-header">
+                    <div class="calc-icon">📊</div>
+                    <div>
+                        <h2 class="calc-title">Calculadora IVA Inteligente</h2>
+                        <p class="calc-subtitle">Con visualizaciones y recomendaciones automáticas</p>
+                    </div>
+                </div>
+
+                <div class="inputs-grid">
+                    <div class="input-group">
+                        <label>Tipo de Cálculo</label>
+                        <select id="iva-tipo" onchange="calcularIVAReal()">
+                            <option value="agregar">Agregar IVA al neto</option>
+                            <option value="extraer">Extraer IVA del bruto</option>
+                            <option value="solo-iva">Calcular solo IVA</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group input-currency">
+                        <label id="iva-label">Monto</label>
+                        <input type="number" id="iva-monto" placeholder="0" oninput="calcularIVAReal()">
+                    </div>
+                </div>
+
+                <div class="calc-actions">
+                    <button class="calc-button" onclick="calcularIVAReal()">
+                        <span>⚡</span> Calcular Instantáneo
+                    </button>
+                    <button class="calc-button secondary" onclick="guardarCalculo('iva')">
+                        <span>💾</span> Guardar Cálculo
+                    </button>
+                </div>
+
+                <div class="results-container">
+                    <div id="iva-result" class="result-box">
+                        <p class="result-title">
+                            <span>📊</span> Resultados
+                        </p>
+                        <div class="result-item">
+                            <span class="result-label">Neto:</span>
+                            <span class="result-value" id="iva-neto">$0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">IVA (19%):</span>
+                            <span class="result-value" id="iva-impuesto">$0</span>
+                        </div>
+                        <div class="result-item result-total">
+                            <span class="result-label">Total:</span>
+                            <span class="result-value" id="iva-total">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="iva-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="ai-recommendations">
+                    <p class="ai-title">
+                        <span>🤖</span> Recomendaciones IA
+                    </p>
+                    <div id="iva-recommendations"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Más calculadoras se agregarán aquí -->
+        
+    </div>
+
+    <script>
+        // Variables globales
+        let calculosGuardados = JSON.parse(localStorage.getItem('calculosGuardados')) || {};
+        let chartInstances = {};
+
+        // Función para mostrar calculadora
+        function showCalculator(type) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.calculator-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover clase active de todos los tabs
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar sección seleccionada
+            document.getElementById(`calc-${type}`).classList.add('active');
+            
+            // Activar tab correspondiente
+            event.target.classList.add('active');
+            
+            // Track usage usando función compartida
+            MTZ.Analytics.trackCalculatorUsage(type);
+        }
+
+        // Calculadora IVA Inteligente usando funciones compartidas
+        function calcularIVAReal() {
+            const tipo = document.getElementById('iva-tipo').value;
+            const monto = parseFloat(document.getElementById('iva-monto').value) || 0;
+            
+            let resultado;
+            
+            switch(tipo) {
+                case 'agregar':
+                    resultado = MTZ.Calculations.iva.add(monto);
+                    break;
+                case 'extraer':
+                    resultado = MTZ.Calculations.iva.extract(monto);
+                    break;
+                case 'solo-iva':
+                    resultado = MTZ.Calculations.iva.only(monto);
+                    break;
+            }
+            
+            // Actualizar resultados usando formato compartido
+            document.getElementById('iva-neto').textContent = MTZ.Format.currency(resultado.neto);
+            document.getElementById('iva-impuesto').textContent = MTZ.Format.currency(resultado.iva);
+            document.getElementById('iva-total').textContent = MTZ.Format.currency(resultado.total);
+            
+            // Mostrar resultados
+            document.getElementById('iva-result').classList.add('show');
+            
+            // Crear gráfico
+            createIVAChart(neto, iva);
+            
+            // Generar recomendaciones IA
+            generateIVARecommendations(neto, iva, total);
+            
+            // Track analytics
+            trackCalculatorUsage('iva', monto);
+        }
+
+        // Crear gráfico IVA
+        function createIVAChart(neto, iva) {
+            const ctx = document.getElementById('iva-chart').getContext('2d');
+            
+            if (chartInstances.iva) {
+                chartInstances.iva.destroy();
+            }
+            
+            chartInstances.iva = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Neto', 'IVA'],
+                    datasets: [{
+                        data: [neto, iva],
+                        backgroundColor: [
+                            'rgba(0, 212, 255, 0.8)',
+                            'rgba(255, 0, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            '#00d4ff',
+                            '#00ff88'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generar recomendaciones IA
+        function generateIVARecommendations(neto, iva, total) {
+            const container = document.getElementById('iva-recommendations');
+            let recommendations = [];
+            
+            if (iva > 100000) {
+                recommendations.push('💡 IVA alto: Considera si puedes diferir esta facturación para optimizar flujo de caja.');
+            }
+            
+            if (neto > 500000) {
+                recommendations.push('📊 Monto significativo: Revisa si aplican retenciones adicionales.');
+            }
+            
+            if (total > 1000000) {
+                recommendations.push('🏢 Operación grande: Considera impacto en PPM mensual.');
+            }
+            
+            recommendations.push('💼 Tip Pro: Usa nuestro módulo de facturación para generar documentos automáticamente.');
+            
+            container.innerHTML = recommendations.map(rec => 
+                `<div class="recommendation-item">${rec}</div>`
+            ).join('');
+        }
+
+        // Guardar cálculo usando funciones compartidas
+        function guardarCalculo(tipo) {
+            const calculo = {
+                tipo: tipo,
+                fecha: new Date().toISOString(),
+                datos: {}
+            };
+            
+            // Guardar datos específicos según tipo
+            if (tipo === 'iva') {
+                calculo.datos = {
+                    tipoCalculo: document.getElementById('iva-tipo').value,
+                    monto: document.getElementById('iva-monto').value,
+                    neto: document.getElementById('iva-neto').textContent,
+                    iva: document.getElementById('iva-impuesto').textContent,
+                    total: document.getElementById('iva-total').textContent
+                };
+            }
+            
+            // Usar las funciones compartidas de almacenamiento
+            const calculosGuardados = MTZ.Storage.load('calculosGuardados', {});
+            const timestamp = new Date().toISOString();
+            calculosGuardados[timestamp] = calculo;
+            MTZ.Storage.save('calculosGuardados', calculosGuardados);
+            
+            // Mostrar confirmación usando notificaciones compartidas
+            MTZ.Notifications.success('Cálculo guardado exitosamente');
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calcular IVA inicial si hay valores
+            calcularIVAReal();
+            
+            console.log('🚀 MTZ-03 PRO Calculadoras Inteligentes - Cargado');
+        });
+    </script>
+</body>
+</html> 

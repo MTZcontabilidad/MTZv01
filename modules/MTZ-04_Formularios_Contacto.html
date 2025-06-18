@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTZ-04 PRO | Formularios de Contacto Inteligentes</title>
+    
+    <!-- Estilos compartidos -->
+    <link rel="stylesheet" href="shared/assets/css/components.css">
+    
+    <!-- Google Analytics y funciones compartidas -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTZQF2024"></script>
+    <script src="shared/assets/js/mtz-common.js"></script>
+    
+    <style>
+        /* Estilos específicos de MTZ-04 */
+
+        .forms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .form-title {
+            font-size: 1.8em;
+            color: #00d4ff;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px);
+        }
+
+        .success-message {
+            display: none;
+            padding: 20px;
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid #28a745;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #00ff88;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            font-size: 0.9em;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .required {
+            color: #00ff88;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .forms-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Estilos para el modal de vista previa */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            margin: 50px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+            border: 1px solid #00d4ff;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-button {
+            font-size: 30px;
+            color: #00ff88;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-button:hover {
+            transform: scale(1.2);
+        }
+
+        .preview-data {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .preview-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-label {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .copy-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .copy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 15px rgba(40, 167, 69, 0.5);
+        }
+    </style>
+</head>
+<body class="mtz-body">
+    <div class="mtz-container">
+        <nav class="mtz-back-navigation">
+            <a href="index.html" class="mtz-back-btn">
+                <span>🏠</span>
+                Inicio
+            </a>
+            <div class="mtz-breadcrumb">
+                <a href="index.html">Inicio</a> > <span>MTZ-04</span>
+            </div>
+        </nav>
+
+        <header class="mtz-header">
+            <h1>📧 MTZ-04 PRO</h1>
+            <p>Formularios de Contacto Inteligentes</p>
+            <div class="mtz-features">
+                <span class="mtz-feature-tag">⚡ Súper Rápido</span>
+                <span class="mtz-feature-tag">📱 Mobile First</span>
+                <span class="mtz-feature-tag">✅ Validación Auto</span>
+            </div>
+        </header>
+
+        <div class="forms-container">
+            <!-- Formulario de Contacto -->
+            <div class="form-card">
+                <h2 class="form-title">
+                    <span>📞</span>
+                    Formulario de Contacto
+                </h2>
+                
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre Completo <span class="required">*</span></label>
+                            <input type="text" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>RUT</label>
+                            <input type="text" name="rut" placeholder="12.345.678-9">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono <span class="required">*</span></label>
+                            <input type="tel" name="telefono" placeholder="+56 9 1234 5678" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Empresa</label>
+                        <input type="text" name="empresa" placeholder="Nombre de su empresa">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Asunto <span class="required">*</span></label>
+                        <select name="asunto" required>
+                            <option value="">Seleccione un asunto</option>
+                            <option value="consulta">Consulta General</option>
+                            <option value="asesoria">Solicitar Asesoría</option>
+                            <option value="problema">Problema Tributario</option>
+                            <option value="informacion">Solicitar Información</option>
+                            <option value="reunion">Agendar Reunión</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mensaje <span class="required">*</span></label>
+                        <textarea name="mensaje" rows="6" placeholder="Describa su consulta o requerimiento..." required></textarea>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="contacto-privacidad" required>
+                        <label for="contacto-privacidad">Acepto la política de privacidad y tratamiento de datos</label>
+                    </div>
+
+                    <button type="submit" class="submit-button">Enviar Mensaje</button>
+                </form>
+
+                <div id="contactSuccess" class="success-message">
+                    <h3>✅ Mensaje enviado exitosamente</h3>
+                    <p>Nos contactaremos con usted a la brevedad.</p>
+                </div>
+            </div>
+
+            <!-- Formulario de Cotización -->
+            <div class="form-card">
+                <h2 class="form-title">
+                    <span>💼</span>
+                    Solicitud de Cotización
+                </h2>
+                
+                <div class="info-box">
+                    <p>Complete este formulario para recibir una cotización personalizada de nuestros servicios contables y tributarios.</p>
+                </div>
+
+                <form id="cotizacionForm">
+                    <div class="form-group">
+                        <label>Tipo de Empresa <span class="required">*</span></label>
+                        <select name="tipo_empresa" required>
+                            <option value="">Seleccione tipo</option>
+                            <option value="persona_natural">Persona Natural</option>
+                            <option value="microempresa">Microempresa</option>
+                            <option value="pyme">PYME</option>
+                            <option value="empresa">Empresa</option>
+                            <option value="holding">Holding</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Razón Social <span class="required">*</span></label>
+                            <input type="text" name="razon_social" required>
+                        </div>
+                        <div class="form-group">
+                            <label>RUT Empresa <span class="required">*</span></label>
+                            <input type="text" name="rut_empresa" placeholder="76.123.456-7" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Giro o Actividad</label>
+                        <input type="text" name="giro" placeholder="Ej: Comercio, Servicios, Construcción">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Contacto <span class="required">*</span></label>
+                            <input type="text" name="contacto_nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cargo</label>
+                            <input type="text" name="cargo" placeholder="Ej: Gerente General">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" name="email_cotizacion" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono <span class="required">*</span></label>
+                            <input type="tel" name="telefono_cotizacion" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Servicios Requeridos <span class="required">*</span></label>
+                        <div class="services-grid">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv1" name="servicios" value="contabilidad">
+                                <label for="serv1">Contabilidad General</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv2" name="servicios" value="tributaria">
+                                <label for="serv2">Asesoría Tributaria</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv3" name="servicios" value="declaraciones">
+                                <label for="serv3">Declaraciones Mensuales</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv4" name="servicios" value="renta">
+                                <label for="serv4">Declaración Renta</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv5" name="servicios" value="rrhh">
+                                <label for="serv5">Gestión RRHH</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv6" name="servicios" value="constitucion">
+                                <label for="serv6">Constitución Sociedades</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv7" name="servicios" value="auditoria">
+                                <label for="serv7">Auditoría</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="serv8" name="servicios" value="otros">
+                                <label for="serv8">Otros Servicios</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>N° Trabajadores</label>
+                            <input type="number" name="num_trabajadores" min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Facturación Mensual Aprox.</label>
+                            <select name="facturacion">
+                                <option value="">Seleccione rango</option>
+                                <option value="0-5">0 - 5 millones</option>
+                                <option value="5-20">5 - 20 millones</option>
+                                <option value="20-50">20 - 50 millones</option>
+                                <option value="50-100">50 - 100 millones</option>
+                                <option value="100+">Más de 100 millones</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Información Adicional</label>
+                        <textarea name="info_adicional" rows="4" placeholder="Detalles adicionales sobre sus requerimientos..."></textarea>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="cotizacion-privacidad" required>
+                        <label for="cotizacion-privacidad">Autorizo el uso de mis datos para fines comerciales</label>
+                    </div>
+
+                    <button type="submit" class="submit-button">Solicitar Cotización</button>
+                </form>
+
+                <div id="cotizacionSuccess" class="success-message">
+                    <h3>✅ Solicitud enviada exitosamente</h3>
+                    <p>Le enviaremos su cotización en un plazo máximo de 24 horas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Vista Previa -->
+        <div id="previewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 style="color: #00d4ff;">Vista Previa del Formulario</h2>
+                    <span class="close-button" onclick="closeModal()">&times;</span>
+                </div>
+                <div id="previewContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Manejo del formulario de contacto
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Mostrar vista previa
+            showPreview('Formulario de Contacto', data);
+            
+            // Simular envío exitoso
+            setTimeout(() => {
+                document.getElementById('contactSuccess').classList.add('show');
+                this.reset();
+                
+                setTimeout(() => {
+                    document.getElementById('contactSuccess').classList.remove('show');
+                }, 5000);
+            }, 1000);
+        });
+
+        // Manejo del formulario de cotización
+        document.getElementById('cotizacionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            const servicios = [];
+            
+            for (let [key, value] of formData.entries()) {
+                if (key === 'servicios') {
+                    servicios.push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            data.servicios = servicios;
+            
+            // Mostrar vista previa
+            showPreview('Solicitud de Cotización', data);
+            
+            // Simular envío exitoso
+            setTimeout(() => {
+                document.getElementById('cotizacionSuccess').classList.add('show');
+                this.reset();
+                
+                setTimeout(() => {
+                    document.getElementById('cotizacionSuccess').classList.remove('show');
+                }, 5000);
+            }, 1000);
+        });
+
+        // Función para mostrar vista previa
+        function showPreview(titulo, data) {
+            let content = `<h3>${titulo}</h3>`;
+            content += '<div class="preview-data">';
+            
+            for (let [key, value] of Object.entries(data)) {
+                if (value) {
+                    let label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    
+                    if (Array.isArray(value)) {
+                        value = value.join(', ');
+                    }
+                    
+                    content += `
+                        <div class="preview-item">
+                            <span class="preview-label">${label}:</span> ${value}
+                        </div>
+                    `;
+                }
+            }
+            
+            content += '</div>';
+            content += `
+                <button class="copy-button" onclick="copyToClipboard()">Copiar Datos</button>
+                <p style="color: #999; font-size: 0.9em; margin-top: 20px;">
+                    Esta es una vista previa de los datos del formulario. 
+                    En un entorno real, estos datos se enviarían a su correo electrónico.
+                </p>
+            `;
+            
+            document.getElementById('previewContent').innerHTML = content;
+            document.getElementById('previewModal').style.display = 'block';
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // Copiar al portapapeles
+        function copyToClipboard() {
+            const content = document.getElementById('previewContent').innerText;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(content).then(() => {
+                    alert('Datos copiados al portapapeles');
+                });
+            } else {
+                // Fallback para navegadores antiguos
+                const textArea = document.createElement('textarea');
+                textArea.value = content;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Datos copiados al portapapeles');
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('previewModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Validación de RUT (opcional)
+        function validarRUT(rut) {
+            // Implementar validación de RUT chileno si es necesario
+            return true;
+        }
+
+        // Formatear teléfono mientras se escribe
+        document.querySelectorAll('input[type="tel"]').forEach(input => {
+            input.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 0) {
+                    if (value.length <= 2) {
+                        value = '+56 ' + value;
+                    } else if (value.length <= 3) {
+                        value = '+56 ' + value.substring(2);
+                    } else if (value.length <= 7) {
+                        value = '+56 ' + value.substring(2, 3) + ' ' + value.substring(3);
+                    } else {
+                        value = '+56 ' + value.substring(2, 3) + ' ' + value.substring(3, 7) + ' ' + value.substring(7, 11);
+                    }
+                }
+                e.target.value = value;
+            });
+        });
+
+        // Inicialización y tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            MTZ.Analytics.trackPageView('MTZ-04 Formularios de Contacto');
+            MTZ.Analytics.trackModuleUsage('MTZ-04');
+            console.log('MTZ-04 Formularios de Contacto cargado exitosamente');
+        });
+    </script>
+</body>
+</html>
