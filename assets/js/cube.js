@@ -124,73 +124,73 @@ function initThreeJS() {
         }
         
         const config = getOptimalConfig();
-    
-    // Crear escena con fog optimizado
-    scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x000511, 15, 50);
-    
-    // Crear reloj para animaciones sincronizadas
-    clock = new THREE.Clock();
-    
-    // Configurar cámara adaptiva
-    camera = new THREE.PerspectiveCamera(
-        config.fov, 
-        window.innerWidth / window.innerHeight, 
-        0.1, 
-        1000
-    );
-    camera.position.set(0, 0, config.distance);
-    
-    // Crear renderer con configuración óptima
-    renderer = new THREE.WebGLRenderer({ 
-        antialias: config.antialias,
-        alpha: true,
-        powerPreference: config.powerPreference,
-        stencil: false,
-        depth: true
-    });
-    
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(config.pixelRatio);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
-    
-    if (config.shadows) {
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    }
-    
-    container.appendChild(renderer.domElement);
-    
-    // Crear grupo principal del cubo
-    cubeGroup = new THREE.Group();
-    scene.add(cubeGroup);
-    
-    // Configurar sistemas
-    setupLights(config);
-    createAdvancedCube(config);
-    createParticleSystem(config);
-    setupControls();
-    
-    // Iniciar bucle de animación
-    animate();
-    
-    // Actualizar UI
-    updateControlsInfo();
-    
-    console.log('✨ CUBO V3.1 INICIALIZADO - Modo:', config.powerPreference);
-    
-    // Notificar que está listo INMEDIATAMENTE
-    console.log('📡 DISPARANDO EVENTO cubeReady');
-    document.dispatchEvent(new CustomEvent('cubeReady'));
-    
-    // Backup dispatch después de 500ms
-    setTimeout(() => {
-        console.log('📡 BACKUP - DISPARANDO EVENTO cubeReady');
+        
+        // Crear escena con fog optimizado
+        scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x000511, 15, 50);
+        
+        // Crear reloj para animaciones sincronizadas
+        clock = new THREE.Clock();
+        
+        // Configurar cámara adaptiva
+        camera = new THREE.PerspectiveCamera(
+            config.fov, 
+            window.innerWidth / window.innerHeight, 
+            0.1, 
+            1000
+        );
+        camera.position.set(0, 0, config.distance);
+        
+        // Crear renderer con configuración óptima
+        renderer = new THREE.WebGLRenderer({ 
+            antialias: config.antialias,
+            alpha: true,
+            powerPreference: config.powerPreference,
+            stencil: false,
+            depth: true
+        });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(config.pixelRatio);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+        
+        if (config.shadows) {
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        }
+        
+        container.appendChild(renderer.domElement);
+        
+        // Crear grupo principal del cubo
+        cubeGroup = new THREE.Group();
+        scene.add(cubeGroup);
+        
+        // Configurar sistemas
+        setupLights(config);
+        createAdvancedCube(config);
+        createParticleSystem(config);
+        setupControls();
+        
+        // Iniciar bucle de animación
+        animate();
+        
+        // Actualizar UI
+        updateControlsInfo();
+        
+        console.log('✨ CUBO V3.1 INICIALIZADO - Modo:', config.powerPreference);
+        
+        // Notificar que está listo INMEDIATAMENTE
+        console.log('📡 DISPARANDO EVENTO cubeReady');
         document.dispatchEvent(new CustomEvent('cubeReady'));
-    }, 500);
-    
+        
+        // Backup dispatch después de 500ms
+        setTimeout(() => {
+            console.log('📡 BACKUP - DISPARANDO EVENTO cubeReady');
+            document.dispatchEvent(new CustomEvent('cubeReady'));
+        }, 500);
+        
     } catch (error) {
         console.error('❌ Error initializing cube:', error);
         const loadingScreen = document.getElementById('loadingScreen');
@@ -675,22 +675,22 @@ function createEnhancedClickEffect(position, color) {
             ring.lookAt(camera.position);
             scene.add(ring);
             
-            // Animación
+            // Animación del anillo
             let scale = 0.1;
-            const animate = () => {
+            const animateRing = () => {
                 scale += 0.15;
                 ring.scale.setScalar(scale);
                 material.opacity -= 0.03;
                 
                 if (material.opacity > 0) {
-                    requestAnimationFrame(animate);
+                    requestAnimationFrame(animateRing);
                 } else {
                     scene.remove(ring);
                     geometry.dispose();
                     material.dispose();
                 }
             };
-            animate();
+            animateRing();
         }, i * 80);
     }
 }
@@ -729,40 +729,43 @@ function updateControlsInfo() {
     }
 }
 
-// Bucle de animación optimizado
+// Bucle de animación ultra-optimizado
 function animate() {
     requestAnimationFrame(animate);
     
     const elapsedTime = clock.getElapsedTime();
-    const deltaTime = clock.getDelta();
     
-    // Rotación suave del cubo
-    currentRotation.x += (targetRotation.x - currentRotation.x) * 0.08;
-    currentRotation.y += (targetRotation.y - currentRotation.y) * 0.08;
+    // Rotación suave del cubo (optimizada)
+    const lerpFactor = 0.08;
+    currentRotation.x += (targetRotation.x - currentRotation.x) * lerpFactor;
+    currentRotation.y += (targetRotation.y - currentRotation.y) * lerpFactor;
     
     cubeGroup.rotation.x = currentRotation.x;
     cubeGroup.rotation.y = currentRotation.y;
     
-    // Respiración sutil del cubo
+    // Respiración sutil del cubo (menos cálculos)
     const breathScale = 1 + Math.sin(elapsedTime * 0.6) * 0.03;
     cubeGroup.scale.setScalar(breathScale);
     
     // Rotación automática muy sutil
     cubeGroup.rotation.z = Math.sin(elapsedTime * 0.3) * 0.02;
     
-    // Animar luces
-    lights.forEach((light, index) => {
-        const userData = light.userData;
-        const angle = userData.baseAngle + elapsedTime * 0.2;
-        
-        light.position.x = Math.cos(angle) * userData.radius;
-        light.position.z = Math.sin(angle) * userData.radius;
-        light.position.y = Math.sin(elapsedTime * 0.8 + userData.phase) * 4;
-        light.intensity = userData.originalIntensity + 
-                         Math.sin(elapsedTime * 2 + userData.phase) * 0.3;
-    });
+    // Animar luces (solo si hay luces)
+    if (lights.length > 0) {
+        const lightSpeed = elapsedTime * 0.2;
+        lights.forEach((light) => {
+            const userData = light.userData;
+            const angle = userData.baseAngle + lightSpeed;
+            
+            light.position.x = Math.cos(angle) * userData.radius;
+            light.position.z = Math.sin(angle) * userData.radius;
+            light.position.y = Math.sin(elapsedTime * 0.8 + userData.phase) * 4;
+            light.intensity = userData.originalIntensity + 
+                             Math.sin(elapsedTime * 2 + userData.phase) * 0.3;
+        });
+    }
     
-    // Animar partículas
+    // Animar partículas (solo si existen)
     if (particleSystem) {
         particleSystem.rotation.y = elapsedTime * 0.05;
         particleSystem.rotation.x = Math.sin(elapsedTime * 0.3) * 0.1;
