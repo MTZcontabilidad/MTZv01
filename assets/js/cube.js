@@ -461,18 +461,23 @@ function setupControls() {
     mouse = new THREE.Vector2();
     
     const canvas = renderer.domElement;
+    const deviceCaps = getDeviceCapabilities();
     
-    // Eventos unificados
-    canvas.addEventListener('pointerdown', onPointerDown, { passive: true });
-    canvas.addEventListener('pointermove', onPointerMove, { passive: true });
-    canvas.addEventListener('pointerup', onPointerUp, { passive: true });
-    canvas.addEventListener('click', onPointerClick, { passive: true });
-    canvas.addEventListener('wheel', onWheel, { passive: false });
-    
-    // Eventos táctiles específicos
-    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
-    canvas.addEventListener('touchmove', onTouchMove, { passive: true });
-    canvas.addEventListener('touchend', onTouchEnd, { passive: true });
+    if (deviceCaps.isMobile) {
+        // MÓVIL: Solo eventos táctiles optimizados
+        console.log('📱 Configurando controles TÁCTILES optimizados');
+        canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+        canvas.addEventListener('touchend', onTouchEnd, { passive: false });
+    } else {
+        // PC: Solo eventos de mouse/pointer
+        console.log('🖥️ Configurando controles de ESCRITORIO');
+        canvas.addEventListener('pointerdown', onPointerDown, { passive: true });
+        canvas.addEventListener('pointermove', onPointerMove, { passive: true });
+        canvas.addEventListener('pointerup', onPointerUp, { passive: true });
+        canvas.addEventListener('click', onPointerClick, { passive: true });
+        canvas.addEventListener('wheel', onWheel, { passive: false });
+    }
     
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 }
@@ -530,71 +535,156 @@ function onWheel(event) {
     camera.position.z = Math.max(minDistance, Math.min(maxDistance, camera.position.z));
 }
 
-// Eventos táctiles específicos para móviles
+// Variables para inercia táctil
+let touchVelocity = { x: 0, y: 0 };
+let lastTouchTime = 0;
+let isRotating = false;
+let rotationInertia = { x: 0, y: 0 };
+
+// Eventos táctiles ULTRA-OPTIMIZADOS para móviles
 function onTouchStart(event) {
+    event.preventDefault();
     touchStartTime = Date.now();
+    lastTouchTime = touchStartTime;
+    isRotating = false;
+    
+    // Detener inercia al tocar
+    rotationInertia.x = 0;
+    rotationInertia.y = 0;
     
     if (event.touches.length === 2) {
-        const dx = event.touches[0].clientX - event.touches[1].clientX;
-        const dy = event.touches[0].clientY - event.touches[1].clientY;
+        // ZOOM: Dos dedos - Pinch to zoom
+        const touch1 = event.touches[0];
+        const touch2 = event.touches[1];
+        
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
         initialDistance = Math.sqrt(dx * dx + dy * dy);
+        
+        console.log('🤏 Zoom pinch iniciado');
+        
     } else if (event.touches.length === 1) {
+        // ROTACIÓN: Un dedo - Preparar para rotar
+        const touch = event.touches[0];
         lastTouchPosition = { 
-            x: event.touches[0].clientX, 
-            y: event.touches[0].clientY 
+            x: touch.clientX, 
+            y: touch.clientY 
         };
+        
+        // Preparar para detectar rotación
+        touchVelocity = { x: 0, y: 0 };
+        
+        console.log('👆 Touch iniciado para rotación');
     }
 }
 
 function onTouchMove(event) {
     event.preventDefault();
+    const currentTime = Date.now();
+    const deltaTime = currentTime - lastTouchTime;
     
     if (event.touches.length === 2 && initialDistance > 0) {
-        // Pinch zoom
-        const dx = event.touches[0].clientX - event.touches[1].clientX;
-        const dy = event.touches[0].clientY - event.touches[1].clientY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // ZOOM PINCH SUAVE Y PRECISO
+        const touch1 = event.touches[0];
+        const touch2 = event.touches[1];
         
-        const scale = distance / initialDistance;
-        const minDistance = 6;
-        const maxDistance = 25;
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        const currentDistance = Math.sqrt(dx * dx + dy * dy);
         
-        camera.position.z = Math.max(minDistance, 
-            Math.min(maxDistance, camera.position.z / scale));
+        // Calcular zoom con suavizado
+        const zoomRatio = currentDistance / initialDistance;
+        const zoomSpeed = 0.02; // Más suave
+        const minDistance = 5;
+        const maxDistance = 28;
         
-        initialDistance = distance;
+        // Aplicar zoom suave
+        const newDistance = camera.position.z / (1 + (zoomRatio - 1) * zoomSpeed);
+        camera.position.z = Math.max(minDistance, Math.min(maxDistance, newDistance));
+        
+        // Actualizar distancia inicial para suavidad
+        initialDistance = currentDistance;
+        
+        console.log('🔍 Zoom:', camera.position.z.toFixed(1));
+        
+    } else if (event.touches.length === 1 && lastTouchPosition) {
+        // ROTACIÓN CON UN DEDO - ULTRA SUAVE
+        const touch = event.touches[0];
+        
+        const deltaMove = {
+            x: touch.clientX - lastTouchPosition.x,
+            y: touch.clientY - lastTouchPosition.y
+        };
+        
+        // Sensibilidad optimizada para móviles
+        const sensitivity = 0.012; // Más sensible y natural
+        
+        // Aplicar rotación
+        targetRotation.y += deltaMove.x * sensitivity;
+        targetRotation.x += deltaMove.y * sensitivity;
+        
+        // Limitar rotación vertical para mejor experiencia
+        targetRotation.x = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, targetRotation.x));
+        
+        // Calcular velocidad para inercia
+        if (deltaTime > 0) {
+            touchVelocity.x = deltaMove.x / deltaTime;
+            touchVelocity.y = deltaMove.y / deltaTime;
+        }
+        
+        // Actualizar posición anterior
+        lastTouchPosition = { x: touch.clientX, y: touch.clientY };
+        isRotating = true;
+        
+        console.log('🔄 Rotando:', targetRotation.y.toFixed(2), targetRotation.x.toFixed(2));
     }
+    
+    lastTouchTime = currentTime;
 }
 
 function onTouchEnd(event) {
     const touchDuration = Date.now() - touchStartTime;
     
     if (event.touches.length === 0) {
-        const touch = event.changedTouches[0];
-        const touchDistance = Math.sqrt(
-            Math.pow(touch.clientX - lastTouchPosition.x, 2) +
-            Math.pow(touch.clientY - lastTouchPosition.y, 2)
-        );
+        // Ya no hay toques activos
         
-        // Detectar tap más sensible - aumentamos tolerancia y tiempo
-        if (touchDuration < 500 && touchDistance < 25) {
-            mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+        if (isRotating && touchDuration > 50) {
+            // Aplicar INERCIA si hubo rotación
+            const inertiaFactor = 0.008;
+            rotationInertia.x = touchVelocity.y * inertiaFactor;
+            rotationInertia.y = touchVelocity.x * inertiaFactor;
             
-            // Feedback táctil en dispositivos compatibles
-            if (navigator.vibrate) {
-                navigator.vibrate(50); // Vibración sutil de 50ms
+            console.log('🌪️ Inercia aplicada:', rotationInertia.x.toFixed(3), rotationInertia.y.toFixed(3));
+            
+        } else if (!isRotating && touchDuration < 300) {
+            // TAP RÁPIDO - Detectar click en cara
+            const touch = event.changedTouches[0];
+            
+            // Calcular distancia de movimiento
+            const touchDistance = lastTouchPosition ? Math.sqrt(
+                Math.pow(touch.clientX - lastTouchPosition.x, 2) +
+                Math.pow(touch.clientY - lastTouchPosition.y, 2)
+            ) : 0;
+            
+            // Solo si fue un tap sin movimiento
+            if (touchDistance < 15) {
+                mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+                
+                // Feedback táctil
+                if (navigator.vibrate) {
+                    navigator.vibrate(40);
+                }
+                
+                console.log('👆 TAP detectado en cara');
+                handleClick();
             }
-            
-            console.log('📱 Tap detectado en móvil');
-            handleClick();
-        } else if (touchDuration >= 500) {
-            console.log('📱 Tap muy largo - considerado como arrastre');
-        } else if (touchDistance >= 25) {
-            console.log('📱 Movimiento detectado - considerado como arrastre');
         }
         
+        // Reset variables
         initialDistance = 0;
+        isRotating = false;
+        lastTouchPosition = null;
     }
 }
 
@@ -876,8 +966,25 @@ function animate() {
     
     const elapsedTime = clock.getElapsedTime();
     
+    // Aplicar inercia táctil (solo móviles)
+    if (getDeviceCapabilities().isMobile && (Math.abs(rotationInertia.x) > 0.001 || Math.abs(rotationInertia.y) > 0.001)) {
+        targetRotation.x += rotationInertia.x;
+        targetRotation.y += rotationInertia.y;
+        
+        // Limitar rotación vertical con inercia
+        targetRotation.x = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, targetRotation.x));
+        
+        // Reducir inercia gradualmente
+        rotationInertia.x *= 0.92; // Fricción suave
+        rotationInertia.y *= 0.92;
+        
+        // Detener inercia cuando sea muy pequeña
+        if (Math.abs(rotationInertia.x) < 0.001) rotationInertia.x = 0;
+        if (Math.abs(rotationInertia.y) < 0.001) rotationInertia.y = 0;
+    }
+    
     // Rotación suave del cubo (optimizada)
-    const lerpFactor = 0.08;
+    const lerpFactor = getDeviceCapabilities().isMobile ? 0.12 : 0.08; // Más suave en móvil
     currentRotation.x += (targetRotation.x - currentRotation.x) * lerpFactor;
     currentRotation.y += (targetRotation.y - currentRotation.y) * lerpFactor;
     
@@ -1036,4 +1143,4 @@ window.cubeAPI = {
     }
 };
 
-console.log('✅ CUBO V3.1 CÓDIGO CARGADO - ESPERANDO DOM');
+console.log('✅ CUBO V3.1.09 TOUCH OPTIMIZADO - CÓDIGO CARGADO - ESPERANDO DOM');
