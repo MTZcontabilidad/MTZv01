@@ -1,8 +1,8 @@
 /* ===================================
-   MAIN.JS V3.0 - CONTROLADOR OPTIMIZADO
+   MAIN.JS V3.1 - CONTROLADOR ULTRA-OPTIMIZADO
    =================================== */
 
-console.log('🚀 MAIN.JS V3.0 CARGADO - CONTROLADOR INTELIGENTE');
+console.log('🚀 MAIN.JS V3.1 CARGADO - CONTROLADOR INTELIGENTE');
 
 // Variables para loading
 let loadingProgress = 0;
@@ -23,13 +23,13 @@ document.addEventListener('cubeReady', function() {
     }, 1000); // Reducido a 1 segundo
 });
 
-// Backup timer - si el cubo no se carga en 10 segundos, forzar hide
+// Backup timer - si el cubo no se carga en 8 segundos, forzar hide
 setTimeout(() => {
     if (!loadingComplete) {
-        console.log('⚠️ TIMEOUT - FORZANDO HIDE LOADING');
+        console.log('⚠️ TIMEOUT - FORZANDO HIDE LOADING (8s)');
         hideLoadingScreen();
     }
-}, 10000);
+}, 8000);
 
 // Secuencia de loading
 function startLoadingSequence() {
