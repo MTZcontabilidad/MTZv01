@@ -463,30 +463,31 @@ function createParticleSystem(config) {
 
 // 🛸 CREAR GATOS ALIEN Y ASTRONAUTAS ESPECTACULARES
 function createAlienCats(config) {
-    const totalCats = config.isLowEnd ? 4 : config.isMobile ? 6 : 8;
-    const alienCount = Math.ceil(totalCats * 0.6); // 60% aliens
-    const astronautCount = totalCats - alienCount; // 40% astronautas
+    try {
+        // REDUCIR cantidad para mejor performance
+        const totalCats = config.isLowEnd ? 2 : config.isMobile ? 3 : 5;
+        const alienCount = Math.ceil(totalCats * 0.6); // 60% aliens
+        const astronautCount = totalCats - alienCount; // 40% astronautas
+        
+        console.log(`🚀 Creando ${totalCats} gatitos espaciales (${alienCount} aliens + ${astronautCount} astronautas)`);
     
     // CREAR GATOS ALIEN EN PLATILLOS (MÁS PEQUEÑOS)
     for (let i = 0; i < alienCount; i++) {
         const alienGroup = new THREE.Group();
         
-        // PLATILLO VOLADOR PEQUEÑO
-        const saucerGeometry = new THREE.CylinderGeometry(0.4, 0.6, 0.15, 12);
-        const saucerMaterial = new THREE.MeshPhongMaterial({
+        // PLATILLO VOLADOR PEQUEÑO (geometría simplificada)
+        const saucerGeometry = new THREE.CylinderGeometry(0.4, 0.6, 0.15, 8);
+        const saucerMaterial = new THREE.MeshBasicMaterial({
             color: 0x00ff88,
-            emissive: 0x004422,
-            shininess: 100,
             transparent: true,
             opacity: 0.9
         });
         const saucer = new THREE.Mesh(saucerGeometry, saucerMaterial);
         
-        // Cúpula pequeña
-        const domeGeometry = new THREE.SphereGeometry(0.3, 8, 6, 0, Math.PI * 2, 0, Math.PI / 2);
-        const domeMaterial = new THREE.MeshPhongMaterial({
+        // Cúpula pequeña (simplificada)
+        const domeGeometry = new THREE.SphereGeometry(0.3, 6, 4, 0, Math.PI * 2, 0, Math.PI / 2);
+        const domeMaterial = new THREE.MeshBasicMaterial({
             color: 0x00d4ff,
-            emissive: 0x002244,
             transparent: true,
             opacity: 0.7
         });
@@ -496,11 +497,10 @@ function createAlienCats(config) {
         // GATO ALIEN PEQUEÑO PERO DISTINGUIBLE
         const catBody = new THREE.Group();
         
-        // Cuerpo más pequeño
-        const bodyGeometry = new THREE.SphereGeometry(0.12, 8, 6);
-        const bodyMaterial = new THREE.MeshPhongMaterial({
-            color: 0xff6600,
-            emissive: 0x441100
+        // Cuerpo más pequeño (simplificado)
+        const bodyGeometry = new THREE.SphereGeometry(0.12, 6, 4);
+        const bodyMaterial = new THREE.MeshBasicMaterial({
+            color: 0xff6600
         });
         const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
         body.scale.set(1, 0.8, 1.2);
@@ -585,11 +585,10 @@ function createAlienCats(config) {
         // GATITO ASTRONAUTA ADORABLE
         const catBody = new THREE.Group();
         
-        // Cuerpo del gatito
-        const bodyGeometry = new THREE.SphereGeometry(0.15, 8, 6);
-        const bodyMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffa500, // Naranja
-            emissive: 0x221100
+        // Cuerpo del gatito (simplificado)
+        const bodyGeometry = new THREE.SphereGeometry(0.15, 6, 4);
+        const bodyMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffa500 // Naranja
         });
         const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
         body.scale.set(1, 0.9, 1.1);
@@ -599,13 +598,12 @@ function createAlienCats(config) {
         const head = new THREE.Mesh(headGeometry, bodyMaterial);
         head.position.set(0, 0.2, 0.03);
         
-        // CASCO DE ASTRONAUTA TRANSPARENTE
-        const helmetGeometry = new THREE.SphereGeometry(0.16, 12, 8);
-        const helmetMaterial = new THREE.MeshPhongMaterial({
+        // CASCO DE ASTRONAUTA TRANSPARENTE (simplificado)
+        const helmetGeometry = new THREE.SphereGeometry(0.16, 8, 6);
+        const helmetMaterial = new THREE.MeshBasicMaterial({
             color: 0xffffff,
             transparent: true,
-            opacity: 0.3,
-            emissive: 0x001122
+            opacity: 0.3
         });
         const helmet = new THREE.Mesh(helmetGeometry, helmetMaterial);
         helmet.position.set(0, 0.2, 0.03);
@@ -713,7 +711,12 @@ function createAlienCats(config) {
         scene.add(astronautGroup);
     }
     
-    console.log(`🛸 ${alienCount} Gatos Alien + 👨‍🚀 ${astronautCount} Astronautas creados!`);
+        console.log(`🛸 ${alienCount} Gatos Alien + 👨‍🚀 ${astronautCount} Astronautas creados!`);
+        
+    } catch (error) {
+        console.error('❌ Error creando gatitos espaciales:', error);
+        console.log('⚠️ Continuando sin gatitos espaciales para mantener estabilidad');
+    }
 }
 
 // Configurar controles unificados
@@ -1474,4 +1477,4 @@ window.cubeAPI = {
     }
 };
 
-console.log('✅ CUBO V3.1.11 GATITOS ESPACIALES - ALIENS + ASTRONAUTAS - CÓDIGO CARGADO');
+console.log('✅ CUBO V3.1.12 OPTIMIZADO - GATITOS ESPACIALES ESTABILIZADOS - CÓDIGO CARGADO');
