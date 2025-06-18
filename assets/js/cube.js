@@ -116,8 +116,13 @@ function getOptimalConfig() {
 
 // Inicializar Three.js con configuración optimizada
 function initThreeJS() {
-    const container = document.getElementById('canvas-container');
-    const config = getOptimalConfig();
+    try {
+        const container = document.getElementById('canvas-container');
+        if (!container) {
+            throw new Error('Canvas container not found');
+        }
+        
+        const config = getOptimalConfig();
     
     // Crear escena con fog optimizado
     scene = new THREE.Scene();
@@ -146,7 +151,7 @@ function initThreeJS() {
     
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(config.pixelRatio);
-    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
     
@@ -179,6 +184,16 @@ function initThreeJS() {
     setTimeout(() => {
         document.dispatchEvent(new CustomEvent('cubeReady'));
     }, 500);
+    
+    } catch (error) {
+        console.error('Error initializing cube:', error);
+        document.getElementById('loading-screen').innerHTML = `
+            <div style="color: #ff6b6b; text-align: center;">
+                <h3>Error al cargar el cubo 3D</h3>
+                <p>Por favor, recarga la página</p>
+            </div>
+        `;
+    }
 }
 
 // Sistema de luces dinámicas optimizado
@@ -236,6 +251,7 @@ function createAdvancedCube(config) {
         texture.generateMipmaps = false;
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
+        texture.colorSpace = THREE.SRGBColorSpace;
         
         const material = new THREE.MeshPhysicalMaterial({
             map: texture,
