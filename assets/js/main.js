@@ -11,10 +11,7 @@ let loadingComplete = false;
 // Inicializar cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📱 DOM CARGADO - INICIANDO LOADING');
-    // Pequeño delay para asegurar que todo esté listo
-    setTimeout(() => {
-        startLoadingSequence();
-    }, 100);
+    startLoadingSequence();
 });
 
 // Escuchar cuando el cubo esté listo
@@ -26,13 +23,13 @@ document.addEventListener('cubeReady', function() {
     }, 1000); // Reducido a 1 segundo
 });
 
-// Backup timer - si el cubo no se carga en 8 segundos, forzar hide
+// Backup timer - si el cubo no se carga en 5 segundos, forzar hide
 setTimeout(() => {
     if (!loadingComplete) {
-        console.log('⚠️ TIMEOUT - FORZANDO HIDE LOADING (8s)');
+        console.log('⚠️ TIMEOUT - FORZANDO HIDE LOADING (5s)');
         hideLoadingScreen();
     }
-}, 8000);
+}, 5000);
 
 // Secuencia de loading
 function startLoadingSequence() {

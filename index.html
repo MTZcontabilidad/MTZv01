@@ -14,9 +14,9 @@
     <link rel="icon" type="image/png" href="assets/img/logo-mtz.png">
     
     <!-- CSS V3.1 Ultra-Optimizado -->
-    <link rel="stylesheet" href="assets/css/main.css?v=3102">
-    <link rel="stylesheet" href="assets/css/animations.css?v=3102">
-    <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3102">
+    <link rel="stylesheet" href="assets/css/main.css?v=3103">
+    <link rel="stylesheet" href="assets/css/animations.css?v=3103">
+    <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3103">
 </head>
 <body>
     <!-- Partículas cósmicas de fondo -->
@@ -64,25 +64,12 @@
         </button>
     </div>
 
-    <!-- Three.js R150 - Última versión estable con fallback -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js" 
-            onload="console.log('✅ Three.js R150 cargado correctamente')" 
-            onerror="console.error('❌ Error cargando Three.js desde CDNJS, intentando fallback...'); loadThreeFallback()"></script>
-    
-    <script>
-        function loadThreeFallback() {
-            console.log('🔄 Cargando Three.js desde fallback...');
-            const script = document.createElement('script');
-            script.src = 'https://unpkg.com/three@0.150.0/build/three.min.js';
-            script.onload = () => console.log('✅ Three.js cargado desde fallback');
-            script.onerror = () => console.error('❌ Error en todos los CDNs de Three.js');
-            document.head.appendChild(script);
-        }
-    </script>
+    <!-- Three.js R150 - Carga simple y directa -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js"></script>
     
     <!-- JavaScript V3.1 Ultra-Optimizado -->
-    <script src="assets/js/main.js?v=3102" defer></script>
-    <script src="assets/js/cube.js?v=3102" defer></script>
+    <script src="assets/js/main.js?v=3103"></script>
+    <script src="assets/js/cube.js?v=3103"></script>
 
     <!-- Analytics V3.1 -->
     <script>
