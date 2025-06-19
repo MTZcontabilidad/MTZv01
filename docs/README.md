@@ -62,9 +62,6 @@ MTZ-CUBO-3D/
 │   │   └── main.js        # Controlador principal
 │   └── img/               # Imágenes necesarias
 │       └── logo-mtz.png   # Logo oficial
-├── modules/               # Módulos adicionales
-│   ├── MTZ-01_Enlaces_Rapidos.html
-│   └── README.md
 ├── docs/                  # Documentación
 │   └── README.md          # Este archivo
 └── README.md              # Documentación principal

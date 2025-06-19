@@ -39,53 +39,11 @@
 
 ## 🛠️ **HERRAMIENTAS TRIBUTARIAS GRATUITAS**
 
-### **🔗 MTZ-01: Enlaces Rápidos SII**
-- Portal completo del Servicio de Impuestos Internos
-- Servicios online organizados por categoría
-- Enlaces directos a formularios oficiales
-- Consultas de estado tributario en tiempo real
-
-### **📋 MTZ-02: Generador Documentos RRHH**  
-- Contratos de trabajo automatizados
-- Cartas de despido con formato legal
-- Certificados laborales personalizados
-- Documentos de recursos humanos especializados
-
-### **🧮 MTZ-03: Calculadoras Tributarias**
-- Calculadora de IVA con tasas actualizadas
-- Retenciones automáticas por servicios
-- Cálculo de honorarios profesionales  
-- Impuestos y contribuciones empresariales
-
-### **📝 MTZ-04: Formularios de Contacto**
-- Solicitudes de cotización automatizadas
-- Formularios de consulta especializada
-- Generación de documentos profesionales
-- Sistema de seguimiento de solicitudes
-
-### **🧾 MTZ-05: Generador de Facturas**
-- Facturas con formato legal chileno
-- Boletas de honorarios automatizadas
-- Cálculos de impuestos en tiempo real
-- Descarga instantánea en PDF
-
-### **📅 MTZ-06: Calendario Tributario**
-- Fechas importantes SII actualizadas
-- Recordatorios de vencimientos
-- Planificación fiscal anual
-- Alertas personalizadas
-
-### **📚 MTZ-07: Guías y Tutoriales**
-- Procedimientos paso a paso
-- Video tutoriales especializados
-- Casos de uso reales
-- Mejores prácticas tributarias
-
-### **🏢 MTZ-08: Constitución de Sociedades**
-- Formularios de constitución automatizados
-- Modificaciones societarias
-- Aumentos de capital
-- Gestión corporativa completa
+### **🎯 Portal 3D Interactivo**
+- Cubo 3D con 6 servicios tributarios principales
+- Acceso directo a SII, PREVIRED y organismos oficiales
+- Interfaz moderna y responsive
+- Compatible con todos los dispositivos
 
 ---
 
@@ -193,17 +151,13 @@ open index.html
 ### **📊 Estructura Técnica**
 ```
 MTZv01/
-├── index.html                              # Página principal integrada
-├── MTZ-01_Enlaces_Rapidos.html              # SII y organismos oficiales
-├── MTZ-02_Documentos_RRHH.html              # Generador de documentos
-├── MTZ-03_Calculadoras_Tributarias.html     # Calculadoras fiscales
-├── MTZ-04_Formularios_Contacto.html         # Formularios profesionales
-├── MTZ-05_Generador_Facturas.html           # Facturación automatizada
-├── MTZ-06_Calendario_Tributario.html        # Fechas importantes
-├── MTZ-07_Guias_Tutoriales.html             # Documentación especializada
-├── MTZ-08_Constitucion_Sociedades.html      # Servicios corporativos
-├── TQF/                                     # Fundación Te Quiero Feliz
-└── README.md                                # Esta documentación
+├── index.html              # Portal 3D principal
+├── assets/
+│   ├── css/               # Estilos del portal
+│   ├── js/                # Lógica del cubo 3D
+│   └── img/               # Recursos gráficos
+├── docs/                  # Documentación
+└── README.md              # Esta documentación
 ```
 
 ---
