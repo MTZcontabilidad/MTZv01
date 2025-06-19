@@ -50,21 +50,23 @@ Portal web 3D ultra-optimizado que presenta los servicios de MTZ Consultores Tri
 
 ### 📁 **ESTRUCTURA ACTUAL**
 ```
-MTZ-CUBO-3D/
-├── index.html              # Página principal
-├── assets/
-│   ├── css/               # Estilos optimizados
+MTZ-Portal-3D/
+├── index.html              # Portal principal
+├── README.md               # Documentación principal
+├── src/                    # Código fuente
+│   ├── css/               # Estilos organizados
 │   │   ├── main.css       # Estilos principales
 │   │   ├── animations.css # Animaciones
-│   │   └── mobile-fixes.css # Correcciones móvil
+│   │   └── responsive.css # Diseño responsive
 │   ├── js/                # JavaScript optimizado
-│   │   ├── cube.js        # Motor del cubo 3D
-│   │   └── main.js        # Controlador principal
-│   └── img/               # Imágenes necesarias
-│       └── logo-mtz.png   # Logo oficial
-├── docs/                  # Documentación
-│   └── README.md          # Este archivo
-└── README.md              # Documentación principal
+│   │   ├── app.js         # Inicializador principal
+│   │   └── cube3d.js      # Motor del cubo 3D
+│   └── assets/            # Recursos estáticos
+│       └── images/        # Imágenes
+│           └── logo-mtz.png # Logo oficial
+└── docs/                  # Documentación técnica
+    ├── README.md          # Este archivo
+    └── CHANGELOG.md       # Historial de cambios
 ```
 
 ### 🔍 **DEBUGGING Y LOGS**

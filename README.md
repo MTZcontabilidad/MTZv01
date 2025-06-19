@@ -150,14 +150,22 @@ open index.html
 
 ### **📊 Estructura Técnica**
 ```
-MTZv01/
+MTZ-Portal-3D/
 ├── index.html              # Portal 3D principal
-├── assets/
+├── README.md               # Esta documentación
+├── src/                    # Código fuente organizado
 │   ├── css/               # Estilos del portal
+│   │   ├── main.css       # Estilos base
+│   │   ├── animations.css # Animaciones
+│   │   └── responsive.css # Diseño responsive
 │   ├── js/                # Lógica del cubo 3D
-│   └── img/               # Recursos gráficos
-├── docs/                  # Documentación
-└── README.md              # Esta documentación
+│   │   ├── app.js         # Inicializador
+│   │   └── cube3d.js      # Motor 3D
+│   └── assets/            # Recursos estáticos
+│       └── images/        # Imágenes
+└── docs/                  # Documentación técnica
+    ├── README.md          # Documentación detallada
+    └── CHANGELOG.md       # Historial de cambios
 ```
 
 ---
