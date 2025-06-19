@@ -40,6 +40,14 @@ function initThreeJS() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000511);
 
+        // Añadir luces básicas
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
         // Crear cámara
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(0, 0, 8);
@@ -74,19 +82,24 @@ function createBasicCube() {
     const geometry = new THREE.BoxGeometry(3, 3, 3);
     const materials = [];
     
-    // Crear material para cada cara
+    // Crear material para cada cara en el orden correcto
+    // Three.js usa: +X, -X, +Y, -Y, +Z, -Z
+    const faceOrder = [0, 1, 2, 3, 4, 5]; // SII, PREVIRED, DT, TESORERIA, TQF, MTZ
+    
     for (let i = 0; i < 6; i++) {
-        const faceData = faceInfo[i];
-        const material = new THREE.MeshBasicMaterial({
+        const faceData = faceInfo[faceOrder[i]];
+        const material = new THREE.MeshLambertMaterial({
             color: faceData.color,
             transparent: true,
-            opacity: 0.8
+            opacity: 0.9
         });
         materials.push(material);
     }
     
     cube = new THREE.Mesh(geometry, materials);
     scene.add(cube);
+    
+    console.log('✅ Cubo creado con 6 materiales');
 }
 
 // Configurar controles básicos
@@ -150,10 +163,15 @@ function onClick(event) {
     const intersects = raycaster.intersectObject(cube);
     
     if (intersects.length > 0) {
-        const faceIndex = intersects[0].face.materialIndex;
-        const faceData = faceInfo[faceIndex];
-        console.log('Cara clickeada:', faceData.title);
-        showInfoPanel(faceData);
+        // Calcular el índice de la cara basado en faceIndex
+        const faceIndex = Math.floor(intersects[0].faceIndex / 2);
+        console.log('Face Index:', intersects[0].faceIndex, 'Calculated:', faceIndex);
+        
+        if (faceIndex >= 0 && faceIndex < 6) {
+            const faceData = faceInfo[faceIndex];
+            console.log('Cara clickeada:', faceData.title);
+            showInfoPanel(faceData);
+        }
     }
 }
 
@@ -227,10 +245,15 @@ function onTouchEnd(event) {
         const intersects = raycaster.intersectObject(cube);
         
         if (intersects.length > 0) {
-            const faceIndex = intersects[0].face.materialIndex;
-            const faceData = faceInfo[faceIndex];
-            console.log('Cara tocada:', faceData.title);
-            showInfoPanel(faceData);
+            // Calcular el índice de la cara basado en faceIndex
+            const faceIndex = Math.floor(intersects[0].faceIndex / 2);
+            console.log('Touch Face Index:', intersects[0].faceIndex, 'Calculated:', faceIndex);
+            
+            if (faceIndex >= 0 && faceIndex < 6) {
+                const faceData = faceInfo[faceIndex];
+                console.log('Cara tocada:', faceData.title);
+                showInfoPanel(faceData);
+            }
         }
     }
 }
@@ -274,6 +297,11 @@ function animate() {
     if (cube) {
         cube.rotation.x = currentRotation.x;
         cube.rotation.y = currentRotation.y;
+        
+        // Rotación automática muy sutil si no se está arrastrando
+        if (!isDragging) {
+            cube.rotation.y += 0.003; // Rotación muy lenta
+        }
     }
     
     renderer.render(scene, camera);
