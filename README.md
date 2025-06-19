@@ -163,9 +163,8 @@ MTZ-Portal-3D/
 │   │   └── cube3d.js      # Motor 3D
 │   └── assets/            # Recursos estáticos
 │       └── images/        # Imágenes
-└── docs/                  # Documentación técnica
-    ├── README.md          # Documentación detallada
-    └── CHANGELOG.md       # Historial de cambios
+├── CHANGELOG.md           # Historial de cambios
+└── README.md              # Esta documentación
 ```
 
 ---
