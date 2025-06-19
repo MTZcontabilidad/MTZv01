@@ -1,309 +1,110 @@
-/* ===================================
-   MAIN.JS V3.1 - CONTROLADOR ULTRA-OPTIMIZADO
-   =================================== */
+/* ===========================================
+   MAIN.JS - INICIALIZADOR LIMPIO
+   Solo inicialización básica del cubo
+   =========================================== */
 
-console.log('🚀 MAIN.JS V3.1 CARGADO - CONTROLADOR INTELIGENTE');
+console.log('🎯 MAIN.JS LIMPIO - INICIANDO');
 
-// Variables para loading
-let loadingProgress = 0;
-let loadingComplete = false;
+// Variables globales básicas
+let cubeInitialized = false;
+let initAttempts = 0;
+const maxAttempts = 5;
 
-// Inicializar cuando se carga la página
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 MTZ Portal 3D V3.1.12 - Inicializando...');
+// Función principal de inicialización
+function initPortal() {
+    console.log('🚀 Iniciando portal MTZ...');
     
-    // Iniciar secuencia de loading
-    startLoadingSequence();
-    
-    // Verificar soporte WebGL
-    if (!window.WebGLRenderingContext) {
-        console.error('❌ WebGL no soportado');
-        const errorDiv = document.getElementById('webgl-error');
-        if (errorDiv) errorDiv.style.display = 'block';
-        return;
+    // Verificar que THREE.js esté disponible
+    if (typeof THREE === 'undefined') {
+        console.error('❌ THREE.js no disponible');
+        return false;
     }
     
-    // Función para intentar inicializar el cubo con reintentos
-    function tryInitializeCube(attempt = 1, maxAttempts = 10) {
-        console.log(`🔄 Intento ${attempt}/${maxAttempts} de inicializar cubo...`);
-        
-        // Verificar que THREE esté disponible
-        if (typeof THREE === 'undefined') {
-            console.log('⏳ Esperando THREE.js...');
-            if (attempt < maxAttempts) {
-                setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 500);
-            }
-            return;
-        }
-        
-        // Verificar que startCube esté disponible
-        if (typeof startCube !== 'function') {
-            console.log('⏳ Esperando función startCube...');
-            if (attempt < maxAttempts) {
-                setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 500);
-            } else {
-                console.error('❌ Función startCube no encontrada después de', maxAttempts, 'intentos');
-                console.log('🔍 Funciones disponibles:', Object.keys(window).filter(key => key.includes('cube') || key.includes('Cube')));
-            }
-            return;
-        }
-        
-        // Intentar inicializar
-        try {
-            console.log('🎯 Iniciando cubo...');
-            const success = startCube();
-            if (success) {
-                console.log('✅ Cubo 3D inicializado correctamente en intento', attempt);
-            } else {
-                console.error('❌ Cubo falló al inicializar en intento', attempt);
-                if (attempt < maxAttempts) {
-                    setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 1000);
-                }
-            }
-        } catch (error) {
-            console.error('❌ Error al inicializar cubo en intento', attempt, ':', error);
-            if (attempt < maxAttempts) {
-                setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 1000);
-            }
-        }
+    // Verificar que startCube esté disponible
+    if (typeof startCube !== 'function') {
+        console.error('❌ startCube no disponible');
+        return false;
     }
     
-    // Iniciar el primer intento después de un delay
-    setTimeout(() => {
-        tryInitializeCube();
-    }, 1000);
-    
-    // Sistema de detección de dispositivos
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-    const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth > 768 && window.innerWidth <= 1024;
-    
-    console.log(`📱 Dispositivo detectado: ${isMobile ? 'Móvil' : isTablet ? 'Tablet' : 'Desktop'}`);
-    
-    // Aplicar estilos específicos del dispositivo
-    document.body.classList.add(isMobile ? 'mobile-device' : isTablet ? 'tablet-device' : 'desktop-device');
-    
-    // Optimizaciones de rendimiento
-    if (isMobile) {
-        // Reducir calidad en móviles
-        document.documentElement.style.setProperty('--particle-count', '50');
-        document.documentElement.style.setProperty('--animation-speed', '0.8');
-    } else {
-        document.documentElement.style.setProperty('--particle-count', '100');
-        document.documentElement.style.setProperty('--animation-speed', '1.0');
-    }
-    
-    // Control de modal de confirmación
-    setupModalControls();
-    
-    // Manejo de errores globales
-    window.addEventListener('error', function(e) {
-        console.error('❌ Error global capturado:', e.error);
-    });
-    
-    // Prevenir zoom accidental en iOS
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-        document.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-    }
-    
-    console.log('🎉 MTZ Portal 3D completamente cargado');
-});
-
-function setupModalControls() {
-    // Modal de confirmación para navegación
-    const modal = document.getElementById('confirmModal');
-    const confirmBtn = document.getElementById('confirmNavigation');
-    const cancelBtn = document.getElementById('cancelNavigation');
-    
-    let pendingUrl = '';
-    
-    // Interceptar clics en enlaces de servicios
-    document.querySelectorAll('a[data-service]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            pendingUrl = this.href;
-            
-            const serviceName = this.getAttribute('data-service') || 'este servicio';
-            document.getElementById('serviceName').textContent = serviceName;
-            
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('show'), 10);
-        });
-    });
-    
-    // Confirmar navegación
-    confirmBtn.addEventListener('click', function() {
-        if (pendingUrl) {
-            window.open(pendingUrl, '_blank');
+    // Intentar inicializar el cubo
+    try {
+        const success = startCube();
+        if (success) {
+            cubeInitialized = true;
+            console.log('✅ Portal MTZ inicializado correctamente');
+            return true;
+        } else {
+            console.error('❌ Error inicializando cubo');
+            return false;
         }
-        closeModal();
-    });
-    
-    // Cancelar navegación
-    cancelBtn.addEventListener('click', closeModal);
-    
-    // Cerrar con ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('show')) {
-            closeModal();
-        }
-    });
-    
-    function closeModal() {
-        modal.classList.remove('show');
-        setTimeout(() => {
-            modal.style.display = 'none';
-            pendingUrl = '';
-        }, 300);
+    } catch (error) {
+        console.error('❌ Error en inicialización:', error);
+        return false;
     }
 }
 
-// Función de utilidad para debugging
-window.MTZDebug = {
-    version: '3.1.12',
-    checkStatus: function() {
-        console.log('🔍 Estado del Portal MTZ:');
-        console.log('- Versión:', this.version);
-        console.log('- WebGL:', window.WebGLRenderingContext ? '✅' : '❌');
-        console.log('- Three.js:', typeof THREE !== 'undefined' ? '✅' : '❌');
-        console.log('- Cubo inicializado:', typeof scene !== 'undefined' ? '✅' : '❌');
-        console.log('- Dispositivo:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Móvil' : 'Desktop');
+// Función de reintentos
+function tryInitialize() {
+    initAttempts++;
+    console.log(`🔄 Intento ${initAttempts}/${maxAttempts} de inicialización`);
+    
+    const success = initPortal();
+    
+    if (!success && initAttempts < maxAttempts) {
+        console.log(`⏳ Reintentando en 1 segundo...`);
+        setTimeout(tryInitialize, 1000);
+    } else if (!success) {
+        console.error('❌ No se pudo inicializar después de múltiples intentos');
+        showError();
     }
-};
+}
+
+// Mostrar error básico
+function showError() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.innerHTML = `
+            <div style="color: #ff6b6b; text-align: center; padding: 20px;">
+                <h3>⚠️ Error al cargar</h3>
+                <p>No se pudo inicializar el cubo 3D</p>
+                <button onclick="location.reload()" style="padding: 10px 20px; margin-top: 10px; background: #00d4ff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    🔄 Recargar
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Ocultar pantalla de carga
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
+}
+
+// Inicialización cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 DOM cargado, esperando recursos...');
+    
+    // Esperar un poco para que se carguen todos los recursos
+    setTimeout(() => {
+        tryInitialize();
+    }, 500);
+});
 
 // Escuchar cuando el cubo esté listo
 document.addEventListener('cubeReady', function() {
-    console.log('🎯 EVENTO cubeReady RECIBIDO - OCULTANDO LOADING');
-    loadingComplete = true;
-    setTimeout(() => {
-        hideLoadingScreen();
-    }, 1000); // Reducido a 1 segundo
+    console.log('✅ Cubo listo, ocultando pantalla de carga');
+    hideLoadingScreen();
 });
 
-// Backup timer - si el cubo no se carga en 15 segundos, forzar hide
-setTimeout(() => {
-    if (!loadingComplete) {
-        console.log('⚠️ TIMEOUT EXTENDIDO - FORZANDO HIDE LOADING (15s)');
-        console.log('🔍 Estado actual del sistema:');
-        console.log('  - THREE disponible:', typeof THREE !== 'undefined');
-        console.log('  - startCube disponible:', typeof startCube === 'function');
-        console.log('  - Canvas container:', document.getElementById('canvas-container') ? 'Existe' : 'No existe');
-        hideLoadingScreen();
-    }
-}, 15000); // Aumentado a 15 segundos
-
-// Secuencia de loading
-function startLoadingSequence() {
-    const loadingElement = document.getElementById('loadingScreen');
-    const progressBar = document.querySelector('.progress-bar');
-    const loadingText = document.querySelector('.loading-text');
-    
-    if (!loadingElement) {
-        console.log('❌ No se encontró elemento loading');
-        return;
-    }
-    
-    console.log('⏳ INICIANDO SECUENCIA DE LOADING');
-    
-    // Simular progreso de carga más lento y realista
-    const progressInterval = setInterval(() => {
-        loadingProgress += Math.random() * 8 + 3;
-        
-        if (loadingProgress >= 100) {
-            loadingProgress = 100;
-            clearInterval(progressInterval);
-            
-            // NO ocultar automáticamente - esperar señal del cubo
-            console.log('📊 PROGRESO COMPLETADO - ESPERANDO CUBO');
-        }
-        
-        // Actualizar barra de progreso
-        if (progressBar) {
-            progressBar.style.width = loadingProgress + '%';
-        }
-        
-        // Actualizar texto con más pasos
-        if (loadingText) {
-            if (loadingProgress < 20) {
-                loadingText.textContent = 'Iniciando sistema tributario...';
-            } else if (loadingProgress < 40) {
-                loadingText.textContent = 'Cargando servicios del SII...';
-            } else if (loadingProgress < 60) {
-                loadingText.textContent = 'Conectando con PREVIRED...';
-            } else if (loadingProgress < 80) {
-                loadingText.textContent = 'Inicializando cubo cuántico...';
-            } else if (loadingProgress < 95) {
-                loadingText.textContent = 'Activando efectos visuales...';
-            } else {
-                loadingText.textContent = 'Portal cuántico listo!';
-            }
-        }
-        
-    }, 150); // Intervalo más lento para mejor apreciación
-}
-
-// Ocultar loading screen con transición más suave
-function hideLoadingScreen() {
-    const loadingElement = document.getElementById('loadingScreen');
-    
-    if (loadingElement) {
-        console.log('✅ OCULTANDO LOADING SCREEN');
-        
-        // Transición más suave y lenta
-        loadingElement.style.transition = 'all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        loadingElement.style.opacity = '0';
-        loadingElement.style.transform = 'scale(0.9)';
-        
-        setTimeout(() => {
-            loadingElement.style.display = 'none';
-            loadingComplete = true;
-            console.log('🎯 LOADING COMPLETADO - CUBO DISPONIBLE');
-        }, 1000); // Tiempo aumentado para la transición
-    }
-}
-
-// Función para mostrar/ocultar panel de información
-function toggleInfoPanel(show = false) {
-    const panel = document.getElementById('infoPanel');
-    if (panel) {
-        if (show) {
-            panel.classList.add('active');
-        } else {
-            panel.classList.remove('active');
-        }
-    }
-}
-
-// Funciones de utilidad
-function throttle(func, limit) {
-    let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    }
-}
-
-// Manejar redimensionamiento de ventana
-window.addEventListener('resize', throttle(() => {
-    // El cube.js maneja su propio resize
-    console.log('📐 VENTANA REDIMENSIONADA');
-}, 250));
-
-// Manejar visibilidad de la página
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        console.log('��️ PÁGINA OCULTA');
-    } else {
-        console.log('👁️ PÁGINA VISIBLE');
-    }
+// Manejo de errores globales
+window.addEventListener('error', function(event) {
+    console.error('❌ Error global:', event.error);
 });
 
-console.log('✅ MAIN.JS INICIALIZADO CORRECTAMENTE');
+console.log('✅ MAIN.JS LIMPIO - CÓDIGO CARGADO');

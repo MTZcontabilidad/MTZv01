@@ -2,26 +2,20 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>MTZ Consultores Tributarios | Portal 3D Espectacular V3.1.12 ESTABLE</title>
-    <meta name="description" content="Portal 3D interactivo ultra-optimizado de MTZ Consultores Tributarios con acceso directo a servicios del SII, PREVIRED, Dirección del Trabajo, Tesorería y más. Compatible con todos los dispositivos.">
-    <meta name="keywords" content="MTZ, Consultores Tributarios, SII, PREVIRED, Portal 3D, WebGL, Three.js">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>MTZ Consultores Tributarios | Portal 3D</title>
+    <meta name="description" content="Portal 3D interactivo de MTZ Consultores Tributarios con acceso a servicios tributarios.">
     <meta name="theme-color" content="#00d4ff">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/img/logo-mtz.png">
     
-    <!-- CSS V3.1 Ultra-Optimizado -->
-    <link rel="stylesheet" href="assets/css/main.css?v=3112">
-    <link rel="stylesheet" href="assets/css/animations.css?v=3112">
-    <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3112">
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/mobile-fixes.css">
 </head>
 <body>
-    <!-- Partículas cósmicas de fondo -->
-    <div class="cosmic-particles"></div>
-    
     <!-- Navbar Superior -->
     <nav class="navbar" id="navbar">
         <div class="navbar-content">
@@ -30,7 +24,7 @@
             </div>
             <div class="navbar-info">
                 <h1 class="company-name">MTZ CONSULTORES TRIBUTARIOS</h1>
-                <p class="tech-info">Portal 3D • Three.js • WebGL • Tecnología Cuántica</p>
+                <p class="tech-info">Portal 3D Tributario</p>
             </div>
         </div>
     </nav>
@@ -38,17 +32,9 @@
     <!-- Loading Screen -->
     <div class="loading" id="loadingScreen">
         <div class="loading-content">
-            <img src="assets/img/logo-mtz.png" alt="MTZ Logo" class="loading-logo" id="loadingLogo">
-            <div class="loading-text" id="loadingText">Iniciando Portal Cuántico...</div>
-            <div class="progress-container">
-                <div class="progress-bar"></div>
-            </div>
+            <img src="assets/img/logo-mtz.png" alt="MTZ Logo" class="loading-logo">
+            <div class="loading-text">Cargando Portal 3D...</div>
         </div>
-    </div>
-
-    <!-- Instrucciones de control -->
-    <div class="controls-info" id="controlsInfo">
-        <p>🖱️ Arrastra para rotar • 🔍 Rueda para zoom • 👆 Click en las caras</p>
     </div>
 
     <!-- Contenedor del Canvas 3D -->
@@ -64,53 +50,16 @@
         </button>
     </div>
 
-    <!-- Modal de Confirmación -->
-    <div class="confirmation-modal" id="confirmModal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-icon">🚀</div>
-                <h3>Confirmar Navegación</h3>
-            </div>
-            <div class="modal-body">
-                <p class="modal-question">¿Deseas acceder a <strong id="serviceName">este servicio</strong>?</p>
-                <p class="modal-url">Se abrirá en una nueva pestaña</p>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn modal-confirm" id="confirmNavigation">✅ Confirmar</button>
-                <button class="modal-btn modal-cancel" id="cancelNavigation">❌ Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Three.js R150 - Carga MÚLTIPLE con fallbacks -->
+    <!-- Three.js -->
     <script src="https://unpkg.com/three@0.150.0/build/three.min.js"></script>
-    <script>
-        // Verificación inmediata de Three.js
-        if (typeof THREE === 'undefined') {
-            console.log('⚠️ Fallback: Cargando Three.js desde CDN alternativo');
-            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js"><\/script>');
-        } else {
-            console.log('✅ Three.js cargado exitosamente desde unpkg');
-        }
-    </script>
     
-    <!-- JavaScript V3.1 Ultra-Optimizado -->
-    <script src="assets/js/cube.js?v=3112"></script>
-    <script src="assets/js/main.js?v=3112"></script>
+    <!-- JavaScript del Portal -->
+    <script src="assets/js/cube.js"></script>
+    <script src="assets/js/main.js"></script>
 
-    <!-- Analytics V3.1 -->
     <script>
-        console.log('🎯 MTZ Portal 3D V3.1.12 ESTABILIZADO');
-        console.log('🛸 GATOS ESPACIALES: OPTIMIZADOS Y ESTABLES');
-        console.log('⚡ PERFORMANCE: GEOMETRÍAS SIMPLIFICADAS');
-        console.log('🛡️ ERROR HANDLING: MANEJO ROBUSTO DE ERRORES');
-        console.log('🔧 MATERIALES: BASIC EN LUGAR DE PHONG');
-        console.log('📊 CANTIDAD REDUCIDA: MEJOR RENDIMIENTO');
-        console.log('✨ CUBO FLOTANTE: MOVIMIENTO SUTIL MÁGICO');
-        console.log('🤏 Zoom Pinch: ULTRA PRECISO Y SUAVE');
-        console.log('📱 Modal Responsivo: PERFECTO EN MÓVILES');
-        console.log('✅ Modal de Confirmación: OBLIGATORIO');
-        console.log('✨ Three.js R150 + WebGL 2.0');
+        console.log('🎯 MTZ Portal 3D - Versión Limpia');
+        console.log('✅ Solo cubo básico funcional');
     </script>
 </body>
 </html> 
