@@ -44,14 +44,29 @@
     <!-- Contenedor del Canvas 3D -->
     <div id="canvas-container"></div>
 
+    <!-- Overlay de fondo para el panel -->
+    <div class="panel-overlay" id="panelOverlay"></div>
+    
     <!-- Panel de información -->
     <div class="info-panel" id="infoPanel">
-        <div class="info-icon" id="infoIcon">🏛️</div>
-        <h3 id="infoTitle">Servicio Tributario</h3>
-        <p id="infoContent">Información del servicio seleccionado</p>
-        <button class="action-button" id="actionButton">
-            Acceder al Servicio
-        </button>
+        <button class="close-panel" id="closePanel">✕</button>
+        <div class="panel-header">
+            <div class="info-icon" id="infoIcon">🏛️</div>
+            <h3 id="infoTitle">Servicio Tributario</h3>
+        </div>
+        <div class="panel-content">
+            <p id="infoContent">Información del servicio seleccionado</p>
+            <div class="panel-actions">
+                <button class="action-button primary" id="actionButton">
+                    <span class="button-icon">🚀</span>
+                    <span class="button-text">Acceder al Servicio</span>
+                </button>
+                <button class="action-button secondary" id="closeButton">
+                    <span class="button-icon">✕</span>
+                    <span class="button-text">Cerrar</span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Three.js -->

@@ -414,33 +414,70 @@ function onTouchEnd(event) {
     }
 }
 
-// Mostrar panel de información
+// Mostrar panel de información con estándar mundial
 function showInfoPanel(faceData) {
     const infoPanel = document.getElementById('infoPanel');
+    const panelOverlay = document.getElementById('panelOverlay');
     const infoIcon = document.getElementById('infoIcon');
     const infoTitle = document.getElementById('infoTitle');
     const infoContent = document.getElementById('infoContent');
     const actionButton = document.getElementById('actionButton');
+    const closeButton = document.getElementById('closeButton');
+    const closePanel = document.getElementById('closePanel');
     
-    if (infoPanel && infoIcon && infoTitle && infoContent && actionButton) {
+    if (infoPanel && panelOverlay && infoIcon && infoTitle && infoContent && actionButton) {
+        // Configurar contenido
         infoIcon.textContent = faceData.emoji;
         infoTitle.textContent = faceData.title;
         infoContent.textContent = faceData.content;
         
+        // Configurar botón principal
         actionButton.onclick = () => {
             if (faceData.link && faceData.link !== '#fundacion') {
                 window.open(faceData.link, '_blank');
+                hideInfoPanel();
             }
         };
         
+        // Configurar botones de cerrar
+        const hidePanel = () => hideInfoPanel();
+        if (closeButton) closeButton.onclick = hidePanel;
+        if (closePanel) closePanel.onclick = hidePanel;
+        if (panelOverlay) panelOverlay.onclick = hidePanel;
+        
+        // Mostrar panel con overlay
+        panelOverlay.classList.add('active');
         infoPanel.classList.add('active');
         
-        // Auto-ocultar después de 5 segundos
-        setTimeout(() => {
-            infoPanel.classList.remove('active');
-        }, 5000);
+        // Prevenir scroll del body
+        document.body.style.overflow = 'hidden';
+        
+        console.log('📋 Panel de información mostrado:', faceData.title);
     }
 }
+
+// Ocultar panel de información
+function hideInfoPanel() {
+    const infoPanel = document.getElementById('infoPanel');
+    const panelOverlay = document.getElementById('panelOverlay');
+    
+    if (infoPanel && panelOverlay) {
+        infoPanel.classList.remove('active');
+        panelOverlay.classList.remove('active');
+        
+        // Restaurar scroll del body
+        document.body.style.overflow = '';
+        
+        console.log('❌ Panel de información cerrado');
+    }
+}
+
+// Cerrar panel con tecla ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        hideInfoPanel();
+    }
+});
 
 // Bucle de animación
 function animate() {
@@ -501,4 +538,5 @@ function startCube() {
     }
 }
 
+console.log('✅ MTZ Cubo 3D - Código cargado');
 console.log('✅ MTZ Cubo 3D - Código cargado');

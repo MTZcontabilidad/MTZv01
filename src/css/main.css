@@ -594,98 +594,201 @@ a, button {
     opacity: 0.9;
 }
 
-/* Info Panel Mejorado */
+/* Panel de Información Profesional - Estándar Mundial */
 .info-panel {
     position: fixed;
     top: 50%;
-    right: -400px;
-    transform: translateY(-50%);
-    width: 380px;
-    background: linear-gradient(135deg, 
-        rgba(0, 0, 0, 0.95) 0%,
-        rgba(0, 20, 40, 0.8) 100%);
-    backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 20px;
-    padding: 30px;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 450px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: linear-gradient(145deg, 
+        rgba(0, 0, 0, 0.98) 0%,
+        rgba(0, 15, 35, 0.95) 50%,
+        rgba(0, 25, 50, 0.92) 100%);
+    backdrop-filter: blur(30px) saturate(200%);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 24px;
+    padding: 40px;
     box-shadow: 
-        -20px 20px 80px rgba(0, 0, 0, 0.8),
-        0 0 100px rgba(0, 212, 255, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    z-index: 200;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        0 25px 100px rgba(0, 0, 0, 0.9),
+        0 0 120px rgba(0, 212, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(0, 212, 255, 0.1);
+    z-index: 1000;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     opacity: 0;
     visibility: hidden;
+    overflow-y: auto;
 }
 
 .info-panel.active {
-    right: 50px;
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    visibility: visible;
+    border: 2px solid rgba(0, 212, 255, 0.4);
+    box-shadow: 
+        0 30px 120px rgba(0, 0, 0, 0.95),
+        0 0 150px rgba(0, 212, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 212, 255, 0.15);
+}
+
+/* Overlay de fondo para enfocar el panel */
+.panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+}
+
+.panel-overlay.active {
     opacity: 1;
     visibility: visible;
 }
 
-.info-icon {
-    width: 80px;
-    height: 80px;
+/* Botón de cerrar elegante */
+.close-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    background: linear-gradient(135deg, 
-        var(--primary-cyan), 
-        var(--primary-pink));
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5em;
-    margin-bottom: 25px;
+}
+
+.close-panel:hover {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    transform: scale(1.1);
+}
+
+/* Header del panel */
+.panel-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.info-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, 
+        var(--primary-cyan), 
+        var(--primary-green));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8em;
+    margin: 0 auto 20px;
+    box-shadow: 
+        0 10px 30px rgba(0, 212, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(2deg); }
 }
 
 .info-panel h3 {
     font-family: 'Orbitron', monospace;
-    font-size: 1.8em;
+    font-size: 2em;
     font-weight: 700;
-    margin-bottom: 15px;
-    background: linear-gradient(90deg, 
+    margin: 0;
+    background: linear-gradient(135deg, 
         var(--primary-cyan), 
         var(--primary-green));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-transform: uppercase;
     letter-spacing: 2px;
+    text-align: center;
 }
 
-.info-panel p {
-    font-size: 1.1em;
-    line-height: 1.6;
+/* Contenido del panel */
+.panel-content {
+    text-align: left;
+}
+
+.panel-content p {
+    font-size: 1.15em;
+    line-height: 1.7;
     color: var(--text-secondary);
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     font-weight: 400;
+    text-align: justify;
 }
 
-.info-panel .action-button {
+/* Acciones del panel */
+.panel-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-button {
     display: inline-flex;
     align-items: center;
-    gap: 15px;
-    background: linear-gradient(135deg, 
-        var(--primary-cyan), 
-        var(--primary-pink));
-    color: white;
-    text-decoration: none;
-    padding: 15px 30px;
+    gap: 12px;
+    border: none;
+    padding: 16px 28px;
     border-radius: 50px;
     font-family: 'Orbitron', monospace;
     font-weight: 600;
-    font-size: 1em;
+    font-size: 0.95em;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
+    cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.6),
-        0 0 40px rgba(0, 212, 255, 0.4);
     position: relative;
     overflow: hidden;
+    min-width: 160px;
+    justify-content: center;
 }
 
-.info-panel .action-button::before {
+.action-button.primary {
+    background: linear-gradient(135deg, 
+        var(--primary-cyan), 
+        var(--primary-green));
+    color: white;
+    box-shadow: 
+        0 8px 25px rgba(0, 212, 255, 0.4),
+        0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+.action-button.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.action-button::before {
     content: '';
     position: absolute;
     top: 0;
@@ -699,15 +802,32 @@ a, button {
     transition: left 0.6s ease;
 }
 
-.info-panel .action-button:hover {
+.action-button:hover {
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 
-        0 15px 40px rgba(0, 0, 0, 0.8),
-        0 0 80px rgba(0, 212, 255, 0.6);
 }
 
-.info-panel .action-button:hover::before {
+.action-button.primary:hover {
+    box-shadow: 
+        0 12px 35px rgba(0, 212, 255, 0.6),
+        0 0 60px rgba(0, 212, 255, 0.4);
+}
+
+.action-button.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: white;
+}
+
+.action-button:hover::before {
     left: 100%;
+}
+
+.button-icon {
+    font-size: 1.1em;
+}
+
+.button-text {
+    font-weight: 600;
 }
 
 /* Animaciones Simplificadas */
@@ -721,7 +841,60 @@ a, button {
     50% { opacity: 1; transform: scale(1.1); }
 }
 
-/* Responsive Optimizado */
+/* Responsive para Panel de Información */
+@media (max-width: 768px) {
+    .info-panel {
+        width: 95vw;
+        max-width: 400px;
+        padding: 30px 25px;
+        max-height: 85vh;
+    }
+
+    .panel-header {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+    }
+
+    .info-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 2.2em;
+        margin-bottom: 15px;
+    }
+
+    .info-panel h3 {
+        font-size: 1.6em;
+        letter-spacing: 1px;
+    }
+
+    .panel-content p {
+        font-size: 1.05em;
+        line-height: 1.6;
+        margin-bottom: 25px;
+    }
+
+    .panel-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .action-button {
+        font-size: 0.9em;
+        padding: 14px 24px;
+        min-width: auto;
+        width: 100%;
+    }
+
+    .close-panel {
+        top: 15px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}
+
+/* Responsive General */
 @media (max-width: 768px) {
     .navbar {
         height: 70px;
