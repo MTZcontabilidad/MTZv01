@@ -303,7 +303,7 @@ a, button {
         drop-shadow(0 0 60px rgba(0, 212, 255, 1))
         drop-shadow(0 0 120px rgba(255, 0, 128, 0.8))
         drop-shadow(0 0 180px rgba(128, 0, 255, 0.6));
-    animation: logoEntrance 4s ease-out forwards, logoGlow 3s ease-in-out infinite alternate 1.5s;
+    animation: logoEntranceFast 1s ease-out forwards, logoGlow 2s ease-in-out infinite alternate 1s;
     transform: scale(0) rotateY(180deg);
     opacity: 0;
 }
@@ -318,12 +318,13 @@ a, button {
     letter-spacing: 3px;
     margin-bottom: 30px;
     text-align: center;
-    animation: textPulse 2.5s ease-in-out infinite alternate, textSlideUp 2s ease-out 1s both;
+    animation: textPulse 2s ease-in-out infinite alternate 0.5s;
     text-shadow: 
         0 0 20px rgba(0, 212, 255, 0.8),
         0 0 40px rgba(0, 212, 255, 0.5);
     opacity: 0;
     transform: translateY(30px);
+    transition: all 0.5s ease-out;
 }
 
 /* Barra de Progreso */
@@ -391,6 +392,25 @@ a, button {
         transform: scale(1.2) rotateY(90deg);
         opacity: 0.7;
         filter: blur(5px);
+    }
+    100% {
+        transform: scale(1) rotateY(0deg);
+        opacity: 1;
+        filter: blur(0px);
+    }
+}
+
+/* Animación rápida del logo para 1 segundo */
+@keyframes logoEntranceFast {
+    0% {
+        transform: scale(0) rotateY(180deg);
+        opacity: 0;
+        filter: blur(15px);
+    }
+    60% {
+        transform: scale(1.15) rotateY(45deg);
+        opacity: 0.8;
+        filter: blur(3px);
     }
     100% {
         transform: scale(1) rotateY(0deg);

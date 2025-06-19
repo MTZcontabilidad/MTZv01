@@ -75,6 +75,34 @@ function showError() {
     }
 }
 
+// Mostrar intro con solo el logo
+function showLogoIntro() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingText = document.querySelector('.loading-text');
+    
+    if (loadingScreen && loadingText) {
+        // Ocultar el texto inicialmente
+        loadingText.style.opacity = '0';
+        loadingText.style.transform = 'translateY(20px)';
+        
+        console.log('🎭 Mostrando logo durante 1 segundo...');
+    }
+}
+
+// Mostrar texto de carga después del logo
+function showLoadingText() {
+    const loadingText = document.querySelector('.loading-text');
+    
+    if (loadingText) {
+        // Animar la aparición del texto
+        loadingText.style.transition = 'all 0.5s ease-out';
+        loadingText.style.opacity = '1';
+        loadingText.style.transform = 'translateY(0px)';
+        
+        console.log('📝 Mostrando texto de carga...');
+    }
+}
+
 // Ocultar pantalla de carga
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
@@ -88,12 +116,19 @@ function hideLoadingScreen() {
 
 // Inicialización cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 DOM cargado, esperando recursos...');
+    console.log('📄 DOM cargado, iniciando secuencia de intro...');
     
-    // Esperar un poco para que se carguen todos los recursos
+    // Mostrar solo el logo durante 1 segundo
+    showLogoIntro();
+    
+    // Después de 1 segundo, mostrar texto de carga e inicializar
     setTimeout(() => {
-        tryInitialize();
-    }, 500);
+        showLoadingText();
+        // Esperar un poco más para que se carguen todos los recursos
+        setTimeout(() => {
+            tryInitialize();
+        }, 500);
+    }, 1000);
 });
 
 // Escuchar cuando el cubo esté listo
