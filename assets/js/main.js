@@ -3,7 +3,7 @@
    Solo inicialización básica del cubo
    =========================================== */
 
-console.log('🎯 MAIN.JS LIMPIO - INICIANDO');
+console.log('🎯 MTZ Portal - Inicializando');
 
 // Variables globales básicas
 let cubeInitialized = false;
@@ -107,4 +107,4 @@ window.addEventListener('error', function(event) {
     console.error('❌ Error global:', event.error);
 });
 
-console.log('✅ MAIN.JS LIMPIO - CÓDIGO CARGADO');
+console.log('✅ MTZ Portal - Código cargado');

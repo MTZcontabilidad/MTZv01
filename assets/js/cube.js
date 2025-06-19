@@ -11,7 +11,7 @@ let previousMousePosition = { x: 0, y: 0 };
 let targetRotation = { x: 0, y: 0 };
 let currentRotation = { x: 0, y: 0 };
 
-console.log('🎯 CUBO MTZ LIMPIO - INICIANDO');
+console.log('🎯 MTZ Cubo 3D - Inicializando');
 
 // Información de cada cara del cubo
 const faceInfo = {
@@ -67,7 +67,7 @@ function initThreeJS() {
         // Iniciar animación
         animate();
         
-        console.log('✅ Cubo básico inicializado');
+        console.log('✅ Cubo 3D inicializado correctamente');
         
         // Notificar que está listo
         document.dispatchEvent(new CustomEvent('cubeReady'));
@@ -99,7 +99,7 @@ function createBasicCube() {
     cube = new THREE.Mesh(geometry, materials);
     scene.add(cube);
     
-    console.log('✅ Cubo creado con 6 materiales');
+
 }
 
 // Configurar controles básicos
@@ -165,11 +165,10 @@ function onClick(event) {
     if (intersects.length > 0) {
         // Calcular el índice de la cara basado en faceIndex
         const faceIndex = Math.floor(intersects[0].faceIndex / 2);
-        console.log('Face Index:', intersects[0].faceIndex, 'Calculated:', faceIndex);
         
         if (faceIndex >= 0 && faceIndex < 6) {
             const faceData = faceInfo[faceIndex];
-            console.log('Cara clickeada:', faceData.title);
+
             showInfoPanel(faceData);
         }
     }
@@ -247,11 +246,10 @@ function onTouchEnd(event) {
         if (intersects.length > 0) {
             // Calcular el índice de la cara basado en faceIndex
             const faceIndex = Math.floor(intersects[0].faceIndex / 2);
-            console.log('Touch Face Index:', intersects[0].faceIndex, 'Calculated:', faceIndex);
             
             if (faceIndex >= 0 && faceIndex < 6) {
                 const faceData = faceInfo[faceIndex];
-                console.log('Cara tocada:', faceData.title);
+
                 showInfoPanel(faceData);
             }
         }
@@ -318,7 +316,7 @@ window.addEventListener('resize', handleResize);
 
 // Función principal de inicialización
 function startCube() {
-    console.log('🚀 INICIANDO CUBO LIMPIO...');
+    console.log('🚀 Iniciando cubo 3D...');
     
     if (typeof THREE === 'undefined') {
         console.error('❌ THREE.js no disponible');
@@ -327,12 +325,12 @@ function startCube() {
     
     try {
         initThreeJS();
-        console.log('✅ Cubo limpio inicializado exitosamente');
+        console.log('✅ Cubo 3D listo');
         return true;
     } catch (error) {
-        console.error('❌ Error iniciando cubo limpio:', error);
+        console.error('❌ Error iniciando cubo:', error);
         return false;
     }
 }
 
-console.log('✅ CUBO MTZ LIMPIO - CÓDIGO CARGADO');
+console.log('✅ MTZ Cubo 3D - Código cargado');
