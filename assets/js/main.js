@@ -18,26 +18,60 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar soporte WebGL
     if (!window.WebGLRenderingContext) {
         console.error('❌ WebGL no soportado');
-        document.getElementById('webgl-error').style.display = 'block';
+        const errorDiv = document.getElementById('webgl-error');
+        if (errorDiv) errorDiv.style.display = 'block';
         return;
     }
     
-    // Inicializar el cubo 3D
-    try {
-        if (typeof startCube === 'function') {
+    // Función para intentar inicializar el cubo con reintentos
+    function tryInitializeCube(attempt = 1, maxAttempts = 10) {
+        console.log(`🔄 Intento ${attempt}/${maxAttempts} de inicializar cubo...`);
+        
+        // Verificar que THREE esté disponible
+        if (typeof THREE === 'undefined') {
+            console.log('⏳ Esperando THREE.js...');
+            if (attempt < maxAttempts) {
+                setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 500);
+            }
+            return;
+        }
+        
+        // Verificar que startCube esté disponible
+        if (typeof startCube !== 'function') {
+            console.log('⏳ Esperando función startCube...');
+            if (attempt < maxAttempts) {
+                setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 500);
+            } else {
+                console.error('❌ Función startCube no encontrada después de', maxAttempts, 'intentos');
+                console.log('🔍 Funciones disponibles:', Object.keys(window).filter(key => key.includes('cube') || key.includes('Cube')));
+            }
+            return;
+        }
+        
+        // Intentar inicializar
+        try {
+            console.log('🎯 Iniciando cubo...');
             const success = startCube();
             if (success) {
-                console.log('✅ Cubo 3D inicializado correctamente');
+                console.log('✅ Cubo 3D inicializado correctamente en intento', attempt);
             } else {
-                console.error('❌ Cubo falló al inicializar');
+                console.error('❌ Cubo falló al inicializar en intento', attempt);
+                if (attempt < maxAttempts) {
+                    setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 1000);
+                }
             }
-        } else {
-            console.error('❌ Función startCube no encontrada');
-            console.log('🔍 Funciones disponibles:', Object.keys(window).filter(key => key.includes('cube') || key.includes('Cube')));
+        } catch (error) {
+            console.error('❌ Error al inicializar cubo en intento', attempt, ':', error);
+            if (attempt < maxAttempts) {
+                setTimeout(() => tryInitializeCube(attempt + 1, maxAttempts), 1000);
+            }
         }
-    } catch (error) {
-        console.error('❌ Error al inicializar cubo:', error);
     }
+    
+    // Iniciar el primer intento después de un delay
+    setTimeout(() => {
+        tryInitializeCube();
+    }, 1000);
     
     // Sistema de detección de dispositivos
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;

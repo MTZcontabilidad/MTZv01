@@ -272,18 +272,11 @@ function createAdvancedCube(config) {
         texture.magFilter = THREE.LinearFilter;
         texture.colorSpace = THREE.SRGBColorSpace;
         
-        const material = new THREE.MeshPhysicalMaterial({
+        const material = new THREE.MeshBasicMaterial({
             map: texture,
             color: new THREE.Color(faceData.color),
-            metalness: 0.3,
-            roughness: 0.4,
-            clearcoat: 0.5,
-            clearcoatRoughness: 0.1,
             transparent: true,
-            opacity: 0.95,
-            emissive: new THREE.Color(faceData.color),
-            emissiveIntensity: 0.15,
-            envMapIntensity: 1.5
+            opacity: 0.95
         });
         
         materials.push(material);
@@ -464,258 +457,50 @@ function createParticleSystem(config) {
 // 🛸 CREAR GATOS ALIEN Y ASTRONAUTAS ESPECTACULARES
 function createAlienCats(config) {
     try {
-        // REDUCIR cantidad para mejor performance
-        const totalCats = config.isLowEnd ? 2 : config.isMobile ? 3 : 5;
-        const alienCount = Math.ceil(totalCats * 0.6); // 60% aliens
-        const astronautCount = totalCats - alienCount; // 40% astronautas
+        // Cantidad mínima para máxima estabilidad
+        const totalCats = config.isLowEnd ? 1 : 2;
         
-        console.log(`🚀 Creando ${totalCats} gatitos espaciales (${alienCount} aliens + ${astronautCount} astronautas)`);
+        console.log(`🚀 Creando ${totalCats} gatitos espaciales ULTRA-SIMPLIFICADOS`);
     
-    // CREAR GATOS ALIEN EN PLATILLOS (MÁS PEQUEÑOS)
-    for (let i = 0; i < alienCount; i++) {
+    // CREAR GATOS ESPACIALES ULTRA-SIMPLIFICADOS
+    for (let i = 0; i < totalCats; i++) {
         const alienGroup = new THREE.Group();
         
-        // PLATILLO VOLADOR PEQUEÑO (geometría simplificada)
-        const saucerGeometry = new THREE.CylinderGeometry(0.4, 0.6, 0.15, 8);
-        const saucerMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00ff88,
-            transparent: true,
-            opacity: 0.9
+        // GATO ESPACIAL ULTRA-SIMPLE
+        const catGeometry = new THREE.SphereGeometry(0.3, 8, 6);
+        const catMaterial = new THREE.MeshBasicMaterial({
+            color: i % 2 === 0 ? 0xff6600 : 0x00ff88
         });
-        const saucer = new THREE.Mesh(saucerGeometry, saucerMaterial);
+        const cat = new THREE.Mesh(catGeometry, catMaterial);
         
-        // Cúpula pequeña (simplificada)
-        const domeGeometry = new THREE.SphereGeometry(0.3, 6, 4, 0, Math.PI * 2, 0, Math.PI / 2);
-        const domeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00d4ff,
-            transparent: true,
-            opacity: 0.7
-        });
-        const dome = new THREE.Mesh(domeGeometry, domeMaterial);
-        dome.position.y = 0.1;
+        alienGroup.add(cat);
         
-        // GATO ALIEN PEQUEÑO PERO DISTINGUIBLE
-        const catBody = new THREE.Group();
-        
-        // Cuerpo más pequeño (simplificado)
-        const bodyGeometry = new THREE.SphereGeometry(0.12, 6, 4);
-        const bodyMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff6600
-        });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.scale.set(1, 0.8, 1.2);
-        
-        // Cabeza proporcionada
-        const headGeometry = new THREE.SphereGeometry(0.1, 8, 6);
-        const head = new THREE.Mesh(headGeometry, bodyMaterial);
-        head.position.set(0, 0.15, 0.05);
-        
-        // Orejas alien más pequeñas pero visibles
-        const earGeometry = new THREE.ConeGeometry(0.04, 0.1, 4);
-        const earMaterial = new THREE.MeshPhongMaterial({
-            color: 0xff8800,
-            emissive: 0x331100
-        });
-        
-        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
-        leftEar.position.set(-0.06, 0.22, 0.02);
-        leftEar.rotation.z = -0.3;
-        
-        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
-        rightEar.position.set(0.06, 0.22, 0.02);
-        rightEar.rotation.z = 0.3;
-        
-        // Ojos brillantes más pequeños pero visibles
-        const eyeGeometry = new THREE.SphereGeometry(0.02, 6, 4);
-        const eyeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00ff00,
-            emissive: 0x00ff00
-        });
-        
-        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        leftEye.position.set(-0.04, 0.16, 0.09);
-        
-        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        rightEye.position.set(0.04, 0.16, 0.09);
-        
-        // Cola pequeña
-        const tailGeometry = new THREE.CylinderGeometry(0.015, 0.03, 0.2, 6);
-        const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
-        tail.position.set(0, 0.05, -0.18);
-        tail.rotation.x = 0.5;
-        
-        // Ensamblar gato alien
-        catBody.add(body, head, leftEar, rightEar, leftEye, rightEye, tail);
-        catBody.position.y = 0.2;
-        
-        // Luz del platillo pequeña
-        const saucerLight = new THREE.PointLight(0x00ff88, 0.3, 8);
-        saucerLight.position.set(0, -0.1, 0);
-        
-        alienGroup.add(saucer, dome, catBody, saucerLight);
-        
-        // Posición orbital
-        const radius = 12 + Math.random() * 8;
-        const angle = (i / alienCount) * Math.PI * 2 + Math.random() * 0.8;
-        const height = (Math.random() - 0.5) * 6;
+        // Posición orbital simple
+        const radius = 8 + i * 2;
+        const angle = (i / totalCats) * Math.PI * 2;
         
         alienGroup.position.set(
             Math.cos(angle) * radius,
-            height,
+            0,
             Math.sin(angle) * radius
         );
         
         alienGroup.userData = {
-            type: 'alien',
+            type: 'simple',
             originalRadius: radius,
             baseAngle: angle,
-            speed: 0.4 + Math.random() * 0.3,
-            bobAmplitude: 0.3 + Math.random() * 0.2,
-            bobSpeed: 1.2 + Math.random() * 0.4
+            speed: 0.5,
+            bobAmplitude: 0.5,
+            bobSpeed: 1.0
         };
         
         alienCats.push(alienGroup);
         scene.add(alienGroup);
     }
     
-    // CREAR GATITOS ASTRONAUTAS FLOTANTES
-    for (let i = 0; i < astronautCount; i++) {
-        const astronautGroup = new THREE.Group();
-        
-        // GATITO ASTRONAUTA ADORABLE
-        const catBody = new THREE.Group();
-        
-        // Cuerpo del gatito (simplificado)
-        const bodyGeometry = new THREE.SphereGeometry(0.15, 6, 4);
-        const bodyMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffa500 // Naranja
-        });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.scale.set(1, 0.9, 1.1);
-        
-        // Cabeza del gatito
-        const headGeometry = new THREE.SphereGeometry(0.12, 8, 6);
-        const head = new THREE.Mesh(headGeometry, bodyMaterial);
-        head.position.set(0, 0.2, 0.03);
-        
-        // CASCO DE ASTRONAUTA TRANSPARENTE (simplificado)
-        const helmetGeometry = new THREE.SphereGeometry(0.16, 8, 6);
-        const helmetMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.3
-        });
-        const helmet = new THREE.Mesh(helmetGeometry, helmetMaterial);
-        helmet.position.set(0, 0.2, 0.03);
-        
-        // Reflejo en el casco
-        const reflectionGeometry = new THREE.SphereGeometry(0.14, 8, 6);
-        const reflectionMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00d4ff,
-            transparent: true,
-            opacity: 0.2
-        });
-        const reflection = new THREE.Mesh(reflectionGeometry, reflectionMaterial);
-        reflection.position.set(0, 0.2, 0.03);
-        
-        // Orejas del gatito (dentro del casco)
-        const earGeometry = new THREE.ConeGeometry(0.03, 0.08, 4);
-        const earMaterial = new THREE.MeshPhongMaterial({
-            color: 0xff7700,
-            emissive: 0x221100
-        });
-        
-        const leftEar = new THREE.Mesh(earGeometry, earMaterial);
-        leftEar.position.set(-0.08, 0.28, 0.01);
-        leftEar.rotation.z = -0.4;
-        
-        const rightEar = new THREE.Mesh(earGeometry, earMaterial);
-        rightEar.position.set(0.08, 0.28, 0.01);
-        rightEar.rotation.z = 0.4;
-        
-        // Ojos del gatito
-        const eyeGeometry = new THREE.SphereGeometry(0.015, 6, 4);
-        const eyeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x0088ff,
-            emissive: 0x0044aa
-        });
-        
-        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        leftEye.position.set(-0.05, 0.21, 0.11);
-        
-        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-        rightEye.position.set(0.05, 0.21, 0.11);
-        
-        // Cola del gatito
-        const tailGeometry = new THREE.CylinderGeometry(0.02, 0.04, 0.25, 6);
-        const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
-        tail.position.set(0, 0.08, -0.22);
-        tail.rotation.x = 0.6;
-        
-        // MOCHILA DE PROPULSIÓN
-        const jetpackGeometry = new THREE.BoxGeometry(0.1, 0.15, 0.05);
-        const jetpackMaterial = new THREE.MeshPhongMaterial({
-            color: 0x666666,
-            emissive: 0x111111
-        });
-        const jetpack = new THREE.Mesh(jetpackGeometry, jetpackMaterial);
-        jetpack.position.set(0, 0.1, -0.12);
-        
-        // Llamas del jetpack
-        const flameGeometry = new THREE.ConeGeometry(0.02, 0.1, 6);
-        const flameMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff4400,
-            emissive: 0xff2200,
-            transparent: true,
-            opacity: 0.8
-        });
-        
-        const flame1 = new THREE.Mesh(flameGeometry, flameMaterial);
-        flame1.position.set(-0.03, 0.03, -0.2);
-        flame1.rotation.x = Math.PI;
-        
-        const flame2 = new THREE.Mesh(flameGeometry, flameMaterial);
-        flame2.position.set(0.03, 0.03, -0.2);
-        flame2.rotation.x = Math.PI;
-        
-        // Ensamblar astronauta
-        catBody.add(body, head, helmet, reflection, leftEar, rightEar, leftEye, rightEye, tail, jetpack, flame1, flame2);
-        
-        // Luz del astronauta
-        const astronautLight = new THREE.PointLight(0x00aaff, 0.2, 6);
-        astronautLight.position.set(0, 0.3, 0);
-        
-        astronautGroup.add(catBody, astronautLight);
-        
-        // Posición orbital diferente a los aliens
-        const radius = 10 + Math.random() * 12;
-        const angle = (i / astronautCount) * Math.PI * 2 + Math.random() * 1.2;
-        const height = (Math.random() - 0.5) * 10;
-        
-        astronautGroup.position.set(
-            Math.cos(angle) * radius,
-            height,
-            Math.sin(angle) * radius
-        );
-        
-        astronautGroup.userData = {
-            type: 'astronaut',
-            originalRadius: radius,
-            baseAngle: angle,
-            speed: 0.2 + Math.random() * 0.3,
-            bobAmplitude: 0.4 + Math.random() * 0.3,
-            bobSpeed: 0.8 + Math.random() * 0.6
-        };
-        
-        alienCats.push(astronautGroup);
-        scene.add(astronautGroup);
-    }
-    
-        console.log(`🛸 ${alienCount} Gatos Alien + 👨‍🚀 ${astronautCount} Astronautas creados!`);
-        
     } catch (error) {
-        console.error('❌ Error creando gatitos espaciales:', error);
-        console.log('⚠️ Continuando sin gatitos espaciales para mantener estabilidad');
+        console.error('❌ Error creando gatos espaciales:', error);
+        // Continuar sin gatos si hay error
     }
 }
 
