@@ -113,6 +113,38 @@ body::after {
     animation: particlesDrift 20s linear infinite;
 }
 
+/* Campo de energía adicional */
+.energy-field {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+    background: 
+        conic-gradient(from 0deg at 25% 25%, 
+            transparent 0deg, 
+            rgba(0, 212, 255, 0.1) 90deg, 
+            transparent 180deg,
+            rgba(0, 255, 136, 0.1) 270deg,
+            transparent 360deg),
+        conic-gradient(from 180deg at 75% 75%, 
+            transparent 0deg, 
+            rgba(255, 0, 128, 0.1) 90deg, 
+            transparent 180deg,
+            rgba(255, 102, 0, 0.1) 270deg,
+            transparent 360deg);
+    animation: energyRotate 30s linear infinite;
+}
+
+@keyframes energyRotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
 @keyframes particlesDrift {
     0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
     100% { background-position: 400px 300px, -400px -300px, 200px -150px, -200px 150px, 300px -200px; }

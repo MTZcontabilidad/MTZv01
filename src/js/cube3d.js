@@ -28,6 +28,78 @@ function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
 }
 
+// Crear textura personalizada para cada cara
+function createFaceTexture(faceData, index) {
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    
+    // Fondo con gradiente radial
+    const gradient = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    gradient.addColorStop(0, faceData.color + '80');
+    gradient.addColorStop(0.7, faceData.color + '40');
+    gradient.addColorStop(1, faceData.color + '20');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+    
+    // Patrón de grid sutil
+    ctx.strokeStyle = faceData.color + '30';
+    ctx.lineWidth = 1;
+    const gridSize = size / 16;
+    
+    for (let i = 0; i <= 16; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridSize, 0);
+        ctx.lineTo(i * gridSize, size);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridSize);
+        ctx.lineTo(size, i * gridSize);
+        ctx.stroke();
+    }
+    
+    // Círculo central con borde brillante
+    const center = size / 2;
+    ctx.beginPath();
+    ctx.arc(center, center, size * 0.25, 0, Math.PI * 2);
+    ctx.strokeStyle = faceData.color;
+    ctx.lineWidth = 6;
+    ctx.stroke();
+    
+    // Círculo interior
+    ctx.beginPath();
+    ctx.arc(center, center, size * 0.22, 0, Math.PI * 2);
+    ctx.strokeStyle = faceData.color + 'AA';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Emoji con sombra
+    const emojiSize = size * 0.12;
+    ctx.font = `bold ${emojiSize}px Arial, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Sombra del emoji
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillText(faceData.emoji, center + 3, center + 3);
+    
+    // Emoji principal
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(faceData.emoji, center, center);
+    
+    // Título con mejor tipografía
+    const titleSize = size * 0.05;
+    ctx.font = `bold ${titleSize}px Arial, sans-serif`;
+    ctx.fillStyle = faceData.color;
+    ctx.fillText(faceData.title, center, center + size * 0.35);
+    
+    return canvas;
+}
+
 // Inicializar Three.js básico
 function initThreeJS() {
     try {
@@ -40,13 +112,28 @@ function initThreeJS() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000511);
 
-        // Añadir luces básicas
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        // Sistema de luces mejorado
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
         scene.add(ambientLight);
         
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
+        // Luz principal
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        mainLight.position.set(10, 10, 5);
+        scene.add(mainLight);
+        
+        // Luces de colores para efectos
+        const colorLights = [
+            { color: 0x00d4ff, position: [8, 0, 0] },
+            { color: 0x00ff88, position: [-8, 0, 0] },
+            { color: 0xff6600, position: [0, 8, 0] },
+            { color: 0x25D366, position: [0, -8, 0] }
+        ];
+        
+        colorLights.forEach(lightData => {
+            const light = new THREE.PointLight(lightData.color, 0.5, 20);
+            light.position.set(...lightData.position);
+            scene.add(light);
+        });
 
         // Crear cámara
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -60,6 +147,9 @@ function initThreeJS() {
 
         // Crear cubo básico
         createBasicCube();
+        
+        // Agregar partículas de fondo
+        createStarField();
         
         // Configurar controles
         setupControls();
@@ -77,7 +167,7 @@ function initThreeJS() {
     }
 }
 
-// Crear cubo básico con materiales simples
+// Crear cubo con materiales mejorados y efectos visuales
 function createBasicCube() {
     const geometry = new THREE.BoxGeometry(3, 3, 3);
     const materials = [];
@@ -88,10 +178,21 @@ function createBasicCube() {
     
     for (let i = 0; i < 6; i++) {
         const faceData = faceInfo[faceOrder[i]];
-        const material = new THREE.MeshLambertMaterial({
-            color: faceData.color,
+        
+        // Crear canvas para cada cara con diseño mejorado
+        const canvas = createFaceTexture(faceData, i);
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.generateMipmaps = false;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        
+        const material = new THREE.MeshPhongMaterial({
+            map: texture,
+            color: new THREE.Color(faceData.color),
             transparent: true,
-            opacity: 0.9
+            opacity: 0.95,
+            shininess: 30,
+            specular: 0x222222
         });
         materials.push(material);
     }
@@ -99,7 +200,64 @@ function createBasicCube() {
     cube = new THREE.Mesh(geometry, materials);
     scene.add(cube);
     
+    // Agregar wireframe sutil
+    const wireframeGeometry = new THREE.EdgesGeometry(geometry);
+    const wireframeMaterial = new THREE.LineBasicMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.3
+    });
+    const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+    cube.add(wireframe);
+}
 
+// Crear campo de estrellas de fondo
+function createStarField() {
+    const starGeometry = new THREE.BufferGeometry();
+    const starCount = 1000;
+    const positions = new Float32Array(starCount * 3);
+    const colors = new Float32Array(starCount * 3);
+    
+    const starColors = [
+        [1, 1, 1],      // Blanco
+        [0.8, 0.9, 1],  // Azul claro
+        [1, 0.9, 0.8],  // Amarillo suave
+        [0.9, 0.8, 1],  // Violeta suave
+        [0.8, 1, 0.9]   // Verde suave
+    ];
+    
+    for (let i = 0; i < starCount; i++) {
+        // Posiciones aleatorias en una esfera
+        const radius = 30 + Math.random() * 20;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        positions[i * 3 + 2] = radius * Math.cos(phi);
+        
+        // Colores aleatorios
+        const colorIndex = Math.floor(Math.random() * starColors.length);
+        colors[i * 3] = starColors[colorIndex][0];
+        colors[i * 3 + 1] = starColors[colorIndex][1];
+        colors[i * 3 + 2] = starColors[colorIndex][2];
+    }
+    
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    starGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    
+    const starMaterial = new THREE.PointsMaterial({
+        size: 2,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8
+    });
+    
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+    
+    // Guardar referencia para animación
+    window.stars = stars;
 }
 
 // Configurar controles básicos
@@ -300,6 +458,16 @@ function animate() {
         if (!isDragging) {
             cube.rotation.y += 0.003; // Rotación muy lenta
         }
+        
+        // Efecto de pulsación sutil en el cubo
+        const time = Date.now() * 0.001;
+        cube.scale.setScalar(1 + Math.sin(time * 2) * 0.02);
+    }
+    
+    // Animar estrellas de fondo
+    if (window.stars) {
+        window.stars.rotation.y += 0.0005;
+        window.stars.rotation.x += 0.0002;
     }
     
     renderer.render(scene, camera);
